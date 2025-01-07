@@ -3,6 +3,7 @@ import {ApiError} from "../utils/ApiError.js"
 import {User} from "../models/user.model.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import jwt from "jsonwebtoken"
+import { uploadOnCloudinary } from "../utils/cloudinary.js"
 
 
 const generateAccessAndRefreshTokens = async (userId) => {
@@ -25,6 +26,7 @@ const generateAccessAndRefreshTokens = async (userId) => {
 
 const registerUser = asyncHandler( async (req, res) => {
     const {username, email, password } = req.body
+    console.log(req.body)
     console.log(email);
 
     if(
@@ -44,6 +46,14 @@ const registerUser = asyncHandler( async (req, res) => {
     console.log(username);
     console.log(email);
     console.log(password);
+
+    const avatarLocalPath = req.files?.coverimage[0]?.path;
+
+    const coverimage = await uploadOnCloudinary(avatarLocalPath)
+    //const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+    if (!coverimage) {
+        throw new ApiError(400, "coverimage file is required")
+    }
     
 
     const user = await User.create({
