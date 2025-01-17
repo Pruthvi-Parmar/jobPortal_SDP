@@ -91,8 +91,53 @@ const getJobs = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, jobs, "Jobs retrieved successfully"));
 })
 
+const updateJob = asyncHandler(async (req, res) => {
+    const { id, title, location, salary, type, overview, responsibility, requirment } = req.body;
+
+    // console.log(req.body);
+    // console.log(requirment);
+    
+    
+
+    
+    if (!id) {
+        throw new ApiError(400, "Job ID is required");
+    }
+
+    
+    const job = await Jobs.findById(id);
+
+    console.log(job);
+    
+
+    if (!job) {
+        throw new ApiError(404, "Job not found");
+    }
+
+    
+    if (title) job.title = title;
+    if (location) job.location = location;
+    if (salary) job.salary = salary;
+    if (type) job.type = type;
+    if (overview) job.overview = overview;
+    if (responsibility) job.responsibility = responsibility;
+    if (requirment) job.requirment = requirment;
+
+    // console.log(job);
+    
+
+    
+    const updatedJob = await job.save();
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, updatedJob, "Job updated successfully"));
+});
+
+
 
 export {
     postJobs,
-    getJobs
+    getJobs,
+    updateJob
 }
