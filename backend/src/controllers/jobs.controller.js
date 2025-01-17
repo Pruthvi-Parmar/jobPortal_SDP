@@ -38,6 +38,7 @@ const postJobs = asyncHandler(async(req,res) => {
         createdBy:req.user._id,
     })
 
+
     return res
     .status(200)
     .json(
@@ -132,12 +133,31 @@ const updateJob = asyncHandler(async (req, res) => {
     return res
         .status(200)
         .json(new ApiResponse(200, updatedJob, "Job updated successfully"));
-});
+})
+
+const deleteJob = asyncHandler(async(req, res) => {
+
+    const { id } = req.body
+
+    const job = await Jobs.findByIdAndDelete(id)
+
+    if(!job){
+        throw ApiError(400,"job not found")
+    }
+
+    
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,{},"job deleted succesfully")
+    )
+})
 
 
 
 export {
     postJobs,
     getJobs,
-    updateJob
+    updateJob,
+    deleteJob
 }
