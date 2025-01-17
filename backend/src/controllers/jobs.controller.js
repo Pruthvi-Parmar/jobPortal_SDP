@@ -46,6 +46,53 @@ const postJobs = asyncHandler(async(req,res) => {
 
 })
 
+const getJobs = asyncHandler(async (req, res) => {
+    
+    const { title, location, type, keyword } = req.query;
+
+    console.log(req.query);
+    
+
+   
+    const query = {};
+
+    if (title) {
+        query.title = { $regex: title, $options: "i" }; 
+    }
+
+    if (location) {
+        query.location = { $regex: location, $options: "i" }; 
+    }
+
+    if (type) {
+        query.type = type; 
+    }
+    if (keyword) {
+        query.$or = 
+        [
+            { title: { $regex: keyword, $options: "i" } },
+            { overview: { $regex: keyword, $options: "i" } },
+            { responsibilities: { $regex: keyword, $options: "i" } },
+        ];
+    }
+
+    console.log(query)
+    
+
+    
+    const jobs = await Jobs.find(query);
+
+    if (!jobs || jobs.length === 0) {
+        throw new ApiError(404, "No jobs found with the given filters");
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, jobs, "Jobs retrieved successfully"));
+})
+
+
 export {
     postJobs,
+    getJobs
 }
