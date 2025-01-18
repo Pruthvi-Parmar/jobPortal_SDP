@@ -106,42 +106,42 @@ const updateJob = asyncHandler(async (req, res) => {
     }
 
     
-   // const job = await Jobs.findById(id);
+   const job = await Jobs.findById(id);
 
-    const updatedJob = await Jobs.findByIdAndUpdate(id,{
-        $set: {
-            title,
-            location,
-            salary,
-            type,
-            overview,
-            responsibility,
-            requirment
-        },
+    // const updatedJob = await Jobs.findByIdAndUpdate(id,{
+    //     $set: {
+    //         title,
+    //         location,
+    //         salary,
+    //         type,
+    //         overview,
+    //         responsibility,
+    //         requirment
+    //     },
        
-    }, {new: true})
+    // }, {new: true})
 
-    console.log(updatedJob);
+    console.log(job);
     
 
-    if (!updatedJob) {
+    if (!job) {
         throw new ApiError(404, "Job not found");
     }
 
     
-    // if (title) job.title = title;
-    // if (location) job.location = location;
-    // if (salary) job.salary = salary;
-    // if (type) job.type = type;
-    // if (overview) job.overview = overview;
-    // if (responsibility) job.responsibility = responsibility;
-    // if (requirment) job.requirment = requirment;
+    if (title) job.title = title;
+    if (location) job.location = location;
+    if (salary) job.salary = salary;
+    if (type) job.type = type;
+    if (overview) job.overview = overview;
+    if (responsibility) job.responsibility = responsibility;
+    if (requirment) job.requirment = requirment;
 
-    // console.log(job);
+    console.log(job);
     
 
     
-    //const updatedJob = await job.save();
+    const updatedJob = await job.save();
 
     return res
         .status(200)
