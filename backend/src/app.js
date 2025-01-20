@@ -18,10 +18,13 @@ app.use(cookieParser())
 
 import userRouter from "./routes/user.routes.js"
 import jobRouter from "./routes/jobs.routes.js"
+import applicationRouter from "./routes/application.routes.js"
+
 
 // routes declaration 
 
 app.use("/v1/users",userRouter)
 app.use("/v1/jobs",jobRouter)
+app.use("/v1/application",applicationRouter)
 
 export { app }
