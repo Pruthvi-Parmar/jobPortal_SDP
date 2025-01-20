@@ -1,6 +1,7 @@
 import { asyncHandler } from "../utils/asyncHandler.js"
 import {ApiError} from "../utils/ApiError.js"
 import {Jobs} from "../models/jobs.models.js"
+import {Applications} from "../models/jobApplication.models.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import jwt from "jsonwebtoken"
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
@@ -154,8 +155,12 @@ const deleteJob = asyncHandler(async(req, res) => {
 
     const job = await Jobs.findByIdAndDelete(id)
 
+    await Applications.deleteMany({ job: id })
+
+    
+
     if(!job){
-        throw ApiError(400,"job not found")
+        throw new ApiError(400,"job not found")
     }
 
 

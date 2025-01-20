@@ -99,7 +99,8 @@ const getJob = asyncHandler(async (req, res) => {
         },
         {
             $project:{
-                _id : 1,
+                _id : 1, // id of document which stores in MongoDB with jobId and userId
+                "jobDetails._id" : 1,
                 "jobDetails.title" : 1,
                 "jobDetails.location" : 1,
                 "jobDetails.overview" : 1,
