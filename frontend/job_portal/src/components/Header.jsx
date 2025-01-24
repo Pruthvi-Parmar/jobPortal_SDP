@@ -16,13 +16,13 @@ const Header = () => {
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
         <div>
           <h1 className="text-2xl font-bold">
-            Job<span className="text-[#F83002]">Portal</span>
+            App<span className="text-[#F83002]">Logo</span>
           </h1>
         </div>
         <div className="flex items-center gap-10">
           <ul className="flex font-medium items-center gap-5">
-            <li>Home</li>
-            <li>MyJobs</li>
+            <Link to="/"><li>Home</li></Link>
+            <Link to="/"><li>MyJobs</li></Link>
           </ul>
           {!user ? (
             <div className="flex items-center gap-2">
