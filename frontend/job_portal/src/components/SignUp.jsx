@@ -4,7 +4,7 @@ import { Label } from '../components/ui/label'
 import { Input } from '../components/ui/input'
 
 import { Button } from '../components/ui/button'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 import { toast } from 'sonner'
@@ -21,6 +21,8 @@ const SignUp = () => {
       coverimage: "",
       resume:"",
     });
+
+    const navigate = useNavigate();
   
 
     const changeEventHandler = (e) => {
@@ -51,12 +53,12 @@ const SignUp = () => {
             
             const res = await axios.post('http://localhost:8001/v1/users/register', formData, {
                 headers: { 'Content-Type': "multipart/form-data" },
-                withCredentials: true,
+                withCredentials: false,
             });
             console.log(res.data.success);
             
-            if (res.data.success) {
-                navigate("/login");
+            if (res.status == 200) {
+              navigate("/login");
                 toast.success(res.data.message);
             }
         } catch (error) {
