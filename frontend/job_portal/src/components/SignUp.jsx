@@ -58,27 +58,12 @@ const SignUp = () => {
         toast.success(res.data.message);
       }
 
-        try {
-            
-            const res = await axios.post('http://localhost:8001/v1/users/register', formData, {
-                headers: { 'Content-Type': "multipart/form-data" },
-                withCredentials: false,
-            });
-            console.log(res.data.success);
-            
-            if (res.data.success) {
-                navigate("/login");
-                toast.success(res.data.message);
-            }
         } catch (error) {
             console.log(error);
             //toast.error(error.response.message);
         } finally{
             
         }
-    }finally{
-      
-    }
   };
 
   return (
