@@ -57,7 +57,6 @@ const SignUp = () => {
         navigate('/login');
         toast.success(res.data.message);
       }
-<<<<<<< HEAD
 
         try {
             
@@ -77,10 +76,8 @@ const SignUp = () => {
         } finally{
             
         }
-=======
-    } catch (error) {
-      console.log(error);
->>>>>>> eb61d83bafabff42c5328c32bcbb91123795a8c0
+    }finally{
+      
     }
   };
 
