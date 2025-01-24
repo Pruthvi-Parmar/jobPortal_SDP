@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-import React from 'react'
-import JobsPage from './JobsPage'
-
-function Home() {
-  return (
-    <div>
-      <JobsPage/>
-      {/* <h1>this is home </h1> */}
-=======
 import React from 'react';
 
 function Home() {
@@ -161,7 +151,6 @@ function Home() {
           </p>
         </div>
       </div>
->>>>>>> eb61d83bafabff42c5328c32bcbb91123795a8c0
     </div>
   );
 }
