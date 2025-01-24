@@ -21,7 +21,7 @@ const Header = () => {
         </div>
         <div className="flex items-center gap-10">
           <ul className="flex font-medium items-center gap-5">
-            <Link to="/"><li>Home</li></Link>
+            <Link to="/userhome"><li>Home</li></Link>
             <Link to="/"><li>MyJobs</li></Link>
           </ul>
           {!user ? (

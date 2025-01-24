@@ -29,7 +29,7 @@ const Login = () => {
       });
 
       if (res.status === 200) {
-        navigate('/');
+        navigate('/userhome');
         toast.success(res.data.message);
       }
     } catch (error) {

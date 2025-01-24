@@ -6,6 +6,7 @@ import Layout from './Layout';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Home from './pages/Home';
+import JobsPage from './pages/JobsPage';
 
 
 const router = createBrowserRouter(
@@ -14,6 +15,7 @@ const router = createBrowserRouter(
       <Route path='' element={<Home />} />
       <Route path='signup' element={<SignUp />} />
       <Route path='login' element={<Login />} />
+      <Route path='userhome' element={<JobsPage />} />
   
       
     </Route>
