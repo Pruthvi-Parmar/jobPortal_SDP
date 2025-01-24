@@ -6,9 +6,10 @@ function App() {
 
   return (
     <>
-     <h1>Job Portal</h1>
+     {/* <h1>Job Portal</h1> */}
+     <h1 className='bg-slate-400 text-2xl'>Hii</h1>
     </>
   )
-}
+}    
 
 export default App
