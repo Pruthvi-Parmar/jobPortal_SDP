@@ -1,9 +1,11 @@
 import React from 'react'
+import JobsPage from './JobsPage'
 
 function Home() {
   return (
     <div>
-      <h1>this is home </h1>
+      <JobsPage/>
+      {/* <h1>this is home </h1> */}
     </div>
   )
 }

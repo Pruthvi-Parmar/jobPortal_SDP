@@ -51,7 +51,7 @@ const SignUp = () => {
             
             const res = await axios.post('http://localhost:8001/v1/users/register', formData, {
                 headers: { 'Content-Type': "multipart/form-data" },
-                withCredentials: true,
+                withCredentials: false,
             });
             console.log(res.data.success);
             
