@@ -45,16 +45,19 @@ const MyJobsPage = () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Use fake data
-      setJobs(fakeJobs);
+      //setJobs(fakeJobs);
 
       // Uncomment below for actual API call
-      /*
+      document.cookie = `accessToken=${localStorage.getItem('accessToken')}; path=/;`;
       const response = await fetch("http://localhost:8001/v1/application/get-applicants-job", {
-        method: "GET",
+        method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`, // Include the token in the header
         },
+        withCredentials: true, // If cookies are also needed
       });
+      console.log(localStorage.getItem('accessToken'));
+      
 
       if (!response.ok) {
         throw new Error("Failed to fetch jobs");
@@ -67,7 +70,7 @@ const MyJobsPage = () => {
       } else {
         throw new Error(result.message || "Failed to fetch jobs");
       }
-      */
+      
     } catch (err) {
       setError(err.message);
     } finally {

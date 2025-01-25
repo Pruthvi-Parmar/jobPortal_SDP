@@ -10,7 +10,7 @@ import { Avatar, AvatarImage } from "../components/ui/avatar";
 import { Link, useNavigate } from "react-router-dom";
 import { LogOut, User2, User2Icon } from "lucide-react";
 const Header = () => {
-    const user = false
+    const user = true
   return (
     <div className="bg-white border border-gray-300 rounded-md shadow-sm">
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
@@ -22,7 +22,7 @@ const Header = () => {
         <div className="flex items-center gap-10">
           <ul className="flex font-medium items-center gap-5">
             <Link to="/userhome"><li>Home</li></Link>
-            <Link to="/"><li>MyJobs</li></Link>
+            <Link to="/myjobs"><li>MyJobs</li></Link>
           </ul>
           {!user ? (
             <div className="flex items-center gap-2">

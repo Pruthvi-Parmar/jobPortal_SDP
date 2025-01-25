@@ -25,10 +25,14 @@ const Login = () => {
     try {
       const res = await axios.post('http://localhost:8001/v1/users/login', input, {
         headers: { 'Content-Type': 'application/json' },
-        withCredentials: false,
+        withCredentials: true,
       });
-
-      if (res.status === 200) {
+      console.log(res);
+      localStorage.setItem('accessToken', res.data.data.accessToken);
+      localStorage.setItem('refreshToken', res.data.data.refreshToken);
+      //console.log();
+      
+      if (res.data.success) {
         navigate('/userhome');
         toast.success(res.data.message);
       }

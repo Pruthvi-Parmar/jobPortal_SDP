@@ -99,6 +99,9 @@ const registerUser = asyncHandler( async (req, res) => {
 const loginUser = asyncHandler( async(req, res) => {
     const {email, username, password} = req.body
 
+    console.log(req.body);
+    
+
     if(!(email || username)){
         throw new ApiError(400,"email or username is requried")
     }
@@ -125,6 +128,9 @@ const loginUser = asyncHandler( async(req, res) => {
         httpOnly: true,
         secure: true
     }
+
+    console.log(user);
+    
 
     return res
     .status(200)

@@ -9,9 +9,9 @@ function Layout() {
   return (
     <>
     <Header/>
-    <PostJobForm/>
-    {/* <MyJobsPage/>
-    <Outlet /> */}
+    
+   
+    <Outlet /> 
     </>
   )
 }

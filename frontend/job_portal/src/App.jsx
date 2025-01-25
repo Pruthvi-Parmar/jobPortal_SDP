@@ -7,6 +7,8 @@ import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Home from './pages/Home';
 import JobsPage from './pages/JobsPage';
+import PostJobForm from './components/PostJobForm';
+import MyJobsPage from './pages/MyJobsPage';
 
 
 const router = createBrowserRouter(
@@ -16,6 +18,7 @@ const router = createBrowserRouter(
       <Route path='signup' element={<SignUp />} />
       <Route path='login' element={<Login />} />
       <Route path='userhome' element={<JobsPage />} />
+      <Route path='myjobs' element={<MyJobsPage />} />
   
       
     </Route>
