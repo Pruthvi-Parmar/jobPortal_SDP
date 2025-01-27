@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import MyJobsCard from "@/components/MyJobsCard";
+import { useSelector } from "react-redux";
 
 const MyJobsPage = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const user = useSelector( state => state.auth.userData)
 
   // Fake data for demonstration
   const fakeJobs = [
@@ -84,21 +86,37 @@ const MyJobsPage = () => {
     fetchJobs();
   }, []);
 
-  return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold text-center mb-8">My Jobs</h1>
-      {loading && <p className="text-center mt-4">Loading...</p>}
-      {error && <p className="text-center mt-4 text-red-500">{error}</p>}
-      {!loading && !error && jobs.length === 0 && (
-        <p className="text-center mt-4">No jobs found.</p>
-      )}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {jobs.map((job) => (
-          <MyJobsCard key={job._id} jobDetails={job.jobDetails} />
-        ))}
+  if(user == null){
+    console.log(user);
+    return(
+      <div className="container mx-auto p-4">
+        <h1 className="text-3xl font-bold text-center mb-8">My Jobs</h1>
+        
+      
+          <p className="text-center mt-4">Please Login First!</p>
+        
+       
       </div>
-    </div>
-  );
-};
+    )
+  }else{
+    return (
+      <div className="container mx-auto p-4">
+        <h1 className="text-3xl font-bold text-center mb-8">My Jobs</h1>
+        {loading && <p className="text-center mt-4">Loading...</p>}
+        {error && <p className="text-center mt-4 text-red-500">{error}</p>}
+        {!loading && !error && jobs.length === 0 && (
+          <p className="text-center mt-4">No jobs found.</p>
+        )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {jobs.map((job) => (
+            <MyJobsCard key={job._id} jobDetails={job.jobDetails} />
+          ))}
+        </div>
+      </div>
+    );
+  };
+  
+  }
 
+  
 export default MyJobsPage;

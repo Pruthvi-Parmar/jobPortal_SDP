@@ -50,9 +50,16 @@ const postJobs = asyncHandler(async(req,res) => {
 
 const getJobs = asyncHandler(async (req, res) => {
     
-    const { title, location, type, keyword } = req.query;
+    const { title, location, type, keyword } = req.body;
+
+    // if(
+    //     [title, location, type, keyword].some((field) => field?.trim() === "")
+    // ){
+    //      title, location, type, keyword  = req.body
+    // }
 
     console.log(req.query);
+    console.log(req.body);
     
 
    
