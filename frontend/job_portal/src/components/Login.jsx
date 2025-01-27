@@ -41,7 +41,12 @@ const Login = () => {
         console.log(res.data.data.user);
         
         dispatch(login(res.data.data.user))
-        navigate('/userhome');
+        if(res.data.data.user.role == "jobseeker"){
+          navigate('/userhome');
+        }
+        if(res.data.data.user.role == "recruiter"){
+          navigate('/');
+        }
         toast.success(res.data.message);
       }
     } catch (error) {
