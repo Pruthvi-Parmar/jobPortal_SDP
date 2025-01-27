@@ -5,6 +5,9 @@ import { Button } from '../components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'sonner';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '@/store/authSlice';
+
 
 const Login = () => {
   const [input, setInput] = useState({
@@ -12,6 +15,8 @@ const Login = () => {
     email: '',
     password: '',
   });
+
+  const dispatch = useDispatch()
 
   const navigate = useNavigate();
 
@@ -33,6 +38,9 @@ const Login = () => {
       //console.log();
       
       if (res.data.success) {
+        console.log(res.data.data.user);
+        
+        dispatch(login(res.data.data.user))
         navigate('/userhome');
         toast.success(res.data.message);
       }

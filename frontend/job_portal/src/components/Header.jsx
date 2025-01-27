@@ -6,11 +6,23 @@ import {
 } from "../components/ui/popover";
 import { Button } from "../components/ui/button";
 import { Avatar, AvatarImage } from "../components/ui/avatar";
-
 import { Link, useNavigate } from "react-router-dom";
 import { LogOut, User2, User2Icon } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "@/store/authSlice";
+import store from "@/store/store";
+
 const Header = () => {
-    const user = true
+  const dispatch = useDispatch()
+  const user = useSelector( state => state.auth.userData)
+  //const user = false
+  console.log(user);
+  if(user){
+    console.log(user.coverimage);
+    
+  }
+
+
   return (
     <div className="bg-white border border-gray-300 rounded-md shadow-sm">
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
@@ -26,6 +38,7 @@ const Header = () => {
           </ul>
           {!user ? (
             <div className="flex items-center gap-2">
+              
               <Link to="/login"><Button variant="outline">Login</Button></Link>
               <Link to="/signup"><Button className="bg-[#6A38C2] hover:bg-[#5b30a6]">Signup</Button></Link>
              
@@ -38,7 +51,7 @@ const Header = () => {
               <PopoverTrigger asChild>
                 <Avatar className="cursor-pointer">
                   <AvatarImage
-                    src={"https://github.com/shadcn.png"}
+                    src={user.coverimage}
                     alt="@shadcn"
                   />
                 </Avatar>
@@ -48,12 +61,12 @@ const Header = () => {
                   <div className="flex gap-2 space-y-1">
                     <Avatar className="cursor-pointer">
                       <AvatarImage
-                        src={"https://github.com/shadcn.png"}
+                        src={user.coverimage}
                         alt="@shadcn"
                       />
                     </Avatar>
                     <div>
-                      <h4 className="font-medium px-3">name</h4>
+                      <h4 className="font-medium px-3">{user.username}</h4>
                       <p className="text-sm text-muted-foreground">
                         bio Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, nihil!
                       </p>

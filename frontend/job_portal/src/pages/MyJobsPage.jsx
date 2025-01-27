@@ -57,7 +57,9 @@ const MyJobsPage = () => {
         withCredentials: true, // If cookies are also needed
       });
       console.log(localStorage.getItem('accessToken'));
+      //console.log("cookies : "+cookie);
       
+     
 
       if (!response.ok) {
         throw new Error("Failed to fetch jobs");
