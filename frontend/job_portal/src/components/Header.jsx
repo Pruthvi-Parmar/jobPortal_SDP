@@ -1,5 +1,9 @@
 import React from "react";
-import { Popover, PopoverContent, PopoverTrigger, } from "../components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../components/ui/popover";
 import { Button } from "../components/ui/button";
 import { Avatar, AvatarImage } from "../components/ui/avatar";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,40 +13,40 @@ import { login, logout } from "@/store/authSlice";
 import store from "@/store/store";
 import axios from "axios";
 
-
 const Header = () => {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const user = useSelector( state => state.auth.userData)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.userData);
   //const user = false
   console.log(user);
-  if(user){
+  if (user) {
     console.log(user.coverimage);
-    
   }
 
-  const handleClick = async() => {
+  const handleClick = async () => {
     console.log("inside logout");
-    console.log(localStorage.getItem('accessToken'));
-    
-    const res = await axios.post('http://localhost:8001/v1/users/logout',{},{
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`, // Include the token in the header
-      },
-      withCredentials: true,
-    });
+    console.log(localStorage.getItem("accessToken"));
+
+    const res = await axios.post(
+      "http://localhost:8001/v1/users/logout",
+      {},
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Include the token in the header
+        },
+        withCredentials: true,
+      }
+    );
     if (res.data.success) {
-      localStorage.setItem('accessToken', null);
-      localStorage.setItem('refreshToken', null);
-      dispatch(logout())
-      navigate('/');
+      localStorage.setItem("accessToken", null);
+      localStorage.setItem("refreshToken", null);
+      dispatch(logout());
+      navigate("/");
       toast.success(res.data.message);
     }
     console.log(res);
-    
-  }
-
+  };
 
   return (
     <div className="bg-white border border-gray-300 rounded-md shadow-sm">
@@ -54,42 +58,67 @@ const Header = () => {
         </div>
         <div className="flex items-center gap-10">
           <ul className="flex font-medium items-center gap-5">
-            <Link to="/userhome"><li>Home</li></Link>
-            <Link to="/myjobs"><li>MyJobs</li></Link>
+            {!user ? (
+              // Case when no user is logged in
+              <>
+                {/* <Link to="/userhome">
+                  <li>Home</li>
+                </Link> */}
+                {/* <Link to="/login">
+                  <li>Login</li>
+                </Link> */}
+              </>
+            ) : user.role === "jobseeker" ? (
+              // Case when logged-in user is a jobseeker
+              <>
+                <Link to="/userhome">
+                  <li>Home</li>
+                </Link>
+                <Link to="/myjobs">
+                  <li>My Jobs</li>
+                </Link>
+              </>
+            ) : (
+              // Case when logged-in user is a recruiter
+              <>
+                <Link to="/userhome">
+                  <li>Home</li>
+                </Link>
+                <Link to="/postjob">
+                  <li>Post Job</li>
+                </Link>
+              </>
+            )}
           </ul>
           {!user ? (
             <div className="flex items-center gap-2">
-              
-              <Link to="/login"><Button variant="outline">Login</Button></Link>
-              <Link to="/signup"><Button className="bg-[#6A38C2] hover:bg-[#5b30a6]">Signup</Button></Link>
-             
-             
-                
-             
+              <Link to="/login">
+                <Button variant="outline">Login</Button>
+              </Link>
+              <Link to="/signup">
+                <Button className="bg-[#6A38C2] hover:bg-[#5b30a6]">
+                  Signup
+                </Button>
+              </Link>
             </div>
           ) : (
             <Popover>
               <PopoverTrigger asChild>
                 <Avatar className="cursor-pointer">
-                  <AvatarImage
-                    src={user.coverimage}
-                    alt="@shadcn"
-                  />
+                  <AvatarImage src={user.coverimage} alt="@shadcn" />
                 </Avatar>
               </PopoverTrigger>
               <PopoverContent className="w-80">
                 <div className="">
                   <div className="flex gap-2 space-y-1">
                     <Avatar className="cursor-pointer">
-                      <AvatarImage
-                        src={user.coverimage}
-                        alt="@shadcn"
-                      />
+                      <AvatarImage src={user.coverimage} alt="@shadcn" />
                     </Avatar>
                     <div>
                       <h4 className="font-medium px-3">{user.username}</h4>
                       <p className="text-sm text-muted-foreground">
-                        bio Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, nihil!
+                        bio Lorem ipsum dolor sit amet consectetur adipisicing
+                        elit. Hic, nihil!
                       </p>
                     </div>
                   </div>
@@ -97,9 +126,7 @@ const Header = () => {
                     {user && (
                       <div className="flex w-fit items-center gap-2 cursor-pointer">
                         <User2 />
-                        <Button variant="link">
-                          view profile
-                        </Button>
+                        <Button variant="link">view profile</Button>
                       </div>
                     )}
 

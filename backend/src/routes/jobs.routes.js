@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {deleteJob, getJobs, postJobs, updateJob} from "../controllers/jobs.controller.js"
+import {deleteJob, getJobs, getJobsPostedByRecruiter, postJobs, updateJob,} from "../controllers/jobs.controller.js"
 import {upload} from "../middlewares/multer.middleware.js"
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -9,6 +9,7 @@ router.route("/post-job").post(verifyJWT,upload.fields([{ name: 'coverImage', ma
 router.route("/get-job").post(getJobs)
 router.route("/update-job").post(updateJob)
 router.route("/delete-job").post(deleteJob)
+router.route("/get-posted-job").post(verifyJWT,getJobsPostedByRecruiter)
 
 
 export default router  

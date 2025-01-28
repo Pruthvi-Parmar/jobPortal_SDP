@@ -45,7 +45,7 @@ const Login = () => {
           navigate('/userhome');
         }
         if(res.data.data.user.role == "recruiter"){
-          navigate('/');
+          navigate('/recruiterhome');
         }
         toast.success(res.data.message);
       }

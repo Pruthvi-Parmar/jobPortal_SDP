@@ -114,6 +114,42 @@ const getJob = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, jobsOfApplicant, "Jobs Retrive Sucessfully"))
 })
 
+// const getJobPostedByRecruiter = asyncHandler(async (req, res) => {
+
+//     const  userId  = req.user._id
+    
+//     const jobsPosted = await Applications.aggregate([
+//         {
+//             $match : { applicant : new mongoose.Types.ObjectId(userId)}
+//         },
+//         {   
+//             $lookup : {
+//                 from : "jobs",
+//                 localField : "job",
+//                 foreignField : "_id",
+//                 as : "jobDetails"
+//             },
+//         },
+//         {
+//             $unwind : "$jobDetails"
+//         },
+//         {
+//             $project:{
+//                 _id : 1, // id of document which stores in MongoDB with jobId and userId
+//                 "jobDetails._id" : 1,
+//                 "jobDetails.title" : 1,
+//                 "jobDetails.location" : 1,
+//                 "jobDetails.overview" : 1,
+//             },
+//         },
+//     ])
+//     console.log(jobsOfApplicant);
+
+//     return res
+//     .status(200)
+//     .json(new ApiResponse(200, jobsOfApplicant, "Jobs Retrive Sucessfully"))
+// })
+
 
 export {
     getApplicant,
