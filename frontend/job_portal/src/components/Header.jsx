@@ -81,7 +81,7 @@ const Header = () => {
             ) : (
               // Case when logged-in user is a recruiter
               <>
-                <Link to="/userhome">
+                <Link to="/recruiterhome">
                   <li>Home</li>
                 </Link>
                 <Link to="/postjob">

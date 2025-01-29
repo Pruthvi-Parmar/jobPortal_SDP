@@ -80,7 +80,7 @@ const SignUp = () => {
           <div>
             <div className="my-3">
               <Label className="block text-sm font-medium text-gray-600">
-                Email
+                Role
               </Label>
               <Input
                 type="text"

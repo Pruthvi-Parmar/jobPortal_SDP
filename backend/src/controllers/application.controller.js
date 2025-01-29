@@ -45,7 +45,9 @@ const applyToJob = asyncHandler(async (req, res) => {
 
 const getApplicant = asyncHandler(async (req, res) => {
 
-    const { JobId } = req.body
+    const { jobId } = req.body
+    console.log(req.body);
+    const JobId = jobId
     
     const applicantForJobs = await Applications.aggregate([
         {

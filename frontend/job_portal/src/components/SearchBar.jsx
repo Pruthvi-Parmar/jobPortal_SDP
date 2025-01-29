@@ -10,6 +10,7 @@ const SearchBar = ({ onSearch }) => {
     e.preventDefault();
     onSearch(keyword);
   };
+  
 
   return (
     <form onSubmit={handleSubmit} className="flex gap-2 w-full max-w-lg mx-auto">

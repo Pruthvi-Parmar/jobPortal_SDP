@@ -10,6 +10,7 @@ import JobsPage from './pages/JobsPage';
 import PostJobForm from './components/PostJobForm';
 import MyJobsPage from './pages/MyJobsPage';
 import MyPostedJobs from './pages/MyPostedJobs';
+import MyPostedJobsTestt from './pages/MyPostedJobsTestt';
 
 
 const router = createBrowserRouter(
@@ -20,7 +21,9 @@ const router = createBrowserRouter(
       <Route path='login' element={<Login />} />
       <Route path='userhome' element={<JobsPage />} />
       <Route path='myjobs' element={<MyJobsPage />} />
-      <Route path='recruiterhome' element={<MyPostedJobs />} />
+      {/* <Route path='recruiterhome' element={<MyPostedJobs />} /> */}
+      <Route path='recruiterhome' element={<MyPostedJobsTestt />} />
+      <Route path='postjob' element={<PostJobForm />} />
   
       
     </Route>

@@ -30,7 +30,11 @@ const PostJobForm = () => {
 
       const response = await fetch("http://localhost:8001/v1/jobs/post-job", {
         method: "POST",
-        body: formData,
+        body: formData, // FormData is used for file uploads, so no need for JSON headers
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("accessToken")}` // Include Bearer token
+        },
+        credentials: "include", // Include credentials if required
       });
 
       if (!response.ok) {
