@@ -22,7 +22,9 @@ const Header = () => {
   if (user) {
     console.log(user.coverimage);
   }
-
+  const handleViewProfile = () => {
+    navigate("/profile"); // Navigate to the profile page
+  };
   const handleClick = async () => {
     console.log("inside logout");
     console.log(localStorage.getItem("accessToken"));
@@ -126,7 +128,7 @@ const Header = () => {
                     {user && (
                       <div className="flex w-fit items-center gap-2 cursor-pointer">
                         <User2 />
-                        <Button variant="link">view profile</Button>
+                        <Button variant="link" onClick={handleViewProfile}>view profile</Button>
                       </div>
                     )}
 
