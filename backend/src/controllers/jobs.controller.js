@@ -50,9 +50,16 @@ const postJobs = asyncHandler(async(req,res) => {
 
 const getJobs = asyncHandler(async (req, res) => {
     
-    const { title, location, type, keyword } = req.query;
+    const { title, location, type, keyword } = req.body;
+
+    // if(
+    //     [title, location, type, keyword].some((field) => field?.trim() === "")
+    // ){
+    //      title, location, type, keyword  = req.body
+    // }
 
     console.log(req.query);
+    console.log(req.body);
     
 
    
@@ -171,11 +178,46 @@ const deleteJob = asyncHandler(async(req, res) => {
     )
 })
 
+const getJobsPostedByRecruiter = asyncHandler(async (req, res) => {
+    
+   
+    const id = req.user._id
+    
+
+    console.log(req.query);
+    console.log(req.body);
+    
+
+   
+    const query = {};
+
+    
+        query.createdBy = id
+    
+
+    
+
+    console.log(query)
+    
+
+    
+    const jobs = await Jobs.find(query);
+
+    if (!jobs || jobs.length === 0) {
+        throw new ApiError(404, "No jobs found with the given filters");
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, jobs, "Jobs retrieved successfully"));
+})
+
 
 
 export {
     postJobs,
     getJobs,
     updateJob,
-    deleteJob
+    deleteJob,
+    getJobsPostedByRecruiter
 }

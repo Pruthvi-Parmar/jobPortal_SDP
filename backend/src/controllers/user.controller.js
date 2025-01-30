@@ -25,12 +25,14 @@ const generateAccessAndRefreshTokens = async (userId) => {
 
 
 const registerUser = asyncHandler( async (req, res) => {
-    const {username, email, password } = req.body
+    const {username, email, password, role } = req.body
     console.log(req.body)
     console.log(email);
+    console.log(role);
+    
 
     if(
-        [username,email,password].some((field) => field?.trim() === "")
+        [username,email,password,role].some((field) => field?.trim() === "")
     ){
         throw new ApiError(400,"all fields are requried")
     }
@@ -46,6 +48,8 @@ const registerUser = asyncHandler( async (req, res) => {
     console.log(username);
     console.log(email);
     console.log(password);
+    console.log(req.files);
+    
 
     const avatarLocalPath = req.files?.coverimage[0]?.path;
 
@@ -54,14 +58,33 @@ const registerUser = asyncHandler( async (req, res) => {
     if (!coverimage) {
         throw new ApiError(400, "coverimage file is required")
     }
+    const avatarLocalPath1 = req.files?.resume[0]?.path;
+
+    const resume = await uploadOnCloudinary(avatarLocalPath1)
+    //const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+    if (!coverimage) {
+        throw new ApiError(400, "resume file is required")
+    }
+
+    console.log(coverimage.url);
+    console.log(resume.url);
+    
     
 
     const user = await User.create({
         username,
         email,
         password,
-        coverimage : coverimage.url
+        role,
+        coverimage : coverimage.url,
+        resume: resume.url,
     })
+
+    if(!user){
+        console.log("nothing ");
+        
+    }
+    
 
     const createdUser = await User.findById(user._id).select(
         "-password -refreshToken"
@@ -72,12 +95,15 @@ const registerUser = asyncHandler( async (req, res) => {
     }
 
     return res.status(200).json(
-        new ApiResponse(201, createdUser, "user registerd successfully")
+        new ApiResponse(200, createdUser, "user registerd successfully")
     )
 })
 
 const loginUser = asyncHandler( async(req, res) => {
     const {email, username, password} = req.body
+
+    console.log(req.body);
+    
 
     if(!(email || username)){
         throw new ApiError(400,"email or username is requried")
@@ -105,6 +131,9 @@ const loginUser = asyncHandler( async(req, res) => {
         httpOnly: true,
         secure: true
     }
+
+    console.log(user);
+    
 
     return res
     .status(200)

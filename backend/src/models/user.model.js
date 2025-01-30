@@ -25,7 +25,7 @@ const userSchema = new Schema(
             trim: true,
             index: true
         },
-        avatar:{
+        resume:{
             type: String, //cloudinary if use!
             required: false
         },
@@ -39,6 +39,10 @@ const userSchema = new Schema(
         },
         refreshToken:{
             type: String,
+        },
+        role:{
+            type: String,
+            //required: true
         }
     },
     {
