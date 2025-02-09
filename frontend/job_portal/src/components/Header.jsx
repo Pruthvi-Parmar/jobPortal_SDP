@@ -55,7 +55,7 @@ const Header = () => {
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
         <div>
           <h1 className="text-2xl font-bold">
-            App<span className="text-[#F83002]">Logo</span>
+            Career<span className="text-[#F83002]">Nest</span>
           </h1>
         </div>
         <div className="flex items-center gap-10">
@@ -63,12 +63,6 @@ const Header = () => {
             {!user ? (
               // Case when no user is logged in
               <>
-                {/* <Link to="/userhome">
-                  <li>Home</li>
-                </Link> */}
-                {/* <Link to="/login">
-                  <li>Login</li>
-                </Link> */}
               </>
             ) : user.role === "jobseeker" ? (
               // Case when logged-in user is a jobseeker

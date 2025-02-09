@@ -78,19 +78,19 @@ const SignUp = () => {
         </h1>
         <form onSubmit={submitHandler} className="space-y-5">
           <div>
-            <div className="my-3">
-              <Label className="block text-sm font-medium text-gray-600">Role</Label>
-              <select
-                name="role"
-                value={input.role}
-                onChange={changeEventHandler}
-                className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2"
-              >
-                <option value="">Select your role</option>
-                <option value="recruiter">Recruiter</option>
-                <option value="job_seeker">Job Seeker</option>
-              </select>
-            </div>
+          <div className="my-3">
+  <Label className="block text-sm font-medium text-gray-600">Role</Label>
+  <select
+    name="role"
+    value={input.role}
+    onChange={changeEventHandler}
+    className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2"
+  >
+    <option value="">Select your role</option>
+    <option value="recruiter">recruitter</option>
+    <option value="job_seeker">jobseeker</option>
+  </select>
+</div>
             <Label className="block text-sm font-medium text-gray-600">
               Username
             </Label>
