@@ -8,6 +8,7 @@ const JobCard = ({ jobId, title, location, salary, type, overview, responsibilit
   const [hasApplied, setHasApplied] = useState(false);
 
   // Function to check if the user has applied for the job
+  // This function is getting called on each card render optimise it by storing the applied jobs before rendering card 
   useEffect(() => {
     const checkApplicationStatus = async () => {
       try {
