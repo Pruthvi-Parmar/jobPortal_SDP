@@ -11,6 +11,8 @@ const applyToJob = asyncHandler(async (req, res) => {
 
     const { jobId } = req.body
     console.log(jobId);
+    console.log(req.body);
+    
     
     
     if(!jobId){

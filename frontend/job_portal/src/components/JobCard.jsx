@@ -1,8 +1,39 @@
 import React from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "./ui/button";
+import { toast } from 'sonner';
+const JobCard = ({jobId, title, location, salary, type, overview, responsibility, requirement, coverImage, status }) => {
+  const handleClick = async () => {
+    console.log(jobId);
+    try {
+      
+      
+      const response = await fetch("http://localhost:8001/v1/application/apply-to-job", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", 
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`, 
+        },
+        body: JSON.stringify({ jobId: jobId }), 
+        credentials: "include",
+      });
+  
+      if (!response.ok) {
+        toast.error("Error while applying");
+        throw new Error("Failed to apply for job");
+        
+      }
+      console.log(response);
+      
 
-const JobCard = ({ title, location, salary, type, overview, responsibility, requirement, coverImage, status }) => {
+      toast.success("applied Succesfull");
+  
+      
+    } catch (error) {
+      console.error("Error applying for job:", error);
+    }
+  };
   return (
     <Card className="hover:shadow-lg transition-shadow">
       {coverImage && (
@@ -27,6 +58,7 @@ const JobCard = ({ title, location, salary, type, overview, responsibility, requ
         <div className="space-y-2 mt-4">
           <p className="text-sm font-semibold">Requirements:</p>
           <p className="text-sm text-gray-600">{requirement}</p>
+          <Button className="text-center" onClick={handleClick}>Apply</Button>
         </div>
       </CardContent>
       <CardFooter className="flex justify-between items-center">

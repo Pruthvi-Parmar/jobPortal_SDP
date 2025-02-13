@@ -10,6 +10,10 @@ const jobApplicationSchema = new Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref : "User",
         require : true
+    },
+    status : {
+        type : String,
+        default : "Pending"
     }
 },{timestamps : true})
 

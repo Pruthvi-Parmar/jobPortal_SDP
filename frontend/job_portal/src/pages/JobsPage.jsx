@@ -72,6 +72,7 @@ const JobsPage = () => {
         {jobs.map((job) => (
           <JobCard
             key={job._id}
+            jobId={job._id}
             title={job.title}
             location={job.location}
             salary={job.salary}
