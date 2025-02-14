@@ -75,14 +75,14 @@ const JobCard = ({ jobId, title, location, salary, type, overview, responsibilit
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-gray-700 mb-4">{overview}</p>
+        <p className="text-sm text-gray-700 mb-4 break-words">{overview}</p>
         <div className="space-y-2">
           <p className="text-sm font-semibold">Responsibilities:</p>
-          <p className="text-sm text-gray-600">{responsibility}</p>
+          <p className="text-sm text-gray-600 break-words">{responsibility}</p>
         </div>
         <div className="space-y-2 mt-4">
           <p className="text-sm font-semibold">Requirements:</p>
-          <p className="text-sm text-gray-600">{requirement}</p>
+          <p className="text-sm text-gray-600 break-words">{requirement}</p>
         </div>
       </CardContent>
       <CardFooter className="flex justify-between items-center">

@@ -26,7 +26,7 @@ const ProfilePage = () => {
       );
 
       const result = response.data;
-
+      console.log(result);
       if (result.success) {
         const userData = result.data;
         setValue("username", userData.username);
