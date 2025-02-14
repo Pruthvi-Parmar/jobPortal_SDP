@@ -22,8 +22,37 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
   }, [job]);
 
   const handleEdit = () => setIsEditing(true);
-  const handleUpdate = () => {
-    //write logic to update 
+  const handleUpdate = async() => {
+    if (!editedJob.title || !editedJob.location || !editedJob.salary || !editedJob.type) {
+      alert("Please fill in all required fields.");
+      return;
+  }
+
+  try {
+      const response = await fetch("http://localhost:8001/v1/jobs/update-job", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+              id: editedJob._id,
+              title: editedJob.title,
+              location: editedJob.location,
+              salary: editedJob.salary,
+              type: editedJob.type,
+              overview: editedJob.overview,
+              responsibility: editedJob.responsibility,
+              requirment: editedJob.requirment,
+              status: editedJob.status,
+          }),
+      });
+
+      const result = await response.json();
+      console.log(result);
+  } catch (error) {
+      console.error("Error updating job:", error);
+      //alert("Something went wrong. Please try again.");
+  } 
     setIsEditing(false);
   };
 

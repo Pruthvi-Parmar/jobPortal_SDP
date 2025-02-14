@@ -101,7 +101,7 @@ const getJobs = asyncHandler(async (req, res) => {
 })
 
 const updateJob = asyncHandler(async (req, res) => {
-    const { id, title, location, salary, type, overview, responsibility, requirment } = req.body;
+    const { id, title, location, salary, type, overview, responsibility, requirment, status } = req.body;
 
     // console.log(req.body);
     // console.log(requirment);
@@ -144,6 +144,8 @@ const updateJob = asyncHandler(async (req, res) => {
     if (overview) job.overview = overview;
     if (responsibility) job.responsibility = responsibility;
     if (requirment) job.requirment = requirment;
+    if (status) job.status = status;
+
 
     console.log(job);
     
