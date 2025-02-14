@@ -31,9 +31,15 @@ const ProfilePage = () => {
         const userData = result.data;
         setValue("username", userData.username);
         setValue("email", userData.email);
+        setValue("fullname", userData.fullname);
         setValue("resume", userData.resume);
         setValue("coverimage", userData.coverimage);
-        // setValue("role", userData.role); // Role is fetched but not editable
+        setValue("role", userData.role);
+        setValue("bio", userData.bio);
+        setValue("location", userData.location);
+        setValue("qualifications", userData.qualifications || []);
+        setValue("experience", userData.experience || []);
+        setValue("company", userData.company || []);
       } else {
         throw new Error(result.message || "Failed to fetch user data");
       }
@@ -57,9 +63,15 @@ const ProfilePage = () => {
   const initialValues = {
     username: "",
     email: "",
+    fullname: "",
     resume: "",
     coverimage: "",
-    // role: "", // Initial value for role
+    role: "",
+    bio: "",
+    location: "",
+    qualifications: [],
+    experience: [],
+    company: [],
   };
   const [initialFormValues, setInitialFormValues] = useState(initialValues);
 
@@ -143,12 +155,20 @@ const ProfilePage = () => {
               <Input id="email" {...register("email")} disabled={!isEditing} />
             </div>
 
+            {/* Fullname */}
+            {formValues.fullname && (
+              <div>
+                <Label htmlFor="fullname">Full Name</Label>
+                <Input id="fullname" {...register("fullname")} disabled={!isEditing} />
+              </div>
+            )}
+
             {/* Resume */}
-            <div>
-              <Label htmlFor="resume">Resume</Label>
-              <div className="flex items-center gap-4">
-                <Input id="resume" {...register("resume")} disabled={!isEditing} />
-                {formValues.resume && (
+            {formValues.resume && (
+              <div>
+                <Label htmlFor="resume">Resume</Label>
+                <div className="flex items-center gap-4">
+                  <Input id="resume" {...register("resume")} disabled={!isEditing} />
                   <a
                     href={formValues.resume}
                     target="_blank"
@@ -157,44 +177,137 @@ const ProfilePage = () => {
                   >
                     Preview
                   </a>
-                )}
-                {isEditing && (
-                  <Input
-                    type="file"
-                    accept="application/pdf"
-                    onChange={(e) => handleFileChange(e, "resume")}
-                  />
-                )}
+                  {isEditing && (
+                    <Input
+                      type="file"
+                      accept="application/pdf"
+                      onChange={(e) => handleFileChange(e, "resume")}
+                    />
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Cover Image */}
-            <div>
-              <Label htmlFor="coverimage">Cover Image</Label>
-              <div className="flex items-center gap-4">
-                <Input id="coverimage" {...register("coverimage")} disabled={!isEditing} />
-                {formValues.coverimage && (
+            {formValues.coverimage && (
+              <div>
+                <Label htmlFor="coverimage">Cover Image</Label>
+                <div className="flex items-center gap-4">
+                  <Input id="coverimage" {...register("coverimage")} disabled={!isEditing} />
                   <img
                     src={formValues.coverimage}
                     alt="Cover"
                     className="w-16 h-16 object-cover rounded"
                   />
-                )}
-                {isEditing && (
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => handleFileChange(e, "coverimage")}
-                  />
-                )}
+                  {isEditing && (
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleFileChange(e, "coverimage")}
+                    />
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Role */}
-            {/* <div>
-              <Label htmlFor="role">Role</Label>
-              <Input id="role" {...register("role")} disabled={!isEditing} />
-            </div> */}
+            {formValues.role && (
+              <div>
+                <Label htmlFor="role">Role</Label>
+                <Input id="role" {...register("role")} disabled={true} />
+              </div>
+            )}
+
+            {/* Bio */}
+            {formValues.bio && (
+              <div>
+                <Label htmlFor="bio">Bio</Label>
+                <Input id="bio" {...register("bio")} disabled={!isEditing} />
+              </div>
+            )}
+
+            {/* Location */}
+            {formValues.location && (
+              <div>
+                <Label htmlFor="location">Location</Label>
+                <Input id="location" {...register("location")} disabled={!isEditing} />
+              </div>
+            )}
+
+            {/* Qualifications */}
+            {formValues.qualifications?.length > 0 && (
+              <div>
+                <Label htmlFor="qualifications">Qualifications</Label>
+                {formValues.qualifications.map((qualification, index) => (
+                  <div key={index} className="space-y-2">
+                    <Input
+                      id={`qualifications[${index}].education`}
+                      {...register(`qualifications[${index}].education`)}
+                      disabled={!isEditing}
+                      placeholder="Education"
+                    />
+                    <Input
+                      id={`qualifications[${index}].skills`}
+                      {...register(`qualifications[${index}].skills`)}
+                      disabled={!isEditing}
+                      placeholder="Skills"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Experience */}
+            {formValues.experience?.length > 0 && (
+              <div>
+                <Label htmlFor="experience">Experience</Label>
+                {formValues.experience.map((exp, index) => (
+                  <div key={index} className="space-y-2">
+                    <Input
+                      id={`experience[${index}].title`}
+                      {...register(`experience[${index}].title`)}
+                      disabled={!isEditing}
+                      placeholder="Title"
+                    />
+                    <Input
+                      id={`experience[${index}].company`}
+                      {...register(`experience[${index}].company`)}
+                      disabled={!isEditing}
+                      placeholder="Company"
+                    />
+                    <Input
+                      id={`experience[${index}].desc`}
+                      {...register(`experience[${index}].desc`)}
+                      disabled={!isEditing}
+                      placeholder="Description"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Company */}
+            {formValues.company?.length > 0 && (
+              <div>
+                <Label htmlFor="company">Company</Label>
+                {formValues.company.map((comp, index) => (
+                  <div key={index} className="space-y-2">
+                    <Input
+                      id={`company[${index}].name`}
+                      {...register(`company[${index}].name`)}
+                      disabled={!isEditing}
+                      placeholder="Company Name"
+                    />
+                    <Input
+                      id={`company[${index}].desc`}
+                      {...register(`company[${index}].desc`)}
+                      disabled={!isEditing}
+                      placeholder="Description"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
 
             {/* Edit/Save Button */}
             <div className="flex justify-end gap-4">
@@ -208,9 +321,15 @@ const ProfilePage = () => {
                       setIsEditing(false);
                       setValue("username", initialFormValues.username);
                       setValue("email", initialFormValues.email);
+                      setValue("fullname", initialFormValues.fullname);
                       setValue("resume", initialFormValues.resume);
                       setValue("coverimage", initialFormValues.coverimage);
-                      // setValue("role", initialFormValues.role); // Reset role value
+                      setValue("role", initialFormValues.role);
+                      setValue("bio", initialFormValues.bio);
+                      setValue("location", initialFormValues.location);
+                      setValue("qualifications", initialFormValues.qualifications);
+                      setValue("experience", initialFormValues.experience);
+                      setValue("company", initialFormValues.company);
                     }}
                   >
                     Cancel
