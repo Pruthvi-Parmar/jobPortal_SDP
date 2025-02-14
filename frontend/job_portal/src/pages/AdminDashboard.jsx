@@ -87,7 +87,7 @@ const AdminDashboard = () => {
   // Delete User
   const deleteUser = async (userId) => {
     try {
-      await fetch("http://localhost:8001/v1/admin/delete-user", {
+      await fetch("http://localhost:8001/v1/admin/deleteuser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -104,7 +104,7 @@ const AdminDashboard = () => {
   // Delete Job
   const deleteJob = async (jobId) => {
     try {
-      await fetch("http://localhost:8001/v1/admin/delete-job", {
+      await fetch("http://localhost:8001/v1/admin/deletejob", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -198,7 +198,36 @@ const AdminDashboard = () => {
           ))}
         </TableBody>
       </Table>
+      <h2 className="text-2xl font-semibold mt-6">Job Applications</h2>
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Applicant Name</TableHead>
+      <TableHead>Job Title</TableHead>
+      <TableHead>Email</TableHead>
+      <TableHead>Status</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    {applications.map((app) => {
+      // Find the user and job details based on stored IDs
+      const user = users.find((u) => u._id === app.userId);
+      const job = jobs.find((j) => j._id === app.jobId);
+
+      return (
+        <TableRow key={app._id}>
+          <TableCell>{user ? user.username : "Unknown User"}</TableCell>
+          <TableCell>{job ? job.title : "Unknown Job"}</TableCell>
+          <TableCell>{user ? user.email : "No Email"}</TableCell>
+          <TableCell>{app.status}</TableCell>
+        </TableRow>
+      );
+    })}
+  </TableBody>
+</Table>
+
     </div>
+    
   );
 };
 
