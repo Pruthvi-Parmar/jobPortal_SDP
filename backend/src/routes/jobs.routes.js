@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {deleteJob, getJobs, getJobsPostedByRecruiter, postJobs, updateJob,} from "../controllers/jobs.controller.js"
+import {deleteJob, getJobs, getJobsPostedByRecruiter, postJobs, updateJob, updateJobStatus,} from "../controllers/jobs.controller.js"
 import {upload} from "../middlewares/multer.middleware.js"
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { authorizeRoles } from "../middlewares/role.middleware.js";
@@ -13,6 +13,7 @@ router.route("/get-job").post(getJobs)//router.route("/get-job").post(verifyJWT,
 router.route("/update-job").post(updateJob)
 router.route("/delete-job").post(deleteJob)
 router.route("/get-posted-job").post(verifyJWT,getJobsPostedByRecruiter)
+router.route("/update-job-state").post(updateJobStatus)
 
 
 export default router  

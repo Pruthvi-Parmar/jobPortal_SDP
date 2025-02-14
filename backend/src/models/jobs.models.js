@@ -37,7 +37,7 @@ const jobSchema = new Schema({
     status: {
         type:String,
         default:"Active",
-        enum:["Active","Closed","Hibernate"]
+        enum:["Active","Hibernate"]
     },
     createdBy: {
         type:mongoose.Schema.Types.ObjectId,

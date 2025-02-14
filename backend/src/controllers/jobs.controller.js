@@ -212,6 +212,23 @@ const getJobsPostedByRecruiter = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, jobs, "Jobs retrieved successfully"));
 })
 
+const updateJobStatus = asyncHandler(async(req, res)=>{
+    
+    const { jobId, status } = req.body
+    
+    const job = await Jobs.findById(jobId)
+
+    if(!job){
+        throw new ApiError(404,"No job Found")
+    }
+    
+    job.status = status
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, job, "status updated sucessfully"));
+})
+
 
 
 export {
@@ -219,5 +236,6 @@ export {
     getJobs,
     updateJob,
     deleteJob,
-    getJobsPostedByRecruiter
+    getJobsPostedByRecruiter,
+    updateJobStatus
 }
