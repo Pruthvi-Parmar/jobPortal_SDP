@@ -12,6 +12,7 @@ import MyJobsPage from './pages/MyJobsPage';
 import MyPostedJobs from './pages/MyPostedJobs';
 import MyPostedJobsTestt from './pages/MyPostedJobsTestt';
 import ProfilePage from './pages/ProfilePage';
+import AdminDashboard from './pages/AdminDashboard';
 
 
 const router = createBrowserRouter(
@@ -26,6 +27,7 @@ const router = createBrowserRouter(
       {/* <Route path='recruiterhome' element={<MyPostedJobs />} /> */}
       <Route path='recruiterhome' element={<MyPostedJobs />} />
       <Route path='postjob' element={<PostJobForm />} />
+      <Route path='admin' element={<AdminDashboard />} />
   
       
     </Route>

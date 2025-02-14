@@ -22,7 +22,7 @@ const AdminDashboard = () => {
   const fetchDashboardData = async () => {
     try {
       const res = await fetch("http://localhost:8001/v1/admin/dashboard", {
-        method: "GET",
+        method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
@@ -37,8 +37,8 @@ const AdminDashboard = () => {
   // Fetch Users
   const fetchUsers = async () => {
     try {
-      const res = await fetch("http://localhost:8001/v1/admin/users", {
-        method: "GET",
+      const res = await fetch("http://localhost:8001/v1/admin/getalluser", {
+        method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
@@ -53,8 +53,8 @@ const AdminDashboard = () => {
   // Fetch Jobs
   const fetchJobs = async () => {
     try {
-      const res = await fetch("http://localhost:8001/v1/admin/jobs", {
-        method: "GET",
+      const res = await fetch("http://localhost:8001/v1/admin/getalljobs", {
+        method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
@@ -69,8 +69,10 @@ const AdminDashboard = () => {
   // Fetch Applications
   const fetchApplications = async () => {
     try {
-      const res = await fetch("http://localhost:8001/v1/admin/applications", {
-        method: "GET",
+      console.log(localStorage.getItem("accessToken"));
+      
+      const res = await fetch("http://localhost:8001/v1/admin/getAllApplications", {
+        method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },

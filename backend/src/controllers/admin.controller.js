@@ -213,7 +213,7 @@ const deleteJob = asyncHandler(async (req, res) => {
 
 const getAllApplications = asyncHandler(async (req, res) => {
     const applications = await Applications.find()
-        .populate("applicant", "username email")
+        .populate("applicant", "username","email")
         .populate("job", "title");
     return res
         .status(200)

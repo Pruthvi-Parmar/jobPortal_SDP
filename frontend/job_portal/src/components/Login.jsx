@@ -27,6 +27,27 @@ const Login = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
+    if(input.username == "admin"){
+      const res = await axios.post('http://localhost:8001/v1/admin/login', input, {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true,
+      });
+      localStorage.setItem('accessToken', res.data.data.accessToken);
+      localStorage.setItem('refreshToken', res.data.data.refreshToken);
+      console.log(res.data.data.accessToken);
+      
+      if (res.data.success) {
+        console.log(res.data.data.user);
+        
+        dispatch(login(res.data.data.user))
+        
+          navigate('/admin');
+       
+        toast.success(res.data.message);
+      }
+      
+    }
+
     try {
       const res = await axios.post('http://localhost:8001/v1/users/login', input, {
         headers: { 'Content-Type': 'application/json' },
