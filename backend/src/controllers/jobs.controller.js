@@ -221,8 +221,14 @@ const updateJobStatus = asyncHandler(async(req, res)=>{
     if(!job){
         throw new ApiError(404,"No job Found")
     }
+    console.log(job);
+    
     
     job.status = status
+    await job.save({validateBeforeSave:false})
+
+    console.log(job);
+    
 
     return res
         .status(200)
