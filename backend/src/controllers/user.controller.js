@@ -68,35 +68,117 @@ const registerUser = asyncHandler( async (req, res) => {
 
     console.log(coverimage.url);
     console.log(resume.url);
-    
-    
 
-    const user = await User.create({
-        username,
-        email,
-        password,
-        role,
-        coverimage : coverimage.url,
-        resume: resume.url,
-    })
+    if(role=="jobseeker"){
+        const {qualifications, experience, location, bio} = req.body
+        console.log(qualifications, experience, location, bio);
+        // if(
+        //     [qualifications,experience,location,bio].some((field) => field?.trim() === "")
+        // ){
+        //     throw new ApiError(400,"all fields are requried")
+        // }
+        const user = await User.create({
+            username,
+            email,
+            password,
+            role,
+            coverimage : coverimage.url,
+            resume: resume.url,
+            qualifications,
+            experience,
+            location,
+            bio
 
-    if(!user){
-        console.log("nothing ");
+        })
+
+        if(!user){
+            console.log("nothing ");
+            
+        }
         
+    
+        const createdUser = await User.findById(user._id).select(
+            "-password -refreshToken"
+        )
+    
+        if(!createdUser){
+            throw new ApiError(500,"something went wrong while registering user")
+        }
+    
+        return res.status(200).json(
+            new ApiResponse(200, createdUser, "user registerd successfully")
+        )
     }
+
+    
     
 
-    const createdUser = await User.findById(user._id).select(
-        "-password -refreshToken"
-    )
+    if(role=="recruiter"){
+        const { company } = req.body
+        // if(
+        //     [company].some((field) => field?.trim() === "")
+        // ){
+        //     throw new ApiError(400,"all fields are requried")
+        // }
+        const user = await User.create({
+            username,
+            email,
+            password,
+            role,
+            coverimage : coverimage.url,
+            bio,
+            company,
 
-    if(!createdUser){
-        throw new ApiError(500,"something went wrong while registering user")
+        })
+
+        if(!user){
+            console.log("nothing ");
+            
+        }
+        
+    
+        const createdUser = await User.findById(user._id).select(
+            "-password -refreshToken"
+        )
+    
+        if(!createdUser){
+            throw new ApiError(500,"something went wrong while registering user")
+        }
+    
+        return res.status(200).json(
+            new ApiResponse(200, createdUser, "user registerd successfully")
+        )
     }
 
-    return res.status(200).json(
-        new ApiResponse(200, createdUser, "user registerd successfully")
-    )
+    
+
+
+    // const user = await User.create({
+    //     username,
+    //     email,
+    //     password,
+    //     role,
+    //     coverimage : coverimage.url,
+    //     resume: resume.url,
+    // })
+
+    // if(!user){
+    //     console.log("nothing ");
+        
+    // }
+    
+
+    // const createdUser = await User.findById(user._id).select(
+    //     "-password -refreshToken"
+    // )
+
+    // if(!createdUser){
+    //     throw new ApiError(500,"something went wrong while registering user")
+    // }
+
+    // return res.status(200).json(
+    //     new ApiResponse(200, createdUser, "user registerd successfully")
+    // )
 })
 
 const loginUser = asyncHandler( async(req, res) => {
@@ -279,6 +361,26 @@ const updateAccountDetails = asyncHandler(async(req, res) => {
     .json(new ApiResponse(200, user, "Account details updated successfully"))
 });
 
+const viewProfile = asyncHandler(async(req, res) => {
+    const {username, email} = req.body
+
+    if (!username || !email) {
+        throw new ApiError(400, "All fields are required")
+    }
+
+    const user = await User.findOne({
+        $or: [{username},{email}]
+    })
+
+    if(!user){
+        throw new ApiError(404,"user does not exist")
+    }
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, user, "Account details updated successfully"))
+});
+
 
 // const forgotPassword = asyncHandler(async (req, res) => {
 //     const {email, newPassword} = req.body
@@ -295,6 +397,8 @@ const updateAccountDetails = asyncHandler(async(req, res) => {
 
 // })
 
+
+
 export {
     registerUser,
     loginUser,
@@ -302,5 +406,6 @@ export {
     refreshAccessToken,
     changePassword,
     getCurrentUser,
-    updateAccountDetails
+    updateAccountDetails,
+    viewProfile
 }

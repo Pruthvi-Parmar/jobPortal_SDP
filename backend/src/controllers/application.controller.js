@@ -69,9 +69,11 @@ const getApplicant = asyncHandler(async (req, res) => {
         {
             $project:{
                 _id : 1,
+                "applicantDetails._id" : 1,
                 "applicantDetails.username" : 1,
                 "applicantDetails.email" : 1,
                 "applicantDetails.fullname" : 1,
+                "status" : 1,
             },
         },
     ])
@@ -154,10 +156,38 @@ const getJob = asyncHandler(async (req, res) => {
 //     .json(new ApiResponse(200, jobsOfApplicant, "Jobs Retrive Sucessfully"))
 // })
 
+const changeApplicationState = asyncHandler(async(req, res)=>{
+    
+    const {jobId, userId, status} = req.body
+
+    const documents = await Applications.aggregate([
+        {
+            $match : { job : new mongoose.Types.ObjectId(jobId)}
+        },
+        {
+            $match : { applicant : new mongoose.Types.ObjectId(userId)}
+        },{
+            $project : {
+                _id : 1,
+                status : 1,
+            }
+        }
+    ])
+    console.log(documents);
+    console.log(documents[0].status);
+    
+    documents[0].status = status
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, documents, "status updated successfully"))
+})
+
 
 export {
     getApplicant,
     applyToJob,
-    getJob
+    getJob,
+    changeApplicationState
 }
 

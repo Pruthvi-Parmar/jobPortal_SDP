@@ -43,7 +43,43 @@ const userSchema = new Schema(
         role:{
             type: String,
             //required: true
-        }
+        },
+        bio:{
+            type: String,
+        },
+        location:{
+            type: String,
+        },
+        qualifications:[{
+            education:{
+                type: String,
+            },
+            certifricate:{
+                type: String,
+            },
+            skills:{
+                type: String,
+            }
+        }],
+        experience:[{
+            title:{
+                type: String,
+            },
+            company:{
+                type: String,
+            },
+            desc:{
+                type: String,
+            }
+        }],
+        company:[{
+            name:{
+                type: String,
+            },
+            desc:{
+                type: String,
+            }
+        }],
     },
     {
         timestamps: true
