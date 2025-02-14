@@ -24,7 +24,7 @@ const router = createBrowserRouter(
       <Route path='myjobs' element={<MyJobsPage />} />
       <Route path='profile' element={<ProfilePage />} />
       {/* <Route path='recruiterhome' element={<MyPostedJobs />} /> */}
-      <Route path='recruiterhome' element={<MyPostedJobsTestt />} />
+      <Route path='recruiterhome' element={<MyPostedJobs />} />
       <Route path='postjob' element={<PostJobForm />} />
   
       
