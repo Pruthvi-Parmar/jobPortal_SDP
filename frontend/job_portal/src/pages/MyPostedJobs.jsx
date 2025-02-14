@@ -32,9 +32,7 @@ const MyPostedJobs = () => {
     fetchJobs();
   }, []);
 
-  const handleUpdateJob = (updatedJob) => {
-    setJobs((prevJobs) => prevJobs.map((job) => (job._id === updatedJob._id ? updatedJob : job)));
-  };
+
 
   
   return user ? (
@@ -54,7 +52,7 @@ const MyPostedJobs = () => {
       {selectedJob && (
         <JobDetails
           job={selectedJob}
-          onUpdateJob={handleUpdateJob}
+          // onUpdateJob={handleUpdateJob}
           // applicants={appliedUsers}
           // loadingApplicants={loadingApplicants}
           // fetchApplicants={fetchApplicants}

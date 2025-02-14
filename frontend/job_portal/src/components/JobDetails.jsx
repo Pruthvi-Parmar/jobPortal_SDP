@@ -23,7 +23,7 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
 
   const handleEdit = () => setIsEditing(true);
   const handleUpdate = () => {
-    onUpdateJob(editedJob);
+    //write logic to update 
     setIsEditing(false);
   };
 
