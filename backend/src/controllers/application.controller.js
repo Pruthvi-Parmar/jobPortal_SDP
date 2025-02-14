@@ -156,32 +156,27 @@ const getJob = asyncHandler(async (req, res) => {
 //     .json(new ApiResponse(200, jobsOfApplicant, "Jobs Retrive Sucessfully"))
 // })
 
-const changeApplicationState = asyncHandler(async(req, res)=>{
+const changeApplicationState = asyncHandler(async(req, res) => {
+    const { jobId, userId, status } = req.body;
+    console.log(jobId, userId, status);
     
-    const {jobId, userId, status} = req.body
 
-    const documents = await Applications.aggregate([
-        {
-            $match : { job : new mongoose.Types.ObjectId(jobId)}
-        },
-        {
-            $match : { applicant : new mongoose.Types.ObjectId(userId)}
-        },{
-            $project : {
-                _id : 1,
-                status : 1,
-            }
-        }
-    ])
-    console.log(documents);
-    console.log(documents[0].status);
-    
-    documents[0].status = status
+    // Update the status in the database
+    const updatedApplication = await Applications.findOneAndUpdate(
+        { job: jobId, applicant: userId }, // Find the matching application
+        { $set: { status: status } }, // Update the status
+        { new: true } // Return the updated document
+    );
+
+    if (!updatedApplication) {
+        return res.status(404).json(new ApiResponse(404, null, "Application not found"));
+    }
 
     return res
-    .status(200)
-    .json(new ApiResponse(200, documents, "status updated successfully"))
-})
+        .status(200)
+        .json(new ApiResponse(200, updatedApplication, "Status updated successfully"));
+});
+
 
 
 export {

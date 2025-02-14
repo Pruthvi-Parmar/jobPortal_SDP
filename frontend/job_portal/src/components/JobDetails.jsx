@@ -14,6 +14,7 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
   const [editedJob, setEditedJob] = useState(job);
   const [appliedUsers, setAppliedUsers] = useState([]);
   const [loadingApplicants, setLoadingApplicants] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     setEditedJob(job);
@@ -41,6 +42,8 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
       const result = await response.json();
       if (result.success) {
         setAppliedUsers(result.data);
+        console.log(result.data);
+        
       }
     } catch (error) {
       console.error("Failed to fetch applicants", error);
@@ -50,14 +53,57 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
   };
 
   const handleAccept = async (applicationId) => {
+
     console.log("Accept application:", applicationId);
-    // Add your accept logic here
+    let userId = applicationId
+    try {
+      const response = await fetch("http://localhost:8001/v1/application/changeState", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          jobId: job._id,  // Job ID from job object
+          userId: userId,  // User ID from the application object
+          status: "Accepted", // New status
+        }),
+      });
+  
+      const result = await response.json();
+      console.log("Application status updated:", result);
+      setRefreshKey((prev) => prev + 1); // Trigger re-render
+    } catch (error) {
+      console.error("Error updating application status", error);
+    }
+
   };
 
   const handleReject = async (applicationId) => {
-    console.log("Reject application:", applicationId);
-    // Add your reject logic here
+    console.log("Accept application:", applicationId);
+    let userId = applicationId
+    try {
+      const response = await fetch("http://localhost:8001/v1/application/changeState", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          jobId: job._id,  // Job ID from job object
+          userId: userId,  // User ID from the application object
+          status: "Rejected", // New status
+        }),
+      });
+  
+      const result = await response.json();
+      console.log("Application status updated:", result);
+      setRefreshKey((prev) => prev + 1); // Trigger re-render
+    } catch (error) {
+      console.error("Error updating application status", error);
+    }
   };
+  useEffect(() => {
+    fetchApplicants();
+  }, [refreshKey]); 
 
 
   return (
@@ -253,7 +299,7 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
                         variant="outline"
                         size="sm"
                         className="text-green-600 hover:bg-green-50"
-                        onClick={() => handleAccept(application._id)}
+                        onClick={() => handleAccept(application.applicantDetails._id)}
                       >
                         <Check className="h-4 w-4 mr-2" />
                         Accept
@@ -262,7 +308,7 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
                         variant="outline"
                         size="sm"
                         className="text-red-600 hover:bg-red-50"
-                        onClick={() => handleReject(application._id)}
+                        onClick={() => handleReject(application.applicantDetails._id)}
                       >
                         <X className="h-4 w-4 mr-2" />
                         Reject
