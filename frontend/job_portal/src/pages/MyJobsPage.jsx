@@ -70,6 +70,10 @@ const MyJobsPage = () => {
       const result = await response.json();
 
       if (result.success) {
+        console.log(result.data);
+        
+        // console.log(result.data[0].status);
+        
         setJobs(result.data);
       } else {
         throw new Error(result.message || "Failed to fetch jobs");
@@ -109,7 +113,7 @@ const MyJobsPage = () => {
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {jobs.map((job) => (
-            <MyJobsCard key={job._id} jobDetails={job.jobDetails} />
+            <MyJobsCard key={job._id} jobDetails={job.jobDetails} status={job.status} />
           ))}
         </div>
       </div>

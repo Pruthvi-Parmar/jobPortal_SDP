@@ -77,7 +77,9 @@ const getApplicant = asyncHandler(async (req, res) => {
             },
         },
     ])
-    console.log(applicantForJobs);
+    //console.log(applicantForJobs);
+    console.log("status ++"+applicantForJobs.status);
+    
 
     return res
     .status(200)
@@ -110,6 +112,8 @@ const getJob = asyncHandler(async (req, res) => {
                 "jobDetails.title" : 1,
                 "jobDetails.location" : 1,
                 "jobDetails.overview" : 1,
+                "jobDetails.status" :1,
+                status:1
             },
         },
     ])
