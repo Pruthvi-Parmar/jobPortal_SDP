@@ -13,6 +13,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Check, X } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
+import { Eye } from "lucide-react";
+
 
 const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
   // console.log(job);
@@ -150,6 +153,38 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
   useEffect(() => {
     fetchApplicants();
   }, [refreshKey]);
+
+
+  const [selectedApplicant, setSelectedApplicant] = useState(null);
+
+  const handleViewProfile = async (applicant) => {
+    try {
+      const response = await fetch("http://localhost:8001/v1/users/viewProfile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        body: JSON.stringify({
+          email: applicant.email,
+          username: applicant.username,
+        }),
+      });
+  
+      const result = await response.json();
+      console.log(result.data);
+      
+  
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to fetch profile");
+      }
+  
+      setSelectedApplicant(result.data); // Update state with applicant details
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    }
+  };
+  
 
   return (
     <motion.div
@@ -395,6 +430,55 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
                         </Badge>
                       )}
                     </div>
+
+{/* get profile */}
+<div>
+  {/* View Profile Button */}
+  <Button
+    variant="outline"
+    size="sm"
+    className="text-blue-600 hover:bg-blue-50"
+    onClick={() => handleViewProfile(application.applicantDetails)}
+  >
+    <Eye className="h-4 w-4 mr-2" />
+    View Profile
+  </Button>
+</div>
+
+{/* Profile Modal */}
+<Dialog open={selectedApplicant !== null} onOpenChange={() => setSelectedApplicant(null)}>
+  <DialogContent className="bg-white shadow-lg border border-gray-300 backdrop:bg-opacity-20">
+    <DialogHeader>
+      <DialogTitle>{selectedApplicant?.username || "Unknown User"}</DialogTitle>
+      <DialogDescription className="text-gray-500">{selectedApplicant?.email}</DialogDescription>
+    </DialogHeader>
+    <div className="mt-4 space-y-2">
+      <p><strong>Location:</strong> {selectedApplicant?.location || "Not provided"}</p>
+      <p><strong>Bio:</strong> {selectedApplicant?.bio || "No bio available"}</p>
+      <p><strong>Skills:</strong> {selectedApplicant?.qualifications?.map((q) => q.skills).join(", ") || "Not listed"}</p>
+      <p><strong>Experience:</strong> {selectedApplicant?.experience?.map((exp) => `${exp.title} at ${exp.company}`).join(", ") || "No experience listed"}</p>
+      <p><strong>Resume:</strong> 
+  {selectedApplicant?.resume ? (
+    <Button 
+      variant="outline" 
+      size="sm" 
+      className="text-blue-600 hover:bg-blue-50 ml-2"
+      onClick={() => window.open(selectedApplicant.resume, "_blank")}
+    >
+      View Resume
+    </Button>
+  ) : "Not Available"}
+</p>
+
+    </div>
+    <DialogClose asChild>
+      <Button variant="secondary" className="mt-3 w-full">Close</Button>
+    </DialogClose>
+  </DialogContent>
+</Dialog>
+
+{/* end : get profile */}
+
                   </CardContent>
                 </Card>
               );
