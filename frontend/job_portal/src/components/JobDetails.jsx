@@ -306,7 +306,7 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
                 }
               />
             ) : (
-              <p className="text-gray-700">{editedJob.overview}</p>
+              <p className="text-gray-700 break-words whitespace-normal">{editedJob.overview}</p>
             )}
           </div>
 
@@ -321,7 +321,7 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
                 }
               />
             ) : (
-              <p className="text-gray-700">{editedJob.responsiblity}</p>
+              <p className="text-gray-700 break-words whitespace-normal">{editedJob.responsiblity}</p>
             )}
           </div>
 
@@ -336,7 +336,7 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
                 }
               />
             ) : (
-              <p className="text-gray-700">{editedJob.requirment}</p>
+              <p className="text-gray-700 break-words whitespace-normal">{editedJob.requirment}</p>
             )}
           </div>
         </CardContent>
