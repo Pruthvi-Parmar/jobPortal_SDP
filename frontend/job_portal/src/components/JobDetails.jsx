@@ -5,11 +5,17 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
 import { Check, X } from "lucide-react";
 
 const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
-    // console.log(job);
+  // console.log(job);
   const [isEditing, setIsEditing] = useState(false);
   const [editedJob, setEditedJob] = useState(job);
   const [appliedUsers, setAppliedUsers] = useState([]);
@@ -22,37 +28,42 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
   }, [job]);
 
   const handleEdit = () => setIsEditing(true);
-  const handleUpdate = async() => {
-    if (!editedJob.title || !editedJob.location || !editedJob.salary || !editedJob.type) {
+  const handleUpdate = async () => {
+    if (
+      !editedJob.title ||
+      !editedJob.location ||
+      !editedJob.salary ||
+      !editedJob.type
+    ) {
       alert("Please fill in all required fields.");
       return;
-  }
+    }
 
-  try {
+    try {
       const response = await fetch("http://localhost:8001/v1/jobs/update-job", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-              id: editedJob._id,
-              title: editedJob.title,
-              location: editedJob.location,
-              salary: editedJob.salary,
-              type: editedJob.type,
-              overview: editedJob.overview,
-              responsibility: editedJob.responsibility,
-              requirment: editedJob.requirment,
-              status: editedJob.status,
-          }),
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: editedJob._id,
+          title: editedJob.title,
+          location: editedJob.location,
+          salary: editedJob.salary,
+          type: editedJob.type,
+          overview: editedJob.overview,
+          responsibility: editedJob.responsibility,
+          requirment: editedJob.requirment,
+          status: editedJob.status,
+        }),
       });
 
       const result = await response.json();
       console.log(result);
-  } catch (error) {
+    } catch (error) {
       console.error("Error updating job:", error);
       //alert("Something went wrong. Please try again.");
-  } 
+    }
     setIsEditing(false);
   };
 
@@ -60,19 +71,21 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
     if (!job) return;
     setLoadingApplicants(true);
     try {
-      const response = await fetch("http://localhost:8001/v1/application/get-job-application", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-        body: JSON.stringify({ jobId: job._id }),
-      });
+      const response = await fetch(
+        "http://localhost:8001/v1/application/get-job-application",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+          body: JSON.stringify({ jobId: job._id }),
+        }
+      );
       const result = await response.json();
       if (result.success) {
         setAppliedUsers(result.data);
         console.log(result.data);
-        
       }
     } catch (error) {
       console.error("Failed to fetch applicants", error);
@@ -82,47 +95,51 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
   };
 
   const handleAccept = async (applicationId) => {
-
     console.log("Accept application:", applicationId);
-    let userId = applicationId
+    let userId = applicationId;
     try {
-      const response = await fetch("http://localhost:8001/v1/application/changeState", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          jobId: job._id,  // Job ID from job object
-          userId: userId,  // User ID from the application object
-          status: "Accepted", // New status
-        }),
-      });
-  
+      const response = await fetch(
+        "http://localhost:8001/v1/application/changeState",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            jobId: job._id, // Job ID from job object
+            userId: userId, // User ID from the application object
+            status: "Accepted", // New status
+          }),
+        }
+      );
+
       const result = await response.json();
       console.log("Application status updated:", result);
       setRefreshKey((prev) => prev + 1); // Trigger re-render
     } catch (error) {
       console.error("Error updating application status", error);
     }
-
   };
 
   const handleReject = async (applicationId) => {
     console.log("Accept application:", applicationId);
-    let userId = applicationId
+    let userId = applicationId;
     try {
-      const response = await fetch("http://localhost:8001/v1/application/changeState", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          jobId: job._id,  // Job ID from job object
-          userId: userId,  // User ID from the application object
-          status: "Rejected", // New status
-        }),
-      });
-  
+      const response = await fetch(
+        "http://localhost:8001/v1/application/changeState",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            jobId: job._id, // Job ID from job object
+            userId: userId, // User ID from the application object
+            status: "Rejected", // New status
+          }),
+        }
+      );
+
       const result = await response.json();
       console.log("Application status updated:", result);
       setRefreshKey((prev) => prev + 1); // Trigger re-render
@@ -132,8 +149,7 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
   };
   useEffect(() => {
     fetchApplicants();
-  }, [refreshKey]); 
-
+  }, [refreshKey]);
 
   return (
     <motion.div
@@ -154,7 +170,9 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
           {isEditing ? (
             <Select
               value={editedJob.status}
-              onValueChange={(value) => setEditedJob({ ...editedJob, status: value })}
+              onValueChange={(value) =>
+                setEditedJob({ ...editedJob, status: value })
+              }
             >
               <SelectTrigger className="w-32">
                 <SelectValue placeholder="Select Status" />
@@ -184,7 +202,9 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
               <Input
                 type="text"
                 value={editedJob.title}
-                onChange={(e) => setEditedJob({ ...editedJob, title: e.target.value })}
+                onChange={(e) =>
+                  setEditedJob({ ...editedJob, title: e.target.value })
+                }
               />
             ) : (
               editedJob.title
@@ -199,7 +219,9 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
               <Input
                 type="text"
                 value={editedJob.location}
-                onChange={(e) => setEditedJob({ ...editedJob, location: e.target.value })}
+                onChange={(e) =>
+                  setEditedJob({ ...editedJob, location: e.target.value })
+                }
               />
             ) : (
               <p className="text-gray-700">{editedJob.location}</p>
@@ -213,7 +235,9 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
               <Input
                 type="number"
                 value={editedJob.salary}
-                onChange={(e) => setEditedJob({ ...editedJob, salary: e.target.value })}
+                onChange={(e) =>
+                  setEditedJob({ ...editedJob, salary: e.target.value })
+                }
               />
             ) : (
               <p className="text-gray-700">${editedJob.salary}</p>
@@ -227,7 +251,9 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
               <Input
                 type="text"
                 value={editedJob.type}
-                onChange={(e) => setEditedJob({ ...editedJob, type: e.target.value })}
+                onChange={(e) =>
+                  setEditedJob({ ...editedJob, type: e.target.value })
+                }
               />
             ) : (
               <p className="text-gray-700">{editedJob.type}</p>
@@ -240,7 +266,9 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
             {isEditing ? (
               <Textarea
                 value={editedJob.overview}
-                onChange={(e) => setEditedJob({ ...editedJob, overview: e.target.value })}
+                onChange={(e) =>
+                  setEditedJob({ ...editedJob, overview: e.target.value })
+                }
               />
             ) : (
               <p className="text-gray-700">{editedJob.overview}</p>
@@ -253,7 +281,9 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
             {isEditing ? (
               <Textarea
                 value={editedJob.responsiblity}
-                onChange={(e) => setEditedJob({ ...editedJob, responsiblity: e.target.value })}
+                onChange={(e) =>
+                  setEditedJob({ ...editedJob, responsiblity: e.target.value })
+                }
               />
             ) : (
               <p className="text-gray-700">{editedJob.responsiblity}</p>
@@ -266,7 +296,9 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
             {isEditing ? (
               <Textarea
                 value={editedJob.requirment}
-                onChange={(e) => setEditedJob({ ...editedJob, requirment: e.target.value })}
+                onChange={(e) =>
+                  setEditedJob({ ...editedJob, requirment: e.target.value })
+                }
               />
             ) : (
               <p className="text-gray-700">{editedJob.requirment}</p>
@@ -294,20 +326,21 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
           variant="secondary"
           disabled={isEditing}
           onClick={() => {
-              fetchApplicants();
+            fetchApplicants();
           }}
-          
         >
           Show Applicants
         </Button>
       </div>
       {appliedUsers.length > 0 && (
         <div className="mt-6">
-          <h3 className="text-lg font-semibold mb-4">Applicants ({appliedUsers.length})</h3>
+          <h3 className="text-lg font-semibold mb-4">
+            Applicants ({appliedUsers.length})
+          </h3>
           <div className="space-y-4">
             {appliedUsers.map((application) => {
               // Add null checks for applicantDetails
-              console.log("application",application)
+              console.log("application", application);
               const applicant = application?.applicantDetails || {};
               return (
                 <Card key={application._id} className="relative">
@@ -324,24 +357,43 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
                       </Badge>
                     </div>
                     <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-green-600 hover:bg-green-50"
-                        onClick={() => handleAccept(application.applicantDetails._id)}
-                      >
-                        <Check className="h-4 w-4 mr-2" />
-                        Accept
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-red-600 hover:bg-red-50"
-                        onClick={() => handleReject(application.applicantDetails._id)}
-                      >
-                        <X className="h-4 w-4 mr-2" />
-                        Reject
-                      </Button>
+                      {application.status === "Pending" ? (
+                        <>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-green-600 hover:bg-green-50"
+                            onClick={() =>
+                              handleAccept(application.applicantDetails._id)
+                            }
+                          >
+                            <Check className="h-4 w-4 mr-2" />
+                            Accept
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-red-600 hover:bg-red-50"
+                            onClick={() =>
+                              handleReject(application.applicantDetails._id)
+                            }
+                          >
+                            <X className="h-4 w-4 mr-2" />
+                            Reject
+                          </Button>
+                        </>
+                      ) : (
+                        <Badge
+                          variant="outline"
+                          className={`text-sm px-3 py-1 ${
+                            application.status === "Accepted"
+                              ? "bg-green-200 text-green-700"
+                              : "bg-red-200 text-red-700"
+                          }`}
+                        >
+                          {application.status}
+                        </Badge>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
