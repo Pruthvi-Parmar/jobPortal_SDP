@@ -6,6 +6,8 @@ import { ApiResponse } from "../utils/ApiResponse.js"
 import jwt from "jsonwebtoken"
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
 import mongoose from "mongoose"
+import { sendEmail } from "../utils/Nodemailer.js"
+import { User } from "../models/user.model.js"
 
 const applyToJob = asyncHandler(async (req, res) => {
 
@@ -171,6 +173,22 @@ const changeApplicationState = asyncHandler(async(req, res) => {
         { $set: { status: status } }, // Update the status
         { new: true } // Return the updated document
     );
+
+    const user = await User.findById(userId);
+    if (!user) {
+        return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    const emailSubject = `Application ${status}`;
+    const emailText =
+        status === "Accepted"
+        ? `Congratulations! Your job application has been accepted.`
+        : `We regret to inform you that your job application has been rejected.`;
+
+    await sendEmail(user.email, emailSubject, emailText);
+
+    console.log("email sent!");
+    
 
     if (!updatedApplication) {
         return res.status(404).json(new ApiResponse(404, null, "Application not found"));

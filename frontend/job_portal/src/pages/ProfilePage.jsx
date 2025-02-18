@@ -31,6 +31,7 @@ const ProfilePage = () => {
         const userData = result.data;
         setValue("username", userData.username);
         setValue("email", userData.email);
+        setValue("oldemail", userData.email);
         setValue("fullname", userData.fullname);
         setValue("resume", userData.resume);
         setValue("coverimage", userData.coverimage);
@@ -61,6 +62,7 @@ const ProfilePage = () => {
 
   const formValues = watch();
   const initialValues = {
+    oldemail:'',
     username: "",
     email: "",
     fullname: "",
@@ -87,11 +89,14 @@ const ProfilePage = () => {
 
   const onSubmit = async (data) => {
     setLoading(true);
+    console.log(data);
+    
     try {
-      const response = await fetch("http://localhost:8001/v1/users/updateCurrentUser", {
+      const response = await fetch("http://localhost:8001/v1/users/updateAccountDetails", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
         body: JSON.stringify(data),
       });
