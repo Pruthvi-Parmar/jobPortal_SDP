@@ -13,12 +13,13 @@ import MyPostedJobs from './pages/MyPostedJobs';
 import MyPostedJobsTestt from './pages/MyPostedJobsTestt';
 import ProfilePage from './pages/ProfilePage';
 import AdminDashboard from './pages/AdminDashboard';
+import Home2 from './pages/Home2';
 
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout />}>
-      <Route path='' element={<Home />} />
+      <Route path='' element={<Home2 />} />
       <Route path='signup' element={<SignUp />} />
       <Route path='login' element={<Login />} />
       <Route path='userhome' element={<JobsPage />} />

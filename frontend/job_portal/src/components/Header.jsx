@@ -53,17 +53,18 @@ const Header = () => {
   return (
     <div className="bg-white border border-gray-300 rounded-md shadow-sm">
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
+        
         <div>
-          <h1 className="text-2xl font-bold">
-            Career<span className="text-[#F83002]">Nest</span>
+          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+            Job<span className="text-[#4F46E5]">Connect</span>
           </h1>
         </div>
+
         <div className="flex items-center gap-10">
           <ul className="flex font-medium items-center gap-5">
             {!user ? (
               // Case when no user is logged in
-              <>
-              </>
+              <></>
             ) : user.role === "jobseeker" ? (
               // Case when logged-in user is a jobseeker
               <>
@@ -122,7 +123,9 @@ const Header = () => {
                     {user && (
                       <div className="flex w-fit items-center gap-2 cursor-pointer">
                         <User2 />
-                        <Button variant="link" onClick={handleViewProfile}>view profile</Button>
+                        <Button variant="link" onClick={handleViewProfile}>
+                          view profile
+                        </Button>
                       </div>
                     )}
 
