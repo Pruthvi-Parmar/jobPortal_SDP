@@ -41,6 +41,25 @@ const applyToJob = asyncHandler(async (req, res) => {
         applicant : req.user._id
     })
 
+    const user = await User.findById(req.user._id);
+    if (!user) {
+        return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    const emailSubject = `Applied to ${job.title}`;
+    const emailText =
+       ` ${user.username} applied For ${job.title} 
+       Location : ${job.location} 
+       Type : ${job.type} 
+       Overview : ${job.overview} 
+       Responsibility : ${job.responsiblity} 
+       Requirment : ${job.requirment} 
+       SALARY : ${job.salary}`
+
+    await sendEmail(user.email, emailSubject, emailText);
+
+    console.log("email sent!");
+
     res
     .status(200)
     .json(new ApiResponse(200,newApplication,"applied to job successfully"))
