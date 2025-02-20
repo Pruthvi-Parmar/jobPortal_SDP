@@ -14,7 +14,6 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     fetchDashboardData();
-    fetchJobs();
     fetchApplications();
   }, []);
 
@@ -34,22 +33,6 @@ const AdminDashboard = () => {
     }
   };
 
-  // Fetch Jobs
-  const fetchJobs = async () => {
-    try {
-      const res = await fetch("http://localhost:8001/v1/admin/getalljobs", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
-      const data = await res.json();
-      if (data.success) setJobs(data.data);
-    } catch (error) {
-      console.error("Error fetching jobs:", error);
-    }
-  };
-
   // Fetch Applications
   const fetchApplications = async () => {
     try {
@@ -65,24 +48,6 @@ const AdminDashboard = () => {
       if (data.success) setApplications(data.data);
     } catch (error) {
       console.error("Error fetching applications:", error);
-    }
-  };
-
-
-  // Delete Job
-  const deleteJob = async (jobId) => {
-    try {
-      await fetch("http://localhost:8001/v1/admin/deletejob", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-        body: JSON.stringify({ jobId }),
-      });
-      setJobs(jobs.filter((job) => job._id !== jobId));
-    } catch (error) {
-      console.error("Error deleting job:", error);
     }
   };
 
@@ -118,32 +83,6 @@ const AdminDashboard = () => {
           </Card>
         </div>
 
-        
-        {/* Jobs Table */}
-        {console.log(jobs)}
-        <h2 className="text-2xl font-semibold mt-6">Jobs</h2>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Title</TableHead>
-              <TableHead>Location</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {jobs.map((job) => (
-              <TableRow key={job._id}>
-                <TableCell>{job.title}</TableCell>
-                <TableCell>{job.location}</TableCell>
-                <TableCell>
-                  <Button variant="destructive" onClick={() => deleteJob(job._id)}>
-                    <Trash2 size={16} />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
         <h2 className="text-2xl font-semibold mt-6">Job Applications</h2>
         <Table>
           <TableHeader>
