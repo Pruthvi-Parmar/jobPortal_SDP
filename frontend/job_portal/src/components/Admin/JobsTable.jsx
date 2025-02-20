@@ -66,7 +66,7 @@ const JobsTable = () => {
                         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
                     },
                     body: JSON.stringify({ jobId }), // Send jobId in the body
-                });
+                });  
                 const data = await res.json();
                 if (data.success) {
                     alert("Job deleted successfully");

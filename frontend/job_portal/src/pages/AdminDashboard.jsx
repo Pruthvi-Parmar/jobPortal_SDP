@@ -7,14 +7,9 @@ import AdminHeader from "@/components/Admin/AdminHeader";
 
 const AdminDashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
-  const [users, setUsers] = useState([]);
-  const [jobs, setJobs] = useState([]);
-  const [applications, setApplications] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchDashboardData();
-    fetchApplications();
   }, []);
 
   // Fetch Dashboard Data (Total Counts)
@@ -33,27 +28,10 @@ const AdminDashboard = () => {
     }
   };
 
-  // Fetch Applications
-  const fetchApplications = async () => {
-    try {
-      console.log(localStorage.getItem("accessToken"));
 
-      const res = await fetch("http://localhost:8001/v1/admin/getAllApplications", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
-      const data = await res.json();
-      if (data.success) setApplications(data.data);
-    } catch (error) {
-      console.error("Error fetching applications:", error);
-    }
-  };
 
   return (
     <>
-    {console.log(applications)}
       <div className="container mx-auto p-6">
         <h1 className="text-3xl font-bold mb-6 text-center">Admin Dashboard</h1>
 
@@ -83,34 +61,6 @@ const AdminDashboard = () => {
             <CardContent className="text-2xl font-bold">{dashboardData?.totalApplications || 0}</CardContent>
           </Card>
         </div>
-
-        <h2 className="text-2xl font-semibold mt-6">Job Applications</h2>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Applicant Name</TableHead>
-              <TableHead>Job Title</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Status</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {applications.map((app) => {
-              // Find the user and job details based on stored IDs
-              const user = users.find((u) => u._id === app.userId);
-              const job = jobs.find((j) => j._id === app.jobId);
-
-              return (
-                <TableRow key={app._id}>
-                  <TableCell>{user ? user.username : "Unknown User"}</TableCell>
-                  <TableCell>{job ? job.title : "Unknown Job"}</TableCell>
-                  <TableCell>{user ? user.email : "No Email"}</TableCell>
-                  <TableCell>{app.status}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
 
       </div>
     </>

@@ -27,7 +27,7 @@ const AdminHeader = () => {
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Include the token in the header
         },
         withCredentials: true,
       }
@@ -37,6 +37,7 @@ const AdminHeader = () => {
       localStorage.setItem("refreshToken", null);
       dispatch(logout());
       navigate("/");
+      toast.success(res.data.message);
     }
     console.log(res);
   };
@@ -52,7 +53,7 @@ const AdminHeader = () => {
 
         <div className="flex items-center gap-10">
           <ul className="flex font-medium items-center gap-5">
-          <Link to="/admin/">
+            <Link to="/admin/">
               <li>Home</li>
             </Link>
             <Link to="/admin/jobs">
@@ -64,6 +65,11 @@ const AdminHeader = () => {
             <Link to="/admin/job-applications">
               <li>Job Applications</li>
             </Link>
+            <div className="flex w-fit items-center gap-2 cursor-pointer">
+              <Button variant="link" onClick={handleClick}>
+                Logout
+              </Button>
+            </div>
           </ul>
 
           {user ? (
