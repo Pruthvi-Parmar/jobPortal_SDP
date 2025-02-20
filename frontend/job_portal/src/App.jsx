@@ -17,6 +17,7 @@ import Home2 from './pages/Home2';
 import AdminLayout from './AdminLayout';
 import UsersTable from './components/Admin/UsersTable';
 import JobsTable from './components/Admin/JobsTable';
+import JobApplicationTable from './components/Admin/JobApplicationsTable';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -40,6 +41,7 @@ const router = createBrowserRouter(
         <Route path='' element={<AdminDashboard />} />
         <Route path='users' element={<UsersTable />} />
         <Route path='jobs' element={<JobsTable />} />
+        <Route path='job-applications' element={<JobApplicationTable />} />
 
       </Route>
     </Route>

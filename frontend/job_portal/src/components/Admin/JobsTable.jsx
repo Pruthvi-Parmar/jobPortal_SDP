@@ -59,15 +59,14 @@ const JobsTable = () => {
     const handleDelete = async (jobId) => {
         if (window.confirm("Are you sure you want to delete this job?")) {
             try {
-                const res = await fetch(
-                    `http://localhost:8001/v1/admin/deletejob/${jobId}`,
-                    {
-                        method: "DELETE",
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-                        },
-                    }
-                );
+                const res = await fetch("http://localhost:8001/v1/admin/deletejob", {
+                    method: "POST", // Use POST since the backend expects it
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                    },
+                    body: JSON.stringify({ jobId }), // Send jobId in the body
+                });
                 const data = await res.json();
                 if (data.success) {
                     alert("Job deleted successfully");
@@ -152,39 +151,39 @@ const JobsTable = () => {
                         <DialogTitle>Job Details</DialogTitle>
                     </DialogHeader>
                     <DialogDescription>
-  {selectedJob ? (
-    <div className="space-y-4 max-h-[70vh] overflow-auto pr-4">
-      <p className="break-words break-all whitespace-normal">
-        <strong>Title:</strong> {selectedJob.title}
-      </p>
-      <p className="break-words break-all whitespace-normal">
-        <strong>Location:</strong> {selectedJob.location}
-      </p>
-      <p className="break-words break-all whitespace-normal">
-        <strong>Salary:</strong> {selectedJob.salary}
-      </p>
-      <p className="break-words break-all whitespace-normal">
-        <strong>Type:</strong> {selectedJob.type}
-      </p>
-      <p className="break-words break-all whitespace-normal">
-        <strong>Overview:</strong> {selectedJob.overview}
-      </p>
-      <p className="break-words break-all whitespace-normal">
-        <strong>Responsibility:</strong> {selectedJob.responsiblity}
-      </p>
-      <p className="break-words break-all whitespace-normal">
-        <strong>Requirement:</strong> {selectedJob.requirment}
-      </p>
-      <img
-        src={selectedJob.coverImage}
-        alt="Cover"
-        className="w-full max-h-[300px] object-contain rounded-md mt-2"
-      />
-    </div>
-  ) : (
-    <p>No details available</p>
-  )}
-</DialogDescription>
+                        {selectedJob ? (
+                            <div className="space-y-4 max-h-[70vh] overflow-auto pr-4">
+                                <p className="break-words break-all whitespace-normal">
+                                    <strong>Title:</strong> {selectedJob.title}
+                                </p>
+                                <p className="break-words break-all whitespace-normal">
+                                    <strong>Location:</strong> {selectedJob.location}
+                                </p>
+                                <p className="break-words break-all whitespace-normal">
+                                    <strong>Salary:</strong> {selectedJob.salary}
+                                </p>
+                                <p className="break-words break-all whitespace-normal">
+                                    <strong>Type:</strong> {selectedJob.type}
+                                </p>
+                                <p className="break-words break-all whitespace-normal">
+                                    <strong>Overview:</strong> {selectedJob.overview}
+                                </p>
+                                <p className="break-words break-all whitespace-normal">
+                                    <strong>Responsibility:</strong> {selectedJob.responsiblity}
+                                </p>
+                                <p className="break-words break-all whitespace-normal">
+                                    <strong>Requirement:</strong> {selectedJob.requirment}
+                                </p>
+                                <img
+                                    src={selectedJob.coverImage}
+                                    alt="Cover"
+                                    className="w-full max-h-[300px] object-contain rounded-md mt-2"
+                                />
+                            </div>
+                        ) : (
+                            <p>No details available</p>
+                        )}
+                    </DialogDescription>
 
 
                     <DialogFooter>
