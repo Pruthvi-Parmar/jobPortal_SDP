@@ -74,6 +74,9 @@ const Header = () => {
                 <Link to="/myjobs">
                   <li>My Jobs</li>
                 </Link>
+                <Link to="/technews">
+                  <li>TechNews</li>
+                </Link>
               </>
             ) : (
               // Case when logged-in user is a recruiter
@@ -83,6 +86,9 @@ const Header = () => {
                 </Link>
                 <Link to="/postjob">
                   <li>Post Job</li>
+                </Link>
+                <Link to="/technews">
+                  <li>TechNews</li>
                 </Link>
               </>
             )}
@@ -114,8 +120,7 @@ const Header = () => {
                     <div>
                       <h4 className="font-medium px-3">{user.username}</h4>
                       <p className="text-sm text-muted-foreground">
-                        bio Lorem ipsum dolor sit amet consectetur adipisicing
-                        elit. Hic, nihil!
+                        {user.bio}
                       </p>
                     </div>
                   </div>

@@ -10,7 +10,7 @@ const app = express()
 //     credentials: true
 // }))
 app.use(cors({
-    origin: 'http://localhost:5174',
+    origin: 'http://localhost:5173',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'], 
@@ -29,6 +29,7 @@ import userRouter from "./routes/user.routes.js"
 import jobRouter from "./routes/jobs.routes.js"
 import applicationRouter from "./routes/application.routes.js"
 import adminRouter from "./routes/admin.routes.js"
+import chatbotRouter from "./routes/chatbot.routes.js"
 
 // routes declaration 
 
@@ -36,5 +37,6 @@ app.use("/v1/users",userRouter)
 app.use("/v1/jobs",jobRouter)
 app.use("/v1/application",applicationRouter)
 app.use("/v1/admin",adminRouter)
+app.use("/v1/chatbot",chatbotRouter)
 
 export { app }

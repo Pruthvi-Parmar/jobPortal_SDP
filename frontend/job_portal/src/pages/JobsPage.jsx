@@ -65,6 +65,9 @@ const JobsPage = () => {
   const handleSendMessage = async () => {
     if (userMessage.trim() === "") return;
 
+    console.log("inside chatbot");
+    
+
     // Add user message to chat
     setChatMessages((prevMessages) => [
       ...prevMessages,
@@ -73,21 +76,26 @@ const JobsPage = () => {
 
     // Send user message to backend
     try {
-      const response = await fetch("http://localhost:8001/v1/chatbot/message", {
+      const response = await fetch("http://localhost:8001/v1/chatbot/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: userMessage }),
+        body: JSON.stringify({ userQuery: userMessage }),
       });
 
+      console.log("fetched");
+      
+
       const result = await response.json();
+      console.log(result);
+      
 
       if (result.success) {
         // Add bot's response to chat
         setChatMessages((prevMessages) => [
           ...prevMessages,
-          { sender: "bot", text: result.reply },
+          { sender: "bot", text: result.data },
         ]);
       } else {
         throw new Error(result.message || "Failed to get chatbot response");
