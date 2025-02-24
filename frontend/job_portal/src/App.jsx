@@ -19,6 +19,8 @@ import UsersTable from './components/Admin/UsersTable';
 import JobsTable from './components/Admin/JobsTable';
 import JobApplicationTable from './components/Admin/JobApplicationsTable';
 import TechNews from './pages/Technews';
+import Payment from './components/Payments';
+``
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -32,6 +34,8 @@ const router = createBrowserRouter(
         <Route path='myjobs' element={<MyJobsPage />} />
         <Route path='profile' element={<ProfilePage />} />
         <Route path='technews' element={<TechNews />} />
+        <Route path='payment' element={<Payment />} />
+        
         {/* <Route path='recruiterhome' element={<MyPostedJobs />} /> */}
         <Route path='recruiterhome' element={<MyPostedJobs />} />
         <Route path='postjob' element={<PostJobForm />} />

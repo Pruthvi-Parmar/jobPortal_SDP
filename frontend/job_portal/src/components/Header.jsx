@@ -55,9 +55,11 @@ const Header = () => {
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
         
         <div>
+        <Link to="/userhome">
           <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
             Job<span className="text-[#4F46E5]">Connect</span>
           </h1>
+        </Link>
         </div>
 
         <div className="flex items-center gap-10">
@@ -75,7 +77,7 @@ const Header = () => {
                   <li>My Jobs</li>
                 </Link>
                 <Link to="/technews">
-                  <li>TechNews</li>
+                  <li>TechInsights</li>
                 </Link>
               </>
             ) : (
@@ -88,7 +90,7 @@ const Header = () => {
                   <li>Post Job</li>
                 </Link>
                 <Link to="/technews">
-                  <li>TechNews</li>
+                  <li>TechInsights</li>
                 </Link>
               </>
             )}
@@ -99,7 +101,7 @@ const Header = () => {
                 <Button variant="outline">Login</Button>
               </Link>
               <Link to="/signup">
-                <Button className="bg-[#6A38C2] hover:bg-[#5b30a6]">
+                <Button className="bg-[#4F46E5] hover:bg-[#322d91]">
                   Signup
                 </Button>
               </Link>
@@ -120,7 +122,7 @@ const Header = () => {
                     <div>
                       <h4 className="font-medium px-3">{user.username}</h4>
                       <p className="text-sm text-muted-foreground">
-                        {user.bio}
+                        {user.bio || "lorem"}
                       </p>
                     </div>
                   </div>

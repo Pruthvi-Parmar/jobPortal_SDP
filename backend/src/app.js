@@ -30,6 +30,7 @@ import jobRouter from "./routes/jobs.routes.js"
 import applicationRouter from "./routes/application.routes.js"
 import adminRouter from "./routes/admin.routes.js"
 import chatbotRouter from "./routes/chatbot.routes.js"
+import paymentRouter from "./routes/payment.routes.js"
 
 // routes declaration 
 
@@ -38,5 +39,6 @@ app.use("/v1/jobs",jobRouter)
 app.use("/v1/application",applicationRouter)
 app.use("/v1/admin",adminRouter)
 app.use("/v1/chatbot",chatbotRouter)
+app.use("/v1/payment",paymentRouter)
 
 export { app }
