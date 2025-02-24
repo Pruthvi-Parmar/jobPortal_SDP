@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner"; // ShadCN Sonner for notifications
 import { Button } from "../components/ui/button";
+import { CheckCircle } from "lucide-react";
+//import { updateUser } from '@/store/authSlice';
 
 const Payment = () => {
    
     
     const [loading, setLoading] = useState(false);
     const user = useSelector((state) => state.auth.userData);
+   // const dispatch = useDispatch()
+    console.log(user);
+    
 
     // Ensure user exists before proceeding
     if (!user) {
@@ -68,6 +73,7 @@ const Payment = () => {
                         );
 
                         if (verifyResponse.data.success) {
+                           // dispatch(updateUser(res.data.data.user)); 
                             toast.success("Payment Successful! 🎉");
                             setTimeout(() => window.location.reload(), 3000);
                         } else {
@@ -99,15 +105,34 @@ const Payment = () => {
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-50">
             <div className="bg-white shadow-lg rounded-lg max-w-lg w-full p-6 space-y-6">
-                <h1 className="text-2xl font-bold text-center text-gray-800">Premium Membership</h1>
-                <p className="text-center text-gray-500 text-sm">Get access to exclusive features by becoming a premium member.</p>
-                <Button
-                    onClick={handlePayment}
-                    disabled={loading}
-                    className="w-full py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500"
-                >
-                    {loading ? "Processing..." : "Buy Premium Membership"}
-                </Button>
+                {user.isPremium ? (
+                    // ✅ Premium Member UI
+                    <div className="text-center">
+                        <CheckCircle className="mx-auto text-green-500 w-16 h-16" />
+                        <h1 className="text-2xl font-bold text-gray-800">You are a Premium Member!</h1>
+                        <p className="text-gray-500 mt-2">
+                            Enjoy exclusive features and benefits as a premium user.
+                        </p>
+                        <Button className="mt-4 w-full bg-green-600 text-white" disabled>
+                            Premium Activated ✅
+                        </Button>
+                    </div>
+                ) : (
+                    // 🔥 Non-Premium UI (Show Payment Option)
+                    <>
+                        <h1 className="text-2xl font-bold text-center text-gray-800">Premium Membership</h1>
+                        <p className="text-center text-gray-500 text-sm">
+                            Get access to exclusive features by becoming a premium member.
+                        </p>
+                        <Button
+                            onClick={handlePayment}
+                            disabled={loading}
+                            className="w-full py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500"
+                        >
+                            {loading ? "Processing..." : "Buy Premium Membership"}
+                        </Button>
+                    </>
+                )}
             </div>
         </div>
     );

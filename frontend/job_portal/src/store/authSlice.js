@@ -23,6 +23,9 @@ const authSlice = createSlice({
       // Remove user from localStorage
       localStorage.removeItem("userData");
     },
+    // updateUser: (state, action) => {
+    //   state.userData = { ...state.userData, ...action.payload }; // Merge updates
+    // },
   },
 });
 

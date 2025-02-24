@@ -79,6 +79,9 @@ const Header = () => {
                 <Link to="/technews">
                   <li>TechInsights</li>
                 </Link>
+                <Link to="/payment">
+                  <li>Premium</li>
+                </Link>
               </>
             ) : (
               // Case when logged-in user is a recruiter

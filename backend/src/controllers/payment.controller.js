@@ -100,6 +100,7 @@ const verifyPayment = asyncHandler(async(req, res) => {
         { isPremium: true }, 
         { new: true }
     );
+    user.save()
 
     console.log(user);
     
