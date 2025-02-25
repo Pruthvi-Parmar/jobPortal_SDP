@@ -23,11 +23,11 @@ const authSlice = createSlice({
       // Remove user from localStorage
       localStorage.removeItem("userData");
     },
-    // updateUser: (state, action) => {
-    //   state.userData = { ...state.userData, ...action.payload }; // Merge updates
-    // },
+    updateUser: (state, action) => {
+      state.userData = { ...state.userData, ...action.payload }; // Merge updates
+    },
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, updateUser } = authSlice.actions;
 export default authSlice.reducer;

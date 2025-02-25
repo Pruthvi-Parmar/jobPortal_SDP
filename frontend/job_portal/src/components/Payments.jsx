@@ -1,21 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "sonner"; // ShadCN Sonner for notifications
+import { toast } from "sonner"; 
 import { Button } from "../components/ui/button";
 import { CheckCircle } from "lucide-react";
-//import { updateUser } from '@/store/authSlice';
+import { updateUser } from '@/store/authSlice';
 
 const Payment = () => {
    
     
     const [loading, setLoading] = useState(false);
     const user = useSelector((state) => state.auth.userData);
-   // const dispatch = useDispatch()
+    const dispatch = useDispatch()
     console.log(user);
+
+    
     
 
-    // Ensure user exists before proceeding
+
     if (!user) {
         toast.error("User not found! Please log in.");
         return (
@@ -31,12 +33,12 @@ const Payment = () => {
         try {
             setLoading(true);
 
-            // Ensure Razorpay script is loaded
+            
             if (!window.Razorpay) {
                 throw new Error("Razorpay SDK not loaded. Check your internet connection.");
             }
 
-            // Create Razorpay order
+            
             const res = await axios.post(
                 "http://localhost:8001/v1/payment/create-order",
                 { amount: 499 },
@@ -54,11 +56,11 @@ const Payment = () => {
 
             const options = {
                 key: import.meta.env.VITE_RAZORPAY_KEY,
-                amount: res.data.data.order.amount * 100, // Amount in paise
+                amount: res.data.data.order.amount * 100, 
                 currency: "INR",
                 name: "Job Portal",
                 description: "Premium Membership",
-                order_id: res.data.data.order.id, // Use dynamic order ID
+                order_id: res.data.data.order.id, 
                 handler: async function (response) {
                     try {
                         const verifyResponse = await axios.post(
@@ -73,9 +75,14 @@ const Payment = () => {
                         );
 
                         if (verifyResponse.data.success) {
-                           // dispatch(updateUser(res.data.data.user)); 
+                            dispatch(updateUser({isPremium:true})); 
+                    // TODO: here after dispaching we are updating state of user which
+                    //        is stored in redux check if above line creating any problem 
+                    //        in previous redux related logic!!!!!
+                            console.log(user);
+                            
                             toast.success("Payment Successful! 🎉");
-                            setTimeout(() => window.location.reload(), 3000);
+                            //setTimeout(() => window.location.reload(), 3000);
                         } else {
                             toast.error("Payment verification failed. Please contact support.");
                         }
@@ -89,7 +96,7 @@ const Payment = () => {
                     email: user.email || "test@example.com",
                     contact: user.phone || "9999999999",
                 },
-                theme: { color: "#4F46E5" }, // Updated theme color to match your project
+                theme: { color: "#4F46E5" }, 
             };
 
             const razorpayInstance = new window.Razorpay(options);
@@ -106,7 +113,7 @@ const Payment = () => {
         <div className="flex items-center justify-center min-h-screen bg-gray-50">
             <div className="bg-white shadow-lg rounded-lg max-w-lg w-full p-6 space-y-6">
                 {user.isPremium ? (
-                    // ✅ Premium Member UI
+                    
                     <div className="text-center">
                         <CheckCircle className="mx-auto text-green-500 w-16 h-16" />
                         <h1 className="text-2xl font-bold text-gray-800">You are a Premium Member!</h1>
@@ -118,7 +125,7 @@ const Payment = () => {
                         </Button>
                     </div>
                 ) : (
-                    // 🔥 Non-Premium UI (Show Payment Option)
+                    
                     <>
                         <h1 className="text-2xl font-bold text-center text-gray-800">Premium Membership</h1>
                         <p className="text-center text-gray-500 text-sm">

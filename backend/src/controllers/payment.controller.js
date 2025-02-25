@@ -5,6 +5,7 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 import {ApiError} from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
+import { sendEmail } from "../utils/Nodemailer.js"
 
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID, // Use your actual key
@@ -108,6 +109,33 @@ const verifyPayment = asyncHandler(async(req, res) => {
     if(!user){
         throw new ApiError(500,"user status is not updated")
     }
+
+    const emailSubject = "🎉 Premium Membership Activated - Welcome to Exclusive Benefits!"
+    const emailText = `
+        Dear ${user.username},
+
+        Congratulations! 🎉 You are now a Premium Member of Job Portal.
+
+        Enjoy your exclusive benefits, including:
+        ✅ Priority job applications  
+        ✅ Direct messaging with recruiters  
+        ✅ Access to premium job listings  
+        ✅ AI-powered resume analyzer  
+        ✅ Enhanced profile visibility  
+
+        Start exploring your premium perks now:  
+        👉 [Go to Dashboard](https://JobConnect.com/dashboard)
+
+        If you have any questions, feel free to contact our support team at support@jobportal.com.
+
+        Best regards,  
+        The Job Portal Team 🚀
+        `;
+
+
+    await sendEmail(user.email, emailSubject, emailText);
+
+    console.log("email sent!");
     
     
 
