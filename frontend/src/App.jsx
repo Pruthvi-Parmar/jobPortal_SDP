@@ -20,6 +20,7 @@ import JobsTable from './components/Admin/JobsTable';
 import JobApplicationTable from './components/Admin/JobApplicationsTable';
 import TechNews from './pages/Technews';
 import Payment from './components/Payments';
+import Chat from './components/chat/Chat';
 ``
 
 const router = createBrowserRouter(
@@ -35,6 +36,7 @@ const router = createBrowserRouter(
         <Route path='profile' element={<ProfilePage />} />
         <Route path='technews' element={<TechNews />} />
         <Route path='payment' element={<Payment />} />
+        <Route path='chat' element={<Chat />} />
         
         {/* <Route path='recruiterhome' element={<MyPostedJobs />} /> */}
         <Route path='recruiterhome' element={<MyPostedJobs />} />

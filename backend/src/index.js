@@ -8,9 +8,9 @@ dotenv.config({
 
 connectDB()
 .then(() => {
-    app.listen(process.env.PORT || 8000 , () => {
-        console.log(`Server is runnong at ${process.env.PORT}`)
-    })
+    // app.listen(process.env.PORT || 8000 , () => {
+    //     console.log(`Server is runnong at ${process.env.PORT}`)
+    // })
 })
 .catch((err) => {
     console.log("DB Connection error from async promise!")

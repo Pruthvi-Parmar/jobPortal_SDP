@@ -1,5 +1,5 @@
-import { Chat } from "../models/chatModel.js";
-import { User } from "../../backend/src/models/user.model.js";
+import { Chat } from "../models/chat.mpdel.js";
+import { User } from "../models/user.model.js";
 import mongoose from "mongoose";
 
 // Fetch all potential chat users
@@ -50,8 +50,8 @@ export const getChatHistory = async (req, res) => {
 // Send a new message
 export const sendMessage = async (req, res) => {
   try {
-    const { receiverId, message } = req.body;
-    const senderId = req.user._id;
+    const { receiverId, message, userId } = req.body;
+    const senderId = userId
 
     const newMessage = new Chat({ senderId, receiverId, message });
     await newMessage.save();

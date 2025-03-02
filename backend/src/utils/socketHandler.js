@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
-import { Chat } from "../models/chatModel.js";
-import { User } from "../../backend/src/models/user.model.js";
+import { Chat } from "../models/chat.mpdel.js";
+import { User } from "../models/user.model.js";
 
 const users = {}; // Store connected users
 
@@ -27,6 +27,7 @@ export const initSocket = (server) => {
         io.to(users[receiverId]).emit("receiveMessage", newMessage);
       }
     });
+    
 
     socket.on("getOnlineUsers", () => {
       socket.emit("updateOnlineUsers", Object.keys(users));
