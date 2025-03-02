@@ -9,7 +9,8 @@ const ChatOngoingList = ({ selectUser, socket }) => {
   const fetchOngoingChats = async () => {
     try {
       const token = localStorage.getItem("accessToken");
-      const { data } = await axios.get(`http://localhost:8001/v1/chat/ongoing-chats`, {
+      const { data } = await axios.post(`http://localhost:8001/v1/chat/ongoing-chats`, 
+      { userId: user._id },{
         headers: { Authorization: `Bearer ${token}` },
       });
       setOngoingChats(data);
