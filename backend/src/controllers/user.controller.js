@@ -384,6 +384,17 @@ const viewProfile = asyncHandler(async(req, res) => {
     .json(new ApiResponse(200, user, "User details fetched successfully"))
 });
 
+const getAllUsers = asyncHandler(async (req, res) => {
+    try {
+        const users = await User.find().select("-password -refreshToken");
+        return res.status(200).json(new ApiResponse(200, users, "Users retrieved successfully"));
+    } catch (error) {
+        console.error("❌ Error fetching users:", error);
+        res.status(500).json({ error: "Error retrieving users" });
+    }
+});
+
+
 
 // const forgotPassword = asyncHandler(async (req, res) => {
 //     const {email, newPassword} = req.body
@@ -410,5 +421,6 @@ export {
     changePassword,
     getCurrentUser,
     updateAccountDetails,
-    viewProfile
+    viewProfile,
+    getAllUsers
 }
