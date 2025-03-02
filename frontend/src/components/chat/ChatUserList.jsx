@@ -3,31 +3,29 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 
 const ChatUserList = ({ selectUser }) => {
-    const user = useSelector((state) => state.auth.userData);
+  const user = useSelector((state) => state.auth.userData);
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
-        
       try {
         const token = localStorage.getItem("accessToken");
-        const  data  = await axios.post(`http://localhost:8001/v1/chat/users`,{userId : user._id}, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        console.log(data.data);
-        
-        setUsers(data.data);
+        const { data } = await axios.post(
+          `http://localhost:8001/v1/chat/users`,
+          { userId: user._id },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setUsers(data);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
     };
 
     fetchUsers();
-  }, []);
+  }, [user._id]);
 
   return (
     <div className="p-4 bg-gray-100 rounded-lg">
-      <h2 className="text-lg font-semibold mb-2">Available Users</h2>
       {users.length === 0 ? (
         <p className="text-gray-500">No users available</p>
       ) : (
