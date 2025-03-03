@@ -3,7 +3,7 @@ import { User } from "../models/user.model.js";
 import mongoose from "mongoose";
 
 // Fetch all potential chat users
-export const getChatUsers = async (req, res) => {
+const getChatUsers = async (req, res) => {
   try {
     const userId = req.user._id;
     const user = await User.findById(userId);
@@ -29,7 +29,7 @@ export const getChatUsers = async (req, res) => {
 };
 
 // Fetch chat history between two users
-export const getChatHistory = async (req, res) => {
+const getChatHistory = async (req, res) => {
   try {
     const { otherUserId } = req.params;
     const userId = req.user._id;
@@ -48,7 +48,7 @@ export const getChatHistory = async (req, res) => {
 };
 
 // Send a new message
-export const sendMessage = async (req, res) => {
+const sendMessage = async (req, res) => {
   try {
     const { receiverId, message, userId } = req.body;
     const senderId = userId
@@ -61,7 +61,8 @@ export const sendMessage = async (req, res) => {
     res.status(500).json({ error: "Error sending message" });
   }
 };
-export const getAvailableUsers = async (req, res) => {
+
+const getAvailableUsers = async (req, res) => {
   try {
     const userId = req.body
     console.log(userId.userId);
@@ -78,3 +79,10 @@ export const getAvailableUsers = async (req, res) => {
     res.status(500).json({ error: "Error fetching users" });
   }
 };
+
+export{
+  getChatUsers,
+  getChatHistory,
+  sendMessage,
+  getAvailableUsers
+}

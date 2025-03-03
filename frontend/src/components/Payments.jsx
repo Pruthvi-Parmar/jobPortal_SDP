@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner"; 
 import { Button } from "../components/ui/button";
 import { CheckCircle } from "lucide-react";
-import { updateUser } from '@/store/authSlice';
+import { login, updateUser } from '@/store/authSlice';
 
 const Payment = () => {
    
@@ -75,7 +75,10 @@ const Payment = () => {
                         );
 
                         if (verifyResponse.data.success) {
-                            dispatch(updateUser({isPremium:true})); 
+                            const updatedUser = { ...user, isPremium: true }; 
+                            dispatch(updateUser(updatedUser)); 
+                            dispatch(login(updatedUser))
+                            
                     // TODO: here after dispaching we are updating state of user which
                     //        is stored in redux check if above line creating any problem 
                     //        in previous redux related logic!!!!!
@@ -107,12 +110,16 @@ const Payment = () => {
         } finally {
             setLoading(false);
         }
+        
+        
     };
+    const newUser = useSelector((state) => state.auth.userData);
+        console.log(newUser);
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-50">
             <div className="bg-white shadow-lg rounded-lg max-w-lg w-full p-6 space-y-6">
-                {user.isPremium ? (
+                {newUser.isPremium ? (
                     
                     <div className="text-center">
                         <CheckCircle className="mx-auto text-green-500 w-16 h-16" />
