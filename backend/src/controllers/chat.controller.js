@@ -1,6 +1,7 @@
 import { Chat } from "../models/chat.mpdel.js";
 import { User } from "../models/user.model.js";
 import mongoose from "mongoose";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 // Fetch all potential chat users
 const getChatUsers = async (req, res) => {
@@ -80,9 +81,75 @@ const getAvailableUsers = async (req, res) => {
   }
 };
 
+const getOngoingChats = asyncHandler(async (req, res) => {
+  try {
+    const { userId } = req.body;
+    console.log("User ID:", userId);
+
+    // Ensure userId is a valid ObjectId
+    const objectId = new mongoose.Types.ObjectId(userId);
+
+    // Debug: Check if messages exist for this user
+    const chatExists = await Chat.findOne({
+      $or: [{ senderId: objectId }, { receiverId: objectId }],
+    });
+
+    if (!chatExists) {
+      console.log("No chat history found for this user.");
+      return res.json([]); // Return an empty array if no messages exist
+    }
+
+    // Find all distinct users with whom the logged-in user has exchanged messages
+    const chatPartners = await Chat.aggregate([
+      {
+        $match: {
+          $or: [{ senderId: objectId }, { receiverId: objectId }],
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $cond: {
+              if: { $eq: ["$senderId", objectId] },
+              then: "$receiverId",
+              else: "$senderId",
+            },
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "users", // Ensure this matches the actual collection name
+          localField: "_id",
+          foreignField: "_id",
+          as: "userDetails",
+        },
+      },
+      { $unwind: "$userDetails" },
+      {
+        $project: {
+          _id: "$userDetails._id",
+          fullname: "$userDetails.fullname",
+          username: "$userDetails.username",
+          email: "$userDetails.email",
+        },
+      },
+    ]);
+
+    console.log("Ongoing chats:", chatPartners);
+    res.json(chatPartners);
+  } catch (error) {
+    console.error("❌ Error fetching ongoing chats:", error);
+    res.status(500).json({ error: "Error fetching ongoing chats" });
+  }
+});
+
+
+
 export{
   getChatUsers,
   getChatHistory,
   sendMessage,
-  getAvailableUsers
+  getAvailableUsers,
+  getOngoingChats
 }

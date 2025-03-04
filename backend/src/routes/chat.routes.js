@@ -1,6 +1,6 @@
 
 import { Router } from "express";
-import { getAvailableUsers, getChatHistory, sendMessage } from "../controllers/chat.controller.js";
+import { getAvailableUsers, getChatHistory, getOngoingChats, sendMessage } from "../controllers/chat.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router()
@@ -13,5 +13,7 @@ router.get("/:otherUserId", verifyJWT, getChatHistory);
 
 // Send a message
 router.post("/", sendMessage);
+
+router.post("/ongoing-chats", verifyJWT, getOngoingChats);
 
 export default router;
