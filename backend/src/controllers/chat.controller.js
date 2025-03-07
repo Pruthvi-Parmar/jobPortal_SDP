@@ -1,6 +1,7 @@
 import { Chat } from "../models/chat.model.js";
 import { User } from "../models/user.model.js";
 import mongoose from "mongoose";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 // Fetch all potential chat users (based on role)
 export const getChatUsers = async (req, res) => {
@@ -30,7 +31,7 @@ export const getChatUsers = async (req, res) => {
 };
 
 // Fetch chat history between two users
-export const getChatHistory = async (req, res) => {
+const getChatHistory = async (req, res) => {
   try {
     const { otherUserId } = req.params;
     const userId = req.user._id;

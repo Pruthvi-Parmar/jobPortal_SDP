@@ -78,10 +78,12 @@ const Header = () => {
                 </Link>
                 <Link to="/technews">
                   <li>TechInsights</li>
-                </Link>
-                <Link to="/payment">
+                </Link>{user.isPremium ?
+                <Link to="/chat">
+                  <li>Messages</li>
+                </Link>:<Link to="/payment">
                   <li>Premium</li>
-                </Link>
+                </Link>}
               </>
             ) : (
               // Case when logged-in user is a recruiter
@@ -94,6 +96,9 @@ const Header = () => {
                 </Link>
                 <Link to="/technews">
                   <li>TechInsights</li>
+                </Link>
+                <Link to="/chat">
+                  <li>Messages</li>
                 </Link>
               </>
             )}
