@@ -28,6 +28,7 @@ import TechNews from "./pages/Technews";
 import Payment from "./components/Payments";
 import Chat from "./components/chat/Chat";
 import { useSelector } from "react-redux";
+import ATS from "./pages/Ats";
 
 
 
@@ -42,6 +43,7 @@ const router = createBrowserRouter(
         <Route path="myjobs" element={<MyJobsPage />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="technews" element={<TechNews />} />
+        <Route path="ats" element={<ATS />} />
         <Route path="payment" element={<Payment />} />
         <Route path="chat" element={<Chat />} />
         

@@ -78,7 +78,11 @@ const Header = () => {
                 </Link>
                 <Link to="/technews">
                   <li>TechInsights</li>
-                </Link>{user.isPremium ?
+                </Link>
+                <Link to="/ats">
+                  <li>Resume ATS</li>
+                </Link>
+                {user.isPremium ?
                 <Link to="/chat">
                   <li>Messages</li>
                 </Link>:<Link to="/payment">
