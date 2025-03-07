@@ -36,6 +36,7 @@ import adminRouter from "./routes/admin.routes.js"
 import chatbotRouter from "./routes/chatbot.routes.js"
 import paymentRouter from "./routes/payment.routes.js"
 import chatRouter from "./routes/chat.routes.js"
+import resumeAnalyseRouter from "./routes/analyse.routes.js"
 
 // routes declaration 
 
@@ -46,6 +47,7 @@ app.use("/v1/admin",adminRouter)
 app.use("/v1/chatbot",chatbotRouter)
 app.use("/v1/payment",paymentRouter)
 app.use("/v1/chat",chatRouter)
+app.use("/v1/resume",resumeAnalyseRouter)
 
 initSocket(server);
 server.listen(process.env.PORT, () => {
