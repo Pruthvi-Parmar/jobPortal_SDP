@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 const socket = io("http://localhost:8001"); // Connect to Socket.IO server
 
-const OngoingChats = () => {
+const OngoingChats = ({ selectUser }) => {
   const [chats, setChats] = useState([]);
   const user = useSelector((state) => state.auth.userData);
 
@@ -43,21 +43,23 @@ const OngoingChats = () => {
 
   return (
     <div className="p-4 bg-white shadow-lg rounded-md w-full h-auto flex flex-col">
-      <h2 className="text-lg font-bold mb-4">Ongoing Chats</h2>
-
-      {/* Ensure scrollability */}
-      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-300">
+      {/* Chat List Container */}
+      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
         {chats.length > 0 ? (
-          <ul>
+          <ul className="space-y-3">
             {chats.map((chat) => (
-              <li key={chat._id} className="py-2 border-b">
-                <p className="text-gray-800 font-semibold">{chat.fullname}</p>
+              <li
+                key={chat._id}
+                onClick={() => selectUser(chat)} // Update selected user
+                className="p-3 bg-gray-100 rounded-lg shadow-sm hover:bg-blue-100 transition cursor-pointer"
+              >
+                <p className="text-gray-800 font-semibold">{chat.username}</p>
                 <p className="text-gray-600 text-sm">{chat.email}</p>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500">No ongoing chats yet.</p>
+          <p className="text-gray-500 text-center py-4">No ongoing chats yet.</p>
         )}
       </div>
     </div>

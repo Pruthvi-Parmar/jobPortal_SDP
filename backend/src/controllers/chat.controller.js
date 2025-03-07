@@ -31,7 +31,7 @@ export const getChatUsers = async (req, res) => {
 };
 
 // Fetch chat history between two users
-const getChatHistory = async (req, res) => {
+export const getChatHistory = async (req, res) => {
   try {
     const { otherUserId } = req.params;
     const userId = req.user._id;
