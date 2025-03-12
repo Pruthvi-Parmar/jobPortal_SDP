@@ -21,17 +21,27 @@ const AdminHeader = () => {
     console.log("inside logout");
     console.log(localStorage.getItem("accessToken"));
 
-    const res = await axios.post(
-      "http://localhost:8001/v1/users/logout",
-      {},
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Include the token in the header
-        },
-        withCredentials: true,
+    if(user.username==="admin"){
+      const res = await axios.post(
+        "http://localhost:8001/v1/admin/logout",
+        {},
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Include the token in the header
+          },
+          withCredentials: true,
+        }
+      );
+      if (res.data.success) {
+        localStorage.setItem("accessToken", null);
+        localStorage.setItem("refreshToken", null);
+        dispatch(logout());
+        navigate("/");
+        toast.success(res.data.message);
       }
-    );
+      console.log(res);
+    }
     if (res.data.success) {
       localStorage.setItem("accessToken", null);
       localStorage.setItem("refreshToken", null);
