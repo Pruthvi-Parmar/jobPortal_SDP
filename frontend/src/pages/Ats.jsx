@@ -83,6 +83,8 @@ const ATS = () => {
             });
 
             const data = await response.json(); // Ensure parsing response
+            console.log(data);
+            
             if (response.ok) {
                 setResult(data);
             } else {

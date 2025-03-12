@@ -3,6 +3,8 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import http from "http";
 import { initSocket } from "./utils/socketHandler.js";
+import passport from "./utils/passport.js";
+
 
 const app = express()
 const server = http.createServer(app);
@@ -38,6 +40,10 @@ import paymentRouter from "./routes/payment.routes.js"
 import chatRouter from "./routes/chat.routes.js"
 import resumeAnalyseRouter from "./routes/analyse.routes.js"
 
+// oauth route
+
+import authRoutes from "./routes/oAuth.routes.js";
+
 // routes declaration 
 
 app.use("/v1/users",userRouter)
@@ -48,6 +54,9 @@ app.use("/v1/chatbot",chatbotRouter)
 app.use("/v1/payment",paymentRouter)
 app.use("/v1/chat",chatRouter)
 app.use("/v1/resume",resumeAnalyseRouter)
+
+app.use(passport.initialize());
+app.use("/auth", authRoutes);
 
 initSocket(server);
 server.listen(process.env.PORT, () => {

@@ -6,7 +6,7 @@ const userSchema = new Schema(
     {
         username: {
             type: String,
-            required: true,
+            //required: true,
             unique: true,
             lowecase: true,
             trim: true,
@@ -14,7 +14,7 @@ const userSchema = new Schema(
         },
         email: {
             type: String,
-            required: true,
+            //required: true,
             unique: true,
             lowecase: true,
             trim: true,
@@ -35,7 +35,7 @@ const userSchema = new Schema(
         },
         password:{
             type: String, //becrypt
-            required: true
+            //required: true
         },
         refreshToken:{
             type: String,
@@ -83,6 +83,11 @@ const userSchema = new Schema(
         isPremium: { 
             type: Boolean, 
             default: false 
+        },
+        googleId: { 
+            type: String,
+            unique: true,
+            sparse: true 
         },
     },
     {

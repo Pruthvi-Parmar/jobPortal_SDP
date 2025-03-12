@@ -29,6 +29,7 @@ import Payment from "./components/Payments";
 import Chat from "./components/chat/Chat";
 import { useSelector } from "react-redux";
 import ATS from "./pages/Ats";
+import GoogleLoginComponent from "./components/GoogleLoginComponent";
 
 
 
@@ -46,6 +47,7 @@ const router = createBrowserRouter(
         <Route path="ats" element={<ATS />} />
         <Route path="payment" element={<Payment />} />
         <Route path="chat" element={<Chat />} />
+        <Route path="oauth" element={<GoogleLoginComponent />} />
         
 
         {/* <Route path='recruiterhome' element={<MyPostedJobs />} /> */}

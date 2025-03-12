@@ -89,7 +89,7 @@ const JobCard = ({ jobId, title, location, salary, type, overview, responsibilit
         <Badge variant={status === "Active" ? "default" : "secondary"}>
           {status}
         </Badge>
-        <p className="text-lg font-bold">${salary.toLocaleString()}</p>
+        <p className="text-lg font-bold">₹{salary.toLocaleString()}</p>
       </CardFooter>
       <div className="p-4">
         <Button 
