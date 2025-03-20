@@ -39,6 +39,7 @@ const AdminHeader = () => {
         dispatch(logout());
         navigate("/");
         toast.success(res.data.message);
+        
       }
       console.log(res);
     }
