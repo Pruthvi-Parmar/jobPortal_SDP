@@ -1,33 +1,45 @@
-import React from "react";
+"use client"
+
+import { useState } from "react"
+import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover"
+import { Button } from "../components/ui/button"
+import { Avatar, AvatarImage, AvatarFallback } from "../components/ui/avatar"
+import { Link, useNavigate } from "react-router-dom"
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "../components/ui/popover";
-import { Button } from "../components/ui/button";
-import { Avatar, AvatarImage } from "../components/ui/avatar";
-import { Link, useNavigate } from "react-router-dom";
-import { LogOut, User2, User2Icon } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
-import { login, logout } from "@/store/authSlice";
-import store from "@/store/store";
-import axios from "axios";
+  LogOut,
+  User2,
+  Menu,
+  X,
+  BriefcaseBusiness,
+  Home,
+  MessageCircle,
+  FileText,
+  Crown,
+  Newspaper,
+} from "lucide-react"
+import { useDispatch, useSelector } from "react-redux"
+import { logout } from "@/store/authSlice"
+import axios from "axios"
+import { toast } from "sonner";
 
 const Header = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const user = useSelector((state) => state.auth.userData);
-  //const user = false
-  console.log(user);
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const user = useSelector((state) => state.auth.userData)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  console.log(user)
   if (user) {
-    console.log(user.coverimage);
+    console.log(user.coverimage)
   }
+
   const handleViewProfile = () => {
-    navigate("/profile"); // Navigate to the profile page
-  };
+    navigate("/profile") // Navigate to the profile page
+  }
+
   const handleClick = async () => {
-    console.log("inside logout");
-    console.log(localStorage.getItem("accessToken"));
+    console.log("inside logout")
+    console.log(localStorage.getItem("accessToken"))
 
     const res = await axios.post(
       "http://localhost:8001/v1/users/logout",
@@ -38,131 +50,269 @@ const Header = () => {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Include the token in the header
         },
         withCredentials: true,
-      }
-    );
+      },
+    )
     if (res.data.success) {
-      localStorage.setItem("accessToken", null);
-      localStorage.setItem("refreshToken", null);
-      dispatch(logout());
-      navigate("/");
-      toast.success(res.data.message);
+      localStorage.setItem("accessToken", null)
+      localStorage.setItem("refreshToken", null)
+      dispatch(logout())
+      navigate("/")
+      toast.success(res.data.message)
     }
-    console.log(res);
-  };
+    console.log(res)
+  }
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen)
+  }
 
   return (
-    <div className="bg-white border border-gray-300 rounded-md shadow-sm">
-      <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
-        
-        <div>
-        <Link to="/userhome">
-          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
-            Job<span className="text-[#4F46E5]">Connect</span>
-          </h1>
-        </Link>
-        </div>
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 md:h-20">
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <Link to="/userhome" className="flex items-center">
+              <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
+                Job<span className="text-primary">Connect</span>
+              </h1>
+            </Link>
+          </div>
 
-        <div className="flex items-center gap-10">
-          <ul className="flex font-medium items-center gap-5">
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-8">
             {!user ? (
-              // Case when no user is logged in
               <></>
             ) : user.role === "jobseeker" ? (
-              // Case when logged-in user is a jobseeker
-              <>
-                <Link to="/userhome">
-                  <li>Home</li>
-                </Link>
-                <Link to="/myjobs">
-                  <li>My Jobs</li>
-                </Link>
-                <Link to="/technews">
-                  <li>TechInsights</li>
-                </Link>
-                <Link to="/ats">
-                  <li>Resume ATS</li>
-                </Link>
-                {user.isPremium ?
-                <Link to="/chat">
-                  <li>Messages</li>
-                </Link>:<Link to="/payment">
-                  <li>Premium</li>
-                </Link>}
-              </>
-            ) : (
-              // Case when logged-in user is a recruiter
-              <>
-                <Link to="/recruiterhome">
-                  <li>Home</li>
-                </Link>
-                <Link to="/postjob">
-                  <li>Post Job</li>
-                </Link>
-                <Link to="/technews">
-                  <li>TechInsights</li>
-                </Link>
-                <Link to="/chat">
-                  <li>Messages</li>
-                </Link>
-              </>
-            )}
-          </ul>
-          {!user ? (
-            <div className="flex items-center gap-2">
-              <Link to="/login">
-                <Button variant="outline">Login</Button>
-              </Link>
-              <Link to="/signup">
-                <Button className="bg-[#4F46E5] hover:bg-[#322d91]">
-                  Signup
-                </Button>
-              </Link>
-            </div>
-          ) : (
-            <Popover>
-              <PopoverTrigger asChild>
-                <Avatar className="cursor-pointer">
-                  <AvatarImage src={user.coverimage} alt="@shadcn" />
-                </Avatar>
-              </PopoverTrigger>
-              <PopoverContent className="w-80">
-                <div className="">
-                  <div className="flex gap-2 space-y-1">
-                    <Avatar className="cursor-pointer">
-                      <AvatarImage src={user.coverimage} alt="@shadcn" />
-                    </Avatar>
-                    <div>
-                      <h4 className="font-medium px-3">{user.username}</h4>
-                      <p className="text-sm text-muted-foreground">
-                        {user.bio || "lorem"}
-                      </p>
-                    </div>
+              <div className="flex items-center space-x-6">
+                <Link to="/userhome" className="nav-link group">
+                  <div className="flex items-center gap-1.5">
+                    <Home className="w-4 h-4" />
+                    <span>Home</span>
                   </div>
-                  <div className="flex flex-col my-2 text-gray-600">
-                    {user && (
-                      <div className="flex w-fit items-center gap-2 cursor-pointer">
-                        <User2 />
-                        <Button variant="link" onClick={handleViewProfile}>
-                          view profile
-                        </Button>
-                      </div>
-                    )}
+                  <span className="nav-indicator"></span>
+                </Link>
+                <Link to="/myjobs" className="nav-link group">
+                  <div className="flex items-center gap-1.5">
+                    <BriefcaseBusiness className="w-4 h-4" />
+                    <span>My Jobs</span>
+                  </div>
+                  <span className="nav-indicator"></span>
+                </Link>
+                <Link to="/technews" className="nav-link group">
+                  <div className="flex items-center gap-1.5">
+                    <Newspaper className="w-4 h-4" />
+                    <span>TechInsights</span>
+                  </div>
+                  <span className="nav-indicator"></span>
+                </Link>
+                <Link to="/ats" className="nav-link group">
+                  <div className="flex items-center gap-1.5">
+                    <FileText className="w-4 h-4" />
+                    <span>Resume ATS</span>
+                  </div>
+                  <span className="nav-indicator"></span>
+                </Link>
+                {user.isPremium ? (
+                  <Link to="/chat" className="nav-link group">
+                    <div className="flex items-center gap-1.5">
+                      <MessageCircle className="w-4 h-4" />
+                      <span>Messages</span>
+                    </div>
+                    <span className="nav-indicator"></span>
+                  </Link>
+                ) : (
+                  <Link to="/payment" className="nav-link group">
+                    <div className="flex items-center gap-1.5">
+                      <Crown className="w-4 h-4" />
+                      <span>Premium</span>
+                    </div>
+                    <span className="nav-indicator"></span>
+                  </Link>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center space-x-6">
+                <Link to="/recruiterhome" className="nav-link group">
+                  <div className="flex items-center gap-1.5">
+                    <Home className="w-4 h-4" />
+                    <span>Home</span>
+                  </div>
+                  <span className="nav-indicator"></span>
+                </Link>
+                <Link to="/postjob" className="nav-link group">
+                  <div className="flex items-center gap-1.5">
+                    <BriefcaseBusiness className="w-4 h-4" />
+                    <span>Post Job</span>
+                  </div>
+                  <span className="nav-indicator"></span>
+                </Link>
+                <Link to="/technews" className="nav-link group">
+                  <div className="flex items-center gap-1.5">
+                    <Newspaper className="w-4 h-4" />
+                    <span>TechInsights</span>
+                  </div>
+                  <span className="nav-indicator"></span>
+                </Link>
+                <Link to="/chat" className="nav-link group">
+                  <div className="flex items-center gap-1.5">
+                    <MessageCircle className="w-4 h-4" />
+                    <span>Messages</span>
+                  </div>
+                  <span className="nav-indicator"></span>
+                </Link>
+              </div>
+            )}
+          </nav>
 
-                    <div className="flex w-fit items-center gap-2 cursor-pointer">
-                      <LogOut />
-                      <Button variant="link" onClick={handleClick}>
+          {/* Auth Buttons or User Menu */}
+          <div className="flex items-center">
+            {!user ? (
+              <div className="flex items-center gap-3">
+                <Link to="/login">
+                  <Button variant="outline" className="font-medium">
+                    Login
+                  </Button>
+                </Link>
+                <Link to="/signup">
+                  <Button className="bg-primary hover:bg-primary/90 font-medium">Signup</Button>
+                </Link>
+              </div>
+            ) : (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="ghost" className="p-0 h-10 w-10 rounded-full">
+                    <Avatar className="h-10 w-10 border-2 border-primary/10 transition-all hover:border-primary/30">
+                      <AvatarImage src={user.coverimage} alt={user.username || "User"} />
+                      <AvatarFallback className="bg-primary/10 text-primary">
+                        {user.username ? user.username.charAt(0).toUpperCase() : "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-72 p-4" align="end">
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <Avatar className="h-12 w-12 border-2 border-primary/10">
+                        <AvatarImage src={user.coverimage} alt={user.username || "User"} />
+                        <AvatarFallback className="bg-primary/10 text-primary">
+                          {user.username ? user.username.charAt(0).toUpperCase() : "U"}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-base truncate">{user.username}</h4>
+                        <p className="text-sm text-muted-foreground truncate">{user.bio || "No bio available"}</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {user.role === "jobseeker" ? "Job Seeker" : "Recruiter"}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1 pt-1">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-sm h-9 px-2 font-normal"
+                        onClick={handleViewProfile}
+                      >
+                        <User2 className="mr-2 h-4 w-4" />
+                        View Profile
+                      </Button>
+
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-sm h-9 px-2 font-normal text-red-500 hover:text-red-600 hover:bg-red-50"
+                        onClick={handleClick}
+                      >
+                        <LogOut className="mr-2 h-4 w-4" />
                         Logout
                       </Button>
                     </div>
                   </div>
-                </div>
-              </PopoverContent>
-            </Popover>
-          )}
+                </PopoverContent>
+              </Popover>
+            )}
+
+            {/* Mobile menu button */}
+            <div className="flex md:hidden ml-4">
+              <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full" onClick={toggleMobileMenu}>
+                {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
 
-export default Header;
+      {/* Mobile menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-white border-t border-gray-100 py-3 px-4 shadow-lg">
+          <nav className="flex flex-col space-y-3">
+            {!user ? (
+              <div className="flex justify-center gap-4 py-2">
+                <Link to="/login" className="w-full">
+                  <Button variant="outline" className="w-full">
+                    Login
+                  </Button>
+                </Link>
+                <Link to="/signup" className="w-full">
+                  <Button className="w-full">Signup</Button>
+                </Link>
+              </div>
+            ) : user.role === "jobseeker" ? (
+              <>
+                <Link to="/userhome" className="mobile-nav-link">
+                  <Home className="w-5 h-5" />
+                  <span>Home</span>
+                </Link>
+                <Link to="/myjobs" className="mobile-nav-link">
+                  <BriefcaseBusiness className="w-5 h-5" />
+                  <span>My Jobs</span>
+                </Link>
+                <Link to="/technews" className="mobile-nav-link">
+                  <Newspaper className="w-5 h-5" />
+                  <span>TechInsights</span>
+                </Link>
+                <Link to="/ats" className="mobile-nav-link">
+                  <FileText className="w-5 h-5" />
+                  <span>Resume ATS</span>
+                </Link>
+                {user.isPremium ? (
+                  <Link to="/chat" className="mobile-nav-link">
+                    <MessageCircle className="w-5 h-5" />
+                    <span>Messages</span>
+                  </Link>
+                ) : (
+                  <Link to="/payment" className="mobile-nav-link">
+                    <Crown className="w-5 h-5" />
+                    <span>Premium</span>
+                  </Link>
+                )}
+              </>
+            ) : (
+              <>
+                <Link to="/recruiterhome" className="mobile-nav-link">
+                  <Home className="w-5 h-5" />
+                  <span>Home</span>
+                </Link>
+                <Link to="/postjob" className="mobile-nav-link">
+                  <BriefcaseBusiness className="w-5 h-5" />
+                  <span>Post Job</span>
+                </Link>
+                <Link to="/technews" className="mobile-nav-link">
+                  <Newspaper className="w-5 h-5" />
+                  <span>TechInsights</span>
+                </Link>
+                <Link to="/chat" className="mobile-nav-link">
+                  <MessageCircle className="w-5 h-5" />
+                  <span>Messages</span>
+                </Link>
+              </>
+            )}
+          </nav>
+        </div>
+      )}
+    </header>
+  )
+}
+
+export default Header
+

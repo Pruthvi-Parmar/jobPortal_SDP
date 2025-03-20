@@ -337,32 +337,41 @@ const getCurrentUser = asyncHandler(async(req, res) => {
     ))
 })
 
-const updateAccountDetails = asyncHandler(async(req, res) => {
-    const {username, email} = req.body
-
-    console.log(req.body);
-    
-
+const updateAccountDetails = asyncHandler(async (req, res) => {
+    const { username, email } = req.body
+  
+    console.log("Request body:", req.body)
+  
     if (!username || !email) {
-        throw new ApiError(400, "All fields are required")
+      throw new ApiError(400, "Username and email are required")
     }
-
-    const user = await User.findByIdAndUpdate(
-        req.user?._id,
-        {
-            $set: {
-                username,
-                email: email
-            }
-        },
-        {new: true}
-        
-    ).select("-password")
-
-    return res
-    .status(200)
-    .json(new ApiResponse(200, user, "Account details updated successfully"))
-});
+  
+    // Create an update object with only the fields that are provided
+    const updateData = {
+      username,
+      email,
+    }
+  
+    // Add any additional fields that might be in the request
+    // This allows for extending the update functionality
+    if (req.body.fullname) updateData.fullname = req.body.fullname
+    if (req.body.bio) updateData.bio = req.body.bio
+    if (req.body.location) updateData.location = req.body.location
+  
+    try {
+      const user = await User.findByIdAndUpdate(req.user?._id, { $set: updateData }, { new: true }).select("-password")
+  
+      if (!user) {
+        throw new ApiError(404, "User not found")
+      }
+  
+      return res.status(200).json(new ApiResponse(200, user, "Account details updated successfully"))
+    } catch (error) {
+      console.error("Error updating user:", error)
+      throw new ApiError(500, error.message || "Failed to update account details")
+    }
+  })
+  
 
 const viewProfile = asyncHandler(async(req, res) => {
     const {username, email} = req.body
