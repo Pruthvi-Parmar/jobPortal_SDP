@@ -7,8 +7,9 @@ import { login } from "@/store/authSlice";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleSuccess = async (response) => {
     try {
       const { credential } = response; // Google Token
@@ -20,31 +21,31 @@ const Login = () => {
       });
 
       console.log("Backend Response:", data);
-      console.log("user : ",data.user);
+      console.log("User:", data.user);
+
+      // Dispatch user data to Redux store
       dispatch(login(data.user));
-      
 
       // Store JWT token in localStorage
-      localStorage.setItem("accessToken", data.token);
-      if (user.role === "jobseeker") {
+      localStorage.setItem("accessToken", data.accessToken); // FIXED: Correct key name
+
+      // Redirect based on user role
+      if (data.user?.role === "jobseeker") {
         navigate("/userhome");
-      } else if (user.role === "recruiter") {
+      } else if (data.user?.role === "recruiter") {
         navigate("/recruiterhome");
       }
 
       toast.success("Login successful!");
-      //alert("Login Successful!");
-
-      // Redirect user to dashboard or home page
-      
-      //window.location.href = "/userhome";
     } catch (error) {
       console.error("Login failed:", error);
+      toast.error("Google login failed. Please try again.");
     }
   };
 
   const handleFailure = (error) => {
     console.error("Google Login Failed:", error);
+    toast.error("Google authentication failed.");
   };
 
   return (

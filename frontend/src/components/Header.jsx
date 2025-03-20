@@ -18,7 +18,7 @@ const Header = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.userData);
   //const user = false
-  console.log(user);
+  console.log("USER",user);
   if (user) {
     console.log(user.coverimage);
   }

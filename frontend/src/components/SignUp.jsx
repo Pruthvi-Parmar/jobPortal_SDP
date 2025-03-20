@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Label } from "../components/ui/label";
-import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { toast } from "sonner";
+import { Link, useNavigate } from "react-router-dom";
+import { Label } from '../components/ui/label';
+import { Input } from '../components/ui/input';
+import { Button } from '../components/ui/button';
+import { useDispatch } from 'react-redux';
+import { login } from '@/store/authSlice';
+
 
 const SignUp = () => {
   const [input, setInput] = useState({
@@ -23,6 +27,52 @@ const SignUp = () => {
   });
 
   const navigate = useNavigate();
+  
+  const dispatch = useDispatch();
+
+  const handleGoogleSuccess = async (response) => {
+    try {
+      const { credential } = response; // Google Token
+
+      // Send Google token and all fields to the backend
+      const { data } = await axios.post("http://localhost:8001/auth/google", {
+        token: credential,
+        username: input.username,
+        email: input.email,
+        fullname: input.fullname,
+        password: input.password,
+        coverimage: input.coverimage,
+        resume: input.resume,
+        role: input.role,
+        bio: input.bio,
+        location: input.location,
+        qualifications: input.qualifications,
+        experience: input.experience,
+        company: input.company,
+      });
+
+      console.log("Backend Response:", data);
+      toast.success("Sign-up successful!");
+      console.log("ACCESS TOKEN" , data.accessToken)
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
+      dispatch(login(data.user))
+      // Redirect based on role
+      if (data.user?.role === "jobseeker") {
+        navigate("/userhome");
+      } else if (data.user?.role === "recruiter") {
+        navigate("/recruiterhome");
+      }
+    } catch (error) {
+      console.error("Google login failed:", error);
+      toast.error(error.response?.data?.message || "An error occurred");
+    }
+  };
+
+  const handleGoogleFailure = (error) => {
+    console.error("Google Login Failed:", error);
+    toast.error("Google authentication failed.");
+  };
 
   const changeEventHandler = (e) => {
     const { name, value } = e.target;
@@ -76,14 +126,12 @@ const SignUp = () => {
     formData.append("location", input.location);
 
     if (input.role === "jobseeker") {
-      // Append qualifications as individual objects
       input.qualifications.forEach((qual, index) => {
         formData.append(`qualifications[${index}][education]`, qual.education);
         formData.append(`qualifications[${index}][certificate]`, qual.certificate);
         formData.append(`qualifications[${index}][skills]`, qual.skills);
       });
 
-      // Append experience as individual objects
       input.experience.forEach((exp, index) => {
         formData.append(`experience[${index}][title]`, exp.title);
         formData.append(`experience[${index}][company]`, exp.company);
@@ -121,11 +169,22 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 p-4 ">
+    <div className="flex items-center justify-center min-h-screen bg-gray-50 p-4">
       <div className="bg-white shadow-lg rounded-lg max-w-lg w-full p-8 space-y-6">
         <h1 className="text-3xl font-bold text-center text-gray-800">
           Create Your Account
         </h1>
+
+        {/* Google Sign-Up Button */}
+        <div className="flex justify-center">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={handleGoogleFailure}
+          />
+        </div>
+
+        <div className="text-sm text-center text-gray-600">OR</div>
+
         <form onSubmit={submitHandler} className="space-y-6">
           {/* Role Selection */}
           <div>
@@ -385,5 +444,6 @@ const SignUp = () => {
       </div>
     </div>
   );
-}
-  export default SignUp;
+};
+
+export default SignUp;

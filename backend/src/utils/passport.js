@@ -13,10 +13,10 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         let user = await User.findOne({ email: profile.emails[0].value });
-
+        console.log("PROFILE", profile)
         if (!user) {
           user = await User.create({
-            username: profile.displayName,
+            username: profile.displayName || "defaultusername",
             email: profile.emails[0].value,
             password: "google-auth", // No actual password needed
           });

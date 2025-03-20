@@ -1,25 +1,73 @@
-import jwt from "jsonwebtoken";
+import { User } from "../models/user.model.js";
+import { OAuth2Client } from "google-auth-library";
+import { ApiError } from "../utils/ApiError.js";
 
-export const googleAuthCallback = async (req, res) => {
-  try {
-    const user = req.user;
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-    // Generate JWT token
-    const token = jwt.sign({ id: user.id, email: user.email }, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: "1h",
-    });
+/**
+ * Handles Google OAuth authentication.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
+export const handleGoogleAuth = async (req, res) => {
+    console.log("Inside Google controller");
 
-    res.json({ user, token });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Authentication failed" });
-  }
-};
+    const { token, role, bio, location, qualifications, experience, company } = req.body;
+    console.log("Received token:", token);
+    console.log("Received role:", role);
 
-export const getCurrentUser = (req, res) => {
-  try {
-    res.json({ user: req.user });
-  } catch (err) {
-    res.status(500).json({ message: "Error fetching user" });
-  }
+    try {
+        // Verify Google ID Token
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const { email, name, picture, sub: googleId } = ticket.getPayload();
+
+        // Check if user exists
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            // Create new user (Sign Up)
+            user = new User({
+                googleId,
+                email,
+                username: name, // Use Google Name as Username
+                fullname: name, // Store Full Name
+                avatar: picture, // Store Google Profile Picture
+                password: null, // No password needed for Google Auth
+                role, // Additional fields
+                bio,
+                location,
+                qualifications,
+                experience,
+                company,
+            });
+            await user.save();
+        } else if (!user.googleId) {
+            // If user exists but was created with email/password, update googleId
+            user.googleId = googleId;
+            await user.save();
+        }
+
+        // Generate JWT access & refresh tokens
+        const accessToken = user.generateAccessToken();
+        const refreshToken = user.generateRefreshToken();
+
+        // Save refresh token to user document
+        user.refreshToken = refreshToken;
+        await user.save();
+
+        // Send response
+        res.json({
+            message: user.googleId ? "Login Successful" : "Sign-Up Successful",
+            accessToken,
+            refreshToken,
+            user,
+        });
+    } catch (error) {
+        console.error("Google authentication error:", error);
+        res.status(500).json({ error: "Google authentication failed" });
+    }
 };
