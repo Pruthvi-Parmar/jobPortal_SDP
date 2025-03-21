@@ -1,46 +1,101 @@
-import mongoose from "mongoose";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import mongoose, {Schema} from "mongoose";
+import jwt from "jsonwebtoken"
+import bcrypt from "bcrypt"
 
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
     {
-        // Authentication Fields
-        googleId: { type: String, unique: true, sparse: true }, // For Google-authenticated users
-        email: { type: String, required: true, unique: true }, // Email is required for all users
-        password: { type: String }, // Password is optional (for email/password users)
-        refreshToken: { type: String }, // Refresh token for JWT
-
-        // Profile Fields
-        username: { type: String, required: true, unique: true }, // Username is required
-        fullname: { type: String }, // Full name
-        avatar: { type: String }, // Profile picture URL
-        role: { type: String, enum: ["jobseeker", "recruiter"], default: "jobseeker" }, // User role
-        bio: { type: String }, // User bio
-        location: { type: String }, // User location
-
-        // Jobseeker-Specific Fields
-        qualifications: [
-            {
-                education: { type: String }, // Education details
-                certificate: { type: String }, // Certifications
-                skills: { type: String }, // Skills
+        username: {
+            type: String,
+            //required: true,
+            unique: true,
+            lowecase: true,
+            trim: true,
+            index: true
+        },
+        email: {
+            type: String,
+            //required: true,
+            unique: true,
+            lowecase: true,
+            trim: true,
+        },
+        fullname: {
+            type: String,
+            required: false,
+            trim: true,
+            index: true
+        },
+        resume:{
+            type: String, //cloudinary if use!
+            required: false
+        },
+        coverimage:{
+            type: String, //cloudinary if use!
+            required: false
+        },
+        password:{
+            type: String, //becrypt
+            //required: true
+        },
+        refreshToken:{
+            type: String,
+        },
+        role:{
+            type: String,
+            //required: true
+        },
+        bio:{
+            type: String,
+        },
+        location:{
+            type: String,
+        },
+        qualifications:[{
+            education:{
+                type: String,
             },
-        ],
-        experience: [
-            {
-                title: { type: String }, // Job title
-                company: { type: String }, // Company name
-                desc: { type: String }, // Job description
+            certifricate:{
+                type: String,
             },
-        ],
-
-        // Recruiter-Specific Fields
-        company: { type: String }, // Company name (for recruiters)
+            skills:{
+                type: String,
+            }
+        }],
+        experience:[{
+            title:{
+                type: String,
+            },
+            company:{
+                type: String,
+            },
+            desc:{
+                type: String,
+            }
+        }],
+        company:[{
+            name:{
+                type: String,
+            },
+            desc:{
+                type: String,
+            }
+        }],
+        isPremium: { 
+            type: Boolean, 
+            default: false 
+        },
+        googleId: { 
+            type: String,
+            unique: true,
+            sparse: true 
+        },
     },
-    { timestamps: true } // Adds createdAt and updatedAt fields
-);
+    {
+        timestamps: true
+    }
+)
 
-// Hash password before saving (for email/password users)
+
 userSchema.pre("save", async function (next) {
     // Skip password hashing if the password is not modified or if the user is Google-authenticated
     if (!this.isModified("password") || !this.password) return next();
@@ -50,12 +105,10 @@ userSchema.pre("save", async function (next) {
     next();
 });
 
-// Method to compare passwords (for email/password users)
 userSchema.methods.isPasswordCorrect = async function (password) {
     return await bcrypt.compare(password, this.password); // Compare hashed passwords
 };
 
-// Method to generate access token
 userSchema.methods.generateAccessToken = function () {
     return jwt.sign(
         {
@@ -68,7 +121,6 @@ userSchema.methods.generateAccessToken = function () {
         { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
     );
 };
-
 userSchema.methods.generateRefreshToken = function () {
     return jwt.sign(
         { _id: this._id },
@@ -77,4 +129,5 @@ userSchema.methods.generateRefreshToken = function () {
     );
 };
 
-export const User = mongoose.model("User", userSchema);
+
+export const User = mongoose.model('User',userSchema)
