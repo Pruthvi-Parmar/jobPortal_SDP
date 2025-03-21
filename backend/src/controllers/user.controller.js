@@ -25,8 +25,8 @@ export const generateAccessAndRefreshTokens = async (userId) => {
 
 
 const registerUser = asyncHandler( async (req, res) => {
-    const {username, email, password, role } = req.body
-    console.log(req.body)
+    const {username, email, password, role, bio } = req.body
+    console.log("request body ",req.body)
     console.log(email);
     console.log(role);
     
@@ -44,11 +44,11 @@ const registerUser = asyncHandler( async (req, res) => {
     if(existedUser){
         throw new ApiError(400,"user already exist")
     }
-    console.log("errrrrrrorrrr!!!!!!");
-    console.log(username);
-    console.log(email);
-    console.log(password);
-    console.log(req.files);
+    // console.log("errrrrrrorrrr!!!!!!");
+    // console.log(username);
+    // console.log(email);
+    // console.log(password);
+    // console.log(req.files);
     
 
     const avatarLocalPath = req.files?.coverimage[0]?.path;
@@ -70,8 +70,8 @@ const registerUser = asyncHandler( async (req, res) => {
     console.log(resume.url);
 
     if(role=="jobseeker"){
-        const {qualifications, experience, location, bio} = req.body
-        console.log(qualifications, experience, location, bio);
+        const {qualifications, experience, location} = req.body
+       // console.log(qualifications, experience, location, bio);
         // if(
         //     [qualifications,experience,location,bio].some((field) => field?.trim() === "")
         // ){
@@ -88,7 +88,6 @@ const registerUser = asyncHandler( async (req, res) => {
             experience,
             location,
             bio
-
         })
 
         if(!user){
@@ -120,6 +119,8 @@ const registerUser = asyncHandler( async (req, res) => {
         // ){
         //     throw new ApiError(400,"all fields are requried")
         // }
+       // console.log("bio",bio);
+        
         const user = await User.create({
             username,
             email,

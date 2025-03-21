@@ -51,7 +51,7 @@ userSchema.pre("save", async function (next) {
 });
 
 // Method to compare passwords (for email/password users)
-userSchema.methods.comparePassword = async function (password) {
+userSchema.methods.isPasswordCorrect = async function (password) {
     return await bcrypt.compare(password, this.password); // Compare hashed passwords
 };
 
