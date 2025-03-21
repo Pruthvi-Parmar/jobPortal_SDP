@@ -1,45 +1,63 @@
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+"use client"
+
+import { Skeleton } from "@/components/ui/skeleton"
+
+import { useState, useEffect } from "react"
+import { motion } from "framer-motion"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
 import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from "@/components/ui/select";
-import { Check, X } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
-import { Eye } from "lucide-react";
+  Check,
+  X,
+  Eye,
+  Edit,
+  Save,
+  Users,
+  MapPin,
+  DollarSign,
+  Briefcase,
+  FileText,
+  ExternalLink,
+  Clock,
+  Calendar,
+} from "lucide-react"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from "@/components/ui/dialog"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Separator } from "@/components/ui/separator"
+import { cn } from "@/lib/utils"
 
-
-const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
-  // console.log(job);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedJob, setEditedJob] = useState(job);
-  const [appliedUsers, setAppliedUsers] = useState([]);
-  const [loadingApplicants, setLoadingApplicants] = useState(false);
-  const [refreshKey, setRefreshKey] = useState(0);
+const JobDetails = ({ job, className }) => {
+  const [isEditing, setIsEditing] = useState(false)
+  const [editedJob, setEditedJob] = useState(job)
+  const [appliedUsers, setAppliedUsers] = useState([])
+  const [loadingApplicants, setLoadingApplicants] = useState(false)
+  const [refreshKey, setRefreshKey] = useState(0)
+  const [selectedApplicant, setSelectedApplicant] = useState(null)
+  const [activeTab, setActiveTab] = useState("details")
 
   useEffect(() => {
-    setEditedJob(job);
-    setAppliedUsers([]);
-  }, [job]);
+    setEditedJob(job)
+    setAppliedUsers([])
+  }, [job])
 
-  const handleEdit = () => setIsEditing(true);
+  const handleEdit = () => setIsEditing(true)
+
   const handleUpdate = async () => {
-    if (
-      !editedJob.title ||
-      !editedJob.location ||
-      !editedJob.salary ||
-      !editedJob.type
-    ) {
-      alert("Please fill in all required fields.");
-      return;
+    if (!editedJob.title || !editedJob.location || !editedJob.salary || !editedJob.type) {
+      alert("Please fill in all required fields.")
+      return
     }
 
     try {
@@ -59,103 +77,93 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
           requirment: editedJob.requirment,
           status: editedJob.status,
         }),
-      });
+      })
 
-      const result = await response.json();
-      console.log(result);
+      const result = await response.json()
+      console.log(result)
     } catch (error) {
-      console.error("Error updating job:", error);
-      //alert("Something went wrong. Please try again.");
+      console.error("Error updating job:", error)
     }
-    setIsEditing(false);
-  };
+    setIsEditing(false)
+  }
 
   const fetchApplicants = async () => {
-    if (!job) return;
-    setLoadingApplicants(true);
+    if (!job) return
+    setLoadingApplicants(true)
     try {
-      const response = await fetch(
-        "http://localhost:8001/v1/application/get-job-application",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-          body: JSON.stringify({ jobId: job._id }),
-        }
-      );
-      const result = await response.json();
+      const response = await fetch("http://localhost:8001/v1/application/get-job-application", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        body: JSON.stringify({ jobId: job._id }),
+      })
+      const result = await response.json()
       if (result.success) {
-        setAppliedUsers(result.data);
-        console.log(result.data);
+        setAppliedUsers(result.data)
+        console.log(result.data)
       }
     } catch (error) {
-      console.error("Failed to fetch applicants", error);
+      console.error("Failed to fetch applicants", error)
     } finally {
-      setLoadingApplicants(false);
+      setLoadingApplicants(false)
     }
-  };
+  }
 
   const handleAccept = async (applicationId) => {
-    console.log("Accept application:", applicationId);
-    let userId = applicationId;
+    console.log("Accept application:", applicationId)
+    const userId = applicationId
     try {
-      const response = await fetch(
-        "http://localhost:8001/v1/application/changeState",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            jobId: job._id, // Job ID from job object
-            userId: userId, // User ID from the application object
-            status: "Accepted", // New status
-          }),
-        }
-      );
+      const response = await fetch("http://localhost:8001/v1/application/changeState", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          jobId: job._id,
+          userId: userId,
+          status: "Accepted",
+        }),
+      })
 
-      const result = await response.json();
-      console.log("Application status updated:", result);
-      setRefreshKey((prev) => prev + 1); // Trigger re-render
+      const result = await response.json()
+      console.log("Application status updated:", result)
+      setRefreshKey((prev) => prev + 1)
     } catch (error) {
-      console.error("Error updating application status", error);
+      console.error("Error updating application status", error)
     }
-  };
+  }
 
   const handleReject = async (applicationId) => {
-    console.log("Accept application:", applicationId);
-    let userId = applicationId;
+    console.log("Reject application:", applicationId)
+    const userId = applicationId
     try {
-      const response = await fetch(
-        "http://localhost:8001/v1/application/changeState",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            jobId: job._id, // Job ID from job object
-            userId: userId, // User ID from the application object
-            status: "Rejected", // New status
-          }),
-        }
-      );
+      const response = await fetch("http://localhost:8001/v1/application/changeState", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          jobId: job._id,
+          userId: userId,
+          status: "Rejected",
+        }),
+      })
 
-      const result = await response.json();
-      console.log("Application status updated:", result);
-      setRefreshKey((prev) => prev + 1); // Trigger re-render
+      const result = await response.json()
+      console.log("Application status updated:", result)
+      setRefreshKey((prev) => prev + 1)
     } catch (error) {
-      console.error("Error updating application status", error);
+      console.error("Error updating application status", error)
     }
-  };
+  }
+
   useEffect(() => {
-    fetchApplicants();
-  }, [refreshKey]);
-
-
-  const [selectedApplicant, setSelectedApplicant] = useState(null);
+    if (activeTab === "applicants") {
+      fetchApplicants()
+    }
+  }, [refreshKey, activeTab])
 
   const handleViewProfile = async (applicant) => {
     try {
@@ -169,325 +177,428 @@ const JobDetails = ({ job, onUpdateJob, onShowApplicants }) => {
           email: applicant.email,
           username: applicant.username,
         }),
-      });
-  
-      const result = await response.json();
-      console.log(result.data);
-      
-  
+      })
+
+      const result = await response.json()
+      console.log(result.data)
+
       if (!response.ok) {
-        throw new Error(result.message || "Failed to fetch profile");
+        throw new Error(result.message || "Failed to fetch profile")
       }
-  
-      setSelectedApplicant(result.data); // Update state with applicant details
+
+      setSelectedApplicant(result.data)
     } catch (error) {
-      console.error("Error fetching profile:", error);
+      console.error("Error fetching profile:", error)
     }
-  };
-  
+  }
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A"
+    const date = new Date(dateString)
+    return new Intl.DateTimeFormat("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    }).format(date)
+  }
+
+  const getInitials = (name) => {
+    if (!name) return "U"
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+  }
 
   return (
     <motion.div
-      className="col-span-2 bg-white shadow-lg p-6 rounded-lg"
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
+      className={cn("bg-white rounded-lg", className)}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      {/* Cover Image */}
-      <div className="relative w-full h-52">
-        <img
-          src={editedJob.coverImage}
-          alt="Job Cover"
-          className="w-full h-full object-cover rounded-lg shadow-md"
-        />
-        {/* Status Badge or Dropdown */}
-        <div className="absolute top-3 right-3">
-          {isEditing ? (
-            <Select
-              value={editedJob.status}
-              onValueChange={(value) =>
-                setEditedJob({ ...editedJob, status: value })
-              }
-            >
-              <SelectTrigger className="w-32">
-                <SelectValue placeholder="Select Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Active">Active</SelectItem>
-                <SelectItem value="Hibernate">Hibernate</SelectItem>
-              </SelectContent>
-            </Select>
-          ) : (
-            <Badge
-              className={`px-3 py-1 text-sm ${
-                editedJob.status === "Active" ? "bg-green-500" : "bg-red-500"
-              }`}
-            >
-              {editedJob.status}
-            </Badge>
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <div className="border rounded-lg shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between p-6 pb-2">
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-2xl font-bold tracking-tight">{editedJob.title}</h2>
+                <Badge
+                  variant={editedJob.status === "Active" ? "success" : "secondary"}
+                  className={cn(
+                    "ml-2",
+                    editedJob.status === "Active" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800",
+                  )}
+                >
+                  {editedJob.status}
+                </Badge>
+              </div>
+              <div className="flex flex-wrap gap-3 mt-2 text-sm text-muted-foreground">
+                <div className="flex items-center">
+                  <MapPin className="h-4 w-4 mr-1" />
+                  <span>{editedJob.location}</span>
+                </div>
+                <div className="flex items-center">
+                  <DollarSign className="h-4 w-4 mr-1" />
+                  <span>${editedJob.salary}</span>
+                </div>
+                <div className="flex items-center">
+                  <Briefcase className="h-4 w-4 mr-1" />
+                  <span>{editedJob.type}</span>
+                </div>
+                <div className="flex items-center">
+                  <Calendar className="h-4 w-4 mr-1" />
+                  <span>Posted {formatDate(editedJob.createdAt)}</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex mt-4 sm:mt-0">
+              {isEditing ? (
+                <>
+                  <Button onClick={handleUpdate} className="mr-2">
+                    <Save className="h-4 w-4 mr-2" />
+                    Save
+                  </Button>
+                  <Button variant="outline" onClick={() => setIsEditing(false)}>
+                    Cancel
+                  </Button>
+                </>
+              ) : (
+                <Button onClick={handleEdit}>
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit Job
+                </Button>
+              )}
+            </div>
+          </div>
+
+          <TabsList className="w-full justify-start px-6 pt-2">
+            <TabsTrigger value="details">Details</TabsTrigger>
+            <TabsTrigger value="applicants" onClick={fetchApplicants}>
+              Applicants
+              {appliedUsers.length > 0 && (
+                <Badge variant="secondary" className="ml-2">
+                  {appliedUsers.length}
+                </Badge>
+              )}
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="details" className="p-6 pt-4">
+            {isEditing ? (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Job Title</label>
+                    <Input
+                      type="text"
+                      value={editedJob.title}
+                      onChange={(e) => setEditedJob({ ...editedJob, title: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Status</label>
+                    <Select
+                      value={editedJob.status}
+                      onValueChange={(value) => setEditedJob({ ...editedJob, status: value })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Active">Active</SelectItem>
+                        <SelectItem value="Hibernate">Hibernate</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Location</label>
+                    <Input
+                      type="text"
+                      value={editedJob.location}
+                      onChange={(e) => setEditedJob({ ...editedJob, location: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Salary</label>
+                    <Input
+                      type="number"
+                      value={editedJob.salary}
+                      onChange={(e) => setEditedJob({ ...editedJob, salary: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Job Type</label>
+                    <Input
+                      type="text"
+                      value={editedJob.type}
+                      onChange={(e) => setEditedJob({ ...editedJob, type: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Overview</label>
+                  <Textarea
+                    rows={4}
+                    value={editedJob.overview}
+                    onChange={(e) => setEditedJob({ ...editedJob, overview: e.target.value })}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Responsibilities</label>
+                  <Textarea
+                    rows={4}
+                    value={editedJob.responsiblity}
+                    onChange={(e) => setEditedJob({ ...editedJob, responsiblity: e.target.value })}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Requirements</label>
+                  <Textarea
+                    rows={4}
+                    value={editedJob.requirment}
+                    onChange={(e) => setEditedJob({ ...editedJob, requirment: e.target.value })}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-lg font-semibold mb-3">Overview</h3>
+                  <div className="prose max-w-none text-muted-foreground">
+                    <p>{editedJob.overview || "No overview provided."}</p>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold mb-3">Responsibilities</h3>
+                  <div className="prose max-w-none text-muted-foreground">
+                    <p>{editedJob.responsiblity || "No responsibilities provided."}</p>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold mb-3">Requirements</h3>
+                  <div className="prose max-w-none text-muted-foreground">
+                    <p>{editedJob.requirment || "No requirements provided."}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="applicants" className="p-6 pt-4">
+            {loadingApplicants ? (
+              <div className="space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <Card key={i}>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-4">
+                        <Skeleton className="h-12 w-12 rounded-full" />
+                        <div className="space-y-2">
+                          <Skeleton className="h-4 w-40" />
+                          <Skeleton className="h-3 w-24" />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : appliedUsers.length > 0 ? (
+              <div className="space-y-4">
+                {appliedUsers.map((application) => {
+                  const applicant = application?.applicantDetails || {}
+                  return (
+                    <Card key={application._id} className="overflow-hidden">
+                      <CardContent className="p-0">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 gap-4">
+                          <div className="flex items-center gap-4">
+                            <Avatar className="h-12 w-12 border">
+                              <AvatarFallback>{getInitials(applicant.username)}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <h4 className="font-medium">{applicant.username || "Unknown User"}</h4>
+                              <p className="text-sm text-muted-foreground">{applicant.email || "No email provided"}</p>
+                              <div className="flex items-center gap-2 mt-1">
+                                <Badge
+                                  variant="outline"
+                                  className={cn(
+                                    "text-xs",
+                                    application.status === "Accepted"
+                                      ? "bg-green-50 text-green-700 border-green-200"
+                                      : application.status === "Rejected"
+                                        ? "bg-red-50 text-red-700 border-red-200"
+                                        : "bg-amber-50 text-amber-700 border-amber-200",
+                                  )}
+                                >
+                                  {application.status || "Unknown Status"}
+                                </Badge>
+                                <span className="text-xs text-muted-foreground flex items-center">
+                                  <Clock className="h-3 w-3 mr-1" />
+                                  Applied {formatDate(application.createdAt)}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex flex-wrap gap-2 sm:justify-end">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="text-blue-600 hover:bg-blue-50 hover:text-blue-700"
+                              onClick={() => handleViewProfile(application.applicantDetails)}
+                            >
+                              <Eye className="h-4 w-4 mr-2" />
+                              View Profile
+                            </Button>
+
+                            {application.status === "Pending" && (
+                              <>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="text-green-600 hover:bg-green-50 hover:text-green-700"
+                                  onClick={() => handleAccept(application.applicantDetails._id)}
+                                >
+                                  <Check className="h-4 w-4 mr-2" />
+                                  Accept
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="text-red-600 hover:bg-red-50 hover:text-red-700"
+                                  onClick={() => handleReject(application.applicantDetails._id)}
+                                >
+                                  <X className="h-4 w-4 mr-2" />
+                                  Reject
+                                </Button>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-medium mb-2">No Applicants Yet</h3>
+                <p className="text-muted-foreground max-w-md mx-auto">
+                  There are no applicants for this job posting yet. Check back later or consider promoting your job
+                  listing.
+                </p>
+              </div>
+            )}
+          </TabsContent>
+        </div>
+      </Tabs>
+
+      {/* Profile Modal */}
+      <Dialog open={selectedApplicant !== null} onOpenChange={() => setSelectedApplicant(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-xl">Applicant Profile</DialogTitle>
+            <DialogDescription>Review the applicant's qualifications and experience</DialogDescription>
+          </DialogHeader>
+
+          {selectedApplicant && (
+            <div className="mt-4 space-y-6">
+              <div className="flex flex-col sm:flex-row gap-6 items-start">
+                <Avatar className="h-20 w-20 border">
+                  <AvatarFallback className="text-xl">{getInitials(selectedApplicant.username)}</AvatarFallback>
+                </Avatar>
+
+                <div className="space-y-2 flex-1">
+                  <h3 className="text-xl font-bold">{selectedApplicant.username || "Unknown User"}</h3>
+                  <div className="flex items-center text-muted-foreground">
+                    <MapPin className="h-4 w-4 mr-1.5" />
+                    <span>{selectedApplicant.location || "Location not specified"}</span>
+                  </div>
+                  <div className="flex items-center text-muted-foreground">
+                    <FileText className="h-4 w-4 mr-1.5" />
+                    <span>{selectedApplicant.email}</span>
+                  </div>
+                </div>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h4 className="font-semibold mb-2">Bio</h4>
+                <p className="text-muted-foreground">{selectedApplicant.bio || "No bio available"}</p>
+              </div>
+
+              <div>
+                <h4 className="font-semibold mb-2">Skills</h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedApplicant.qualifications?.map((q, i) =>
+                    q.skills
+                      ? q.skills.split(",").map((skill, j) => (
+                          <Badge key={`${i}-${j}`} variant="secondary" className="px-2 py-1">
+                            {skill.trim()}
+                          </Badge>
+                        ))
+                      : null,
+                  ) || <p className="text-muted-foreground">No skills listed</p>}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold mb-2">Experience</h4>
+                {selectedApplicant.experience?.length > 0 ? (
+                  <div className="space-y-3">
+                    {selectedApplicant.experience.map((exp, i) => (
+                      <Card key={i}>
+                        <CardContent className="p-4">
+                          <h5 className="font-medium">{exp.title}</h5>
+                          <p className="text-sm text-muted-foreground">{exp.company}</p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {exp.startDate && exp.endDate
+                              ? `${formatDate(exp.startDate)} - ${formatDate(exp.endDate)}`
+                              : "Dates not specified"}
+                          </p>
+                          {exp.description && <p className="text-sm mt-2">{exp.description}</p>}
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground">No experience listed</p>
+                )}
+              </div>
+
+              {selectedApplicant.resume && (
+                <div>
+                  <h4 className="font-semibold mb-2">Resume</h4>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start"
+                    onClick={() => window.open(selectedApplicant.resume, "_blank")}
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    View Resume
+                    <ExternalLink className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
+              )}
+
+              <div className="flex justify-end gap-2 pt-4">
+                <DialogClose asChild>
+                  <Button variant="secondary">Close</Button>
+                </DialogClose>
+              </div>
+            </div>
           )}
-        </div>
-      </div>
-
-      {/* Job Details */}
-      <Card className="mt-5">
-        <CardHeader>
-          <CardTitle className="text-2xl font-semibold">
-            {isEditing ? (
-              <Input
-                type="text"
-                value={editedJob.title}
-                onChange={(e) =>
-                  setEditedJob({ ...editedJob, title: e.target.value })
-                }
-              />
-            ) : (
-              editedJob.title
-            )}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Location */}
-          <div>
-            <label className="text-gray-600 font-medium">Location</label>
-            {isEditing ? (
-              <Input
-                type="text"
-                value={editedJob.location}
-                onChange={(e) =>
-                  setEditedJob({ ...editedJob, location: e.target.value })
-                }
-              />
-            ) : (
-              <p className="text-gray-700">{editedJob.location}</p>
-            )}
-          </div>
-
-          {/* Salary */}
-          <div>
-            <label className="text-gray-600 font-medium">Salary</label>
-            {isEditing ? (
-              <Input
-                type="number"
-                value={editedJob.salary}
-                onChange={(e) =>
-                  setEditedJob({ ...editedJob, salary: e.target.value })
-                }
-              />
-            ) : (
-              <p className="text-gray-700">${editedJob.salary}</p>
-            )}
-          </div>
-
-          {/* Type */}
-          <div>
-            <label className="text-gray-600 font-medium">Type</label>
-            {isEditing ? (
-              <Input
-                type="text"
-                value={editedJob.type}
-                onChange={(e) =>
-                  setEditedJob({ ...editedJob, type: e.target.value })
-                }
-              />
-            ) : (
-              <p className="text-gray-700">{editedJob.type}</p>
-            )}
-          </div>
-
-          {/* Overview */}
-          <div className="col-span-2">
-            <label className="text-gray-600 font-medium">Overview</label>
-            {isEditing ? (
-              <Textarea
-                value={editedJob.overview}
-                onChange={(e) =>
-                  setEditedJob({ ...editedJob, overview: e.target.value })
-                }
-              />
-            ) : (
-              <p className="text-gray-700 break-words whitespace-normal">{editedJob.overview}</p>
-            )}
-          </div>
-
-          {/* Responsibility */}
-          <div className="col-span-2">
-            <label className="text-gray-600 font-medium">Responsibility</label>
-            {isEditing ? (
-              <Textarea
-                value={editedJob.responsiblity}
-                onChange={(e) =>
-                  setEditedJob({ ...editedJob, responsiblity: e.target.value })
-                }
-              />
-            ) : (
-              <p className="text-gray-700 break-words whitespace-normal">{editedJob.responsiblity}</p>
-            )}
-          </div>
-
-          {/* Requirement */}
-          <div className="col-span-2">
-            <label className="text-gray-600 font-medium">Requirement</label>
-            {isEditing ? (
-              <Textarea
-                value={editedJob.requirment}
-                onChange={(e) =>
-                  setEditedJob({ ...editedJob, requirment: e.target.value })
-                }
-              />
-            ) : (
-              <p className="text-gray-700 break-words whitespace-normal">{editedJob.requirment}</p>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Buttons */}
-      <div className="mt-5 flex gap-3">
-        {/* Edit / Save Button */}
-        <Button onClick={isEditing ? handleUpdate : handleEdit}>
-          {isEditing ? "Save Changes" : "Edit Job"}
-        </Button>
-
-        {/* Cancel Button (only when editing) */}
-        {isEditing && (
-          <Button variant="outline" onClick={() => setIsEditing(false)}>
-            Cancel
-          </Button>
-        )}
-
-        {/* Show Applicants Button (DISABLED when editing) */}
-        <Button
-          variant="secondary"
-          disabled={isEditing}
-          onClick={() => {
-            fetchApplicants();
-          }}
-        >
-          Show Applicants
-        </Button>
-      </div>
-      {appliedUsers.length > 0 && (
-        <div className="mt-6">
-          <h3 className="text-lg font-semibold mb-4">
-            Applicants ({appliedUsers.length})
-          </h3>
-          <div className="space-y-4">
-            {appliedUsers.map((application) => {
-              // Add null checks for applicantDetails
-              console.log("application", application);
-              const applicant = application?.applicantDetails || {};
-              return (
-                <Card key={application._id} className="relative">
-                  <CardContent className="p-4 flex items-center justify-between">
-                    <div>
-                      <h4 className="font-medium">
-                        {applicant.username || "Unknown User"}
-                      </h4>
-                      <p className="text-sm text-gray-600">
-                        {applicant.email || "No email provided"}
-                      </p>
-                      <Badge variant="outline" className="mt-2">
-                        {application.status || "Unknown Status"}
-                      </Badge>
-                    </div>
-                    <div className="flex gap-2">
-                      {application.status === "Pending" ? (
-                        <>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-green-600 hover:bg-green-50"
-                            onClick={() =>
-                              handleAccept(application.applicantDetails._id)
-                            }
-                          >
-                            <Check className="h-4 w-4 mr-2" />
-                            Accept
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-red-600 hover:bg-red-50"
-                            onClick={() =>
-                              handleReject(application.applicantDetails._id)
-                            }
-                          >
-                            <X className="h-4 w-4 mr-2" />
-                            Reject
-                          </Button>
-                        </>
-                      ) : (
-                        <Badge
-                          variant="outline"
-                          className={`text-sm px-3 py-1 ${
-                            application.status === "Accepted"
-                              ? "bg-green-200 text-green-700"
-                              : "bg-red-200 text-red-700"
-                          }`}
-                        >
-                          {application.status}
-                        </Badge>
-                      )}
-                    </div>
-
-{/* get profile */}
-<div>
-  {/* View Profile Button */}
-  <Button
-    variant="outline"
-    size="sm"
-    className="text-blue-600 hover:bg-blue-50"
-    onClick={() => handleViewProfile(application.applicantDetails)}
-  >
-    <Eye className="h-4 w-4 mr-2" />
-    View Profile
-  </Button>
-</div>
-
-{/* Profile Modal */}
-<Dialog open={selectedApplicant !== null} onOpenChange={() => setSelectedApplicant(null)}>
-  <DialogContent className="bg-white shadow-lg border border-gray-300 backdrop:bg-opacity-20">
-    <DialogHeader>
-      <DialogTitle>{selectedApplicant?.username || "Unknown User"}</DialogTitle>
-      <DialogDescription className="text-gray-500">{selectedApplicant?.email}</DialogDescription>
-    </DialogHeader>
-    <div className="mt-4 space-y-2">
-      <p><strong>Location:</strong> {selectedApplicant?.location || "Not provided"}</p>
-      <p><strong>Bio:</strong> {selectedApplicant?.bio || "No bio available"}</p>
-      <p><strong>Skills:</strong> {selectedApplicant?.qualifications?.map((q) => q.skills).join(", ") || "Not listed"}</p>
-      <p><strong>Experience:</strong> {selectedApplicant?.experience?.map((exp) => `${exp.title} at ${exp.company}`).join(", ") || "No experience listed"}</p>
-      <p><strong>Resume:</strong> 
-  {selectedApplicant?.resume ? (
-    <Button 
-      variant="outline" 
-      size="sm" 
-      className="text-blue-600 hover:bg-blue-50 ml-2"
-      onClick={() => window.open(selectedApplicant.resume, "_blank")}
-    >
-      View Resume
-    </Button>
-  ) : "Not Available"}
-</p>
-
-    </div>
-    <DialogClose asChild>
-      <Button variant="secondary" className="mt-3 w-full">Close</Button>
-    </DialogClose>
-  </DialogContent>
-</Dialog>
-
-{/* end : get profile */}
-
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
     </motion.div>
-  );
-};
+  )
+}
 
-export default JobDetails;
+export default JobDetails
+
