@@ -12,7 +12,7 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 export const handleGoogleAuth = async (req, res) => {
     console.log("Inside Google controller");
 
-    const { token, role, bio, location, qualifications, experience, company } = req.body;
+    const { token, role, bio, location, qualifications, experience } = req.body;
     console.log("Received token:", token);
     console.log("Received role:", role);
 
@@ -42,7 +42,6 @@ export const handleGoogleAuth = async (req, res) => {
                 location,
                 qualifications,
                 experience,
-                company,
             });
             await user.save();
         } else if (!user.googleId) {

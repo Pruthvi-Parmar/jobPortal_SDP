@@ -126,7 +126,7 @@ const verifyPayment = asyncHandler(async(req, res) => {
         Start exploring your premium perks now:  
         👉 [Go to Dashboard](https://JobConnect.com/dashboard)
 
-        If you have any questions, feel free to contact our support team at support@jobportal.com.
+        If you have any questions, feel free to contact our support team at support@jobconnect.com.
 
         Best regards,  
         The Job Portal Team 🚀
