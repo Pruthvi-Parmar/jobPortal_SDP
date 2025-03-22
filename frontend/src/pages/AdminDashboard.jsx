@@ -1,70 +1,59 @@
-import React, { useEffect, useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Trash2, Eye, Users, Briefcase, FileText } from "lucide-react";
-import AdminHeader from "@/components/Admin/AdminHeader";
+"use client"
 
-const AdminDashboard = () => {
-  const [dashboardData, setDashboardData] = useState(null);
+import React, { useState, useEffect } from "react"
+import  Sidebar  from "../components/Admin/Sidebar"
+import AdminHeader from "../components/Admin/AdminHeader"
+import  Overview  from "../components/Admin/Overview"
+import  UsersTable  from "../components/Admin/UsersTable"
+import  JobsTable  from "../components/Admin/JobsTable"
+import  JobApplicationsTable  from "../components/Admin/JobApplicationsTable"
 
+export default function AdminDashboard() {
+  const [currentView, setCurrentView] = useState("overview")
+  const [dashboardData, setDashboardData] = useState({
+    totalUsers: 0,
+    totalJobs: 0,
+    totalApplications: 0
+  })
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Fetch Dashboard Data from API
   useEffect(() => {
-    fetchDashboardData();
-  }, []);
+    fetchDashboardData()
+  }, [])
 
-  // Fetch Dashboard Data (Total Counts)
   const fetchDashboardData = async () => {
+    setIsLoading(true)
     try {
       const res = await fetch("http://localhost:8001/v1/admin/dashboard", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
-      });
-      const data = await res.json();
-      if (data.success) setDashboardData(data.data);
+      })
+      const data = await res.json()
+      if (data.success) {
+        setDashboardData(data.data)
+      }
     } catch (error) {
-      console.error("Error fetching dashboard data:", error);
+      console.error("Error fetching dashboard data:", error)
+    } finally {
+      setIsLoading(false)
     }
-  };
-
-
+  }
 
   return (
-    <>
-      <div className="container mx-auto p-6">
-        <h1 className="text-3xl font-bold mb-6 text-center">Admin Dashboard</h1>
-
-        {/* Dashboard Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card>
-            <CardHeader className="flex items-center gap-3">
-              <Users size={28} />
-              <CardTitle>Total Users</CardTitle>
-            </CardHeader>
-            <CardContent className="text-2xl font-bold">{dashboardData?.totalUsers || 0}</CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex items-center gap-3">
-              <Briefcase size={28} />
-              <CardTitle>Total Jobs</CardTitle>
-            </CardHeader>
-            <CardContent className="text-2xl font-bold">{dashboardData?.totalJobs || 0}</CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex items-center gap-3">
-              <FileText size={28} />
-              <CardTitle>Total Applications</CardTitle>
-            </CardHeader>
-            <CardContent className="text-2xl font-bold">{dashboardData?.totalApplications || 0}</CardContent>
-          </Card>
-        </div>
-
+    <div className="flex h-screen bg-gray-100">
+      <Sidebar currentView={currentView} setCurrentView={setCurrentView} />
+      <div className="flex flex-col flex-1 overflow-hidden">
+        <AdminHeader />
+        <main className="flex-1 overflow-y-auto p-4 md:p-6">
+          {currentView === "overview" && <Overview dashboardData={dashboardData} isLoading={isLoading} />}
+          {currentView === "users" && <UsersTable />}
+          {currentView === "jobs" && <JobsTable />}
+          {currentView === "applications" && <JobApplicationsTable />}
+        </main>
       </div>
-    </>
-  );
-};
-
-export default AdminDashboard;
+    </div>
+  )
+}
