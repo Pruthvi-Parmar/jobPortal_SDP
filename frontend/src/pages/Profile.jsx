@@ -97,21 +97,25 @@ const ProfilePage = () => {
   setLoading(true);
 
   try {
+    const formData = new FormData()
+    formData.append("username", data.username)
+    formData.append("email", data.email)
+    formData.append("fullname", data.fullname)
+    //formData.append("password", input.password)
+    //formData.append("role", input.role)
+    formData.append("bio", data.bio)
+    formData.append("location", data.location)
+    formData.append("qualifications", data.qualifications)
+    formData.append("experience", data.experience)
+    formData.append("resume", data.resume)
+    
     const response = await fetch("http://localhost:8001/v1/users/updateAccountDetails", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",
       },
       credentials: "include", // Include cookies for authentication
-      body: JSON.stringify({
-        username: data.username,
-        email: data.email,
-        fullname: data.fullname,
-        bio: data.bio,
-        location: data.location,
-        qualifications: data.qualifications, // Include qualifications
-        experience: data.experience, // Include experience
-      }),
+      body: formData,
     });
 
     if (!response.ok) {

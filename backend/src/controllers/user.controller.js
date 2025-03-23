@@ -343,9 +343,9 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
   
     console.log("Request body:", req.body)
   
-    if (!username || !email) {
-      throw new ApiError(400, "Username and email are required")
-    }
+    // if (!username || !email) {
+    //   throw new ApiError(400, "Username and email are required")
+    // }
   
     // Create an update object with only the fields that are provided
     const updateData = {
@@ -358,6 +358,17 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
     if (req.body.fullname) updateData.fullname = req.body.fullname
     if (req.body.bio) updateData.bio = req.body.bio
     if (req.body.location) updateData.location = req.body.location
+
+    const avatarLocalPath1 = req.files?.resume[0]?.path;
+
+    const resume = await uploadOnCloudinary(avatarLocalPath1)
+    
+    if (!resume) {
+        throw new ApiError(400, "resume file is required")
+    }
+
+    console.log("resume url : ",resume.url);
+    updateData.resume = resume.url
   
     try {
       const user = await User.findByIdAndUpdate(req.user?._id, { $set: updateData }, { new: true }).select("-password")
