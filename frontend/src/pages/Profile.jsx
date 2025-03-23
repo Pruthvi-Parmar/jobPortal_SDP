@@ -22,6 +22,20 @@ const ProfilePage = () => {
   const { toast } = useToast();
   const [role, setRole] = useState("");
 
+  // Define initialFormValues state
+  const [initialFormValues, setInitialFormValues] = useState({
+    username: "",
+    email: "",
+    fullname: "",
+    bio: "",
+    location: "",
+    qualifications: [],
+    experience: [],
+    company: [],
+    resume: "",
+    coverimage: "",
+  });
+
   const fetchUserData = async () => {
     setLoading(true);
     try {
@@ -47,6 +61,19 @@ const ProfilePage = () => {
         setValue("resume", userData.resume);
         setValue("coverimage", userData.coverimage);
         setRole(userData.role);
+
+        setInitialFormValues({
+            username: userData.username,
+            email: userData.email,
+            fullname: userData.fullname,
+            bio: userData.bio,
+            location: userData.location,
+            qualifications: userData.qualifications || [],
+            experience: userData.experience || [],
+            company: userData.company || [],
+            resume: userData.resume,
+            coverimage: userData.coverimage,
+          });
       } else {
         throw new Error(result.message || "Failed to fetch user data");
       }

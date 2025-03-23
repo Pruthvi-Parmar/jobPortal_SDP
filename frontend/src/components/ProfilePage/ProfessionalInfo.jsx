@@ -14,6 +14,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { User, Mail, MapPin, Briefcase, GraduationCap, Building, FileText, ImageIcon, Edit, Save, X } from 'lucide-react';
 const ProfessionalInfo = ({ register, watch, isEditing, role }) => {
+  console.log("Role:", role); // Log role
+  console.log("Company Data:", watch("company")); // Log company data
+
   return (
     <div className="space-y-8">
       {role === "jobseeker" && (
@@ -105,7 +108,8 @@ const ProfessionalInfo = ({ register, watch, isEditing, role }) => {
             <Building className="h-5 w-5 text-blue-500" /> Company
           </h3>
           <Separator />
-          {watch("company")?.map((comp, index) => (
+          {/* Render at least one company field, even if empty */}
+          {(watch("company")?.length > 0 ? watch("company") : [{}]).map((comp, index) => (
             <Card key={index} className="bg-slate-50 border-slate-200">
               <CardContent className="p-4 space-y-4">
                 <div className="space-y-2">
