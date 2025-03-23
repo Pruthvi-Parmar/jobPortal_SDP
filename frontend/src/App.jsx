@@ -17,7 +17,7 @@ import PostJobForm from "./components/PostJobForm";
 import MyJobsPage from "./pages/MyJobsPage";
 import MyPostedJobs from "./pages/MyPostedJobs";
 import MyPostedJobsTestt from "./pages/MyPostedJobsTestt";
-import ProfilePage from "./pages/ProfilePage";
+import ProfilePage from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
 import Home2 from "./pages/Home2";
 import AdminLayout from "./AdminLayout";
@@ -30,6 +30,7 @@ import Chat from "./components/chat/Chat";
 import { useSelector } from "react-redux";
 import ATS from "./pages/Ats";
 import GoogleLoginComponent from "./components/GoogleLoginComponent";
+import ProfileForm from "./components/ProfilePage/ProfileForm";
 
 
 
@@ -42,7 +43,8 @@ const router = createBrowserRouter(
         <Route path="login" element={<Login />} />
         <Route path="userhome" element={<JobsPage />} />
         <Route path="myjobs" element={<MyJobsPage />} />
-        <Route path="profile" element={<ProfilePage />} />
+        {/* <Route path="profile" element={<ProfilePage />} /> */}
+        <Route path="profile" element={<ProfilePage/>} />
         <Route path="technews" element={<TechNews />} />
         <Route path="ats" element={<ATS />} />
         <Route path="payment" element={<Payment />} />
