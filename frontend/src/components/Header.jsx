@@ -70,12 +70,16 @@ const Header = () => {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link to="/userhome" className="flex items-center">
+            <Link
+              to={user?.role === "jobseeker" ? "/userhome" : user?.role === "recruiter" ? "/recruiterhome" : "/"}
+              className="flex items-center"
+            >
               <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
                 Job<span className="text-primary">Connect</span>
               </h1>
             </Link>
           </div>
+
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
