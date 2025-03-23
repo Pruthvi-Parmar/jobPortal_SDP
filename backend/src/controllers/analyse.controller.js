@@ -80,7 +80,7 @@ export const analyzeResume = async (req, res) => {
 
     // Get AI response
     const responseText = await getGeminiOutput(prompt);
-    console.log(responseText);
+    console.log("RESPONSE TEXT OF ANALYSIS",responseText);
     
     return res.json({ analysis: responseText });
   } catch (error) {

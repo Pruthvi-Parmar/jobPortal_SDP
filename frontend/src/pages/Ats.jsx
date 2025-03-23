@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -126,8 +124,8 @@ const ATS = () => {
       })
 
       const data = await response.json()
-
-      if (response.ok && data.success) {
+      console.log(data)
+      if (response.ok) {
         // Properly parse the response based on its structure
         setResult(data.data)
         toast.success("Analysis complete!")

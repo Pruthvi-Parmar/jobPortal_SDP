@@ -169,7 +169,7 @@ const Login = () => {
                 </div>
               </div>
 
-              <div>
+              {/* <div>
                 <Label htmlFor="email" className="text-sm font-medium text-gray-700">
                   Email
                 </Label>
@@ -188,7 +188,7 @@ const Login = () => {
                     placeholder="Enter your email"
                   />
                 </div>
-              </div>
+              </div> */}
 
               <div>
                 <div className="flex items-center justify-between">
