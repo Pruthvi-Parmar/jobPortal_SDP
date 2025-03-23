@@ -33,6 +33,7 @@ import GoogleLoginComponent from "./components/GoogleLoginComponent";
 import ProfileForm from "./components/ProfilePage/ProfileForm";
 import Unauthorized from "./pages/Unauthorized";
 import ProtectedRoute from "./components/ProtectedRoute";
+import JobPage from "./pages/JobPage";
 
 
 
@@ -62,7 +63,7 @@ const router = createBrowserRouter(
         <Route element={<ProtectedRoute allowedRoles={["jobseeker"]} />}>
           <Route path="userhome" element={<JobsPage />} />
           <Route path="myjobs" element={<MyJobsPage />} />
-          
+          <Route path="jobs/:jobId" element={<JobPage/>} />
         </Route>
 
         {/* Protected Routes for Recruiters */}

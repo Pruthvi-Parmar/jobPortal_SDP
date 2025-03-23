@@ -1,9 +1,9 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { MapPin, Clock, DollarSign, Briefcase, CheckCircle } from "lucide-react"
+import { MapPin, Clock, Briefcase, CheckCircle } from "lucide-react"
 import { toast } from "sonner"
+import { useNavigate } from "react-router-dom"
+import { Button } from "@/components/ui/button"
 
 const JobCard = ({
   jobId,
@@ -12,14 +12,14 @@ const JobCard = ({
   salary,
   type,
   overview,
-  responsibility,
-  requirement,
+  responsiblity,
+  requirment,
   coverImage,
   status,
 }) => {
   const [hasApplied, setHasApplied] = useState(false)
-  const [isExpanded, setIsExpanded] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const checkApplicationStatus = async () => {
@@ -93,6 +93,25 @@ const JobCard = ({
     }
   }
 
+  const handleLearnMore = () => {
+    navigate(`/jobs/${jobId}`, {
+      state: {
+        job: {
+          _id: jobId,
+          title,
+          location,
+          salary,
+          type,
+          overview,
+          responsiblity,
+          requirment,
+          coverImage,
+          status,
+        },
+      },
+    })
+  }
+
   return (
     <motion.div
       className="bg-background rounded-xl border border-border/40 overflow-hidden transition-all duration-300 h-full flex flex-col"
@@ -100,6 +119,8 @@ const JobCard = ({
       onHoverStart={() => setIsHovering(true)}
       onHoverEnd={() => setIsHovering(false)}
     >
+      {console.log("REQUIREMENT", requirment)}
+      {console.log("RESPONSIBILITY", responsiblity)}
       {coverImage && (
         <div className="relative h-48 overflow-hidden">
           <motion.img
@@ -115,11 +136,10 @@ const JobCard = ({
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
           <div className="absolute top-4 right-4">
             <span
-              className={`px-3 py-1 rounded-full text-xs font-medium ${
-                status === "Active"
+              className={`px-3 py-1 rounded-full text-xs font-medium ${status === "Active"
                   ? "bg-primary/10 text-primary border border-primary/20"
                   : "bg-muted text-muted-foreground"
-              }`}
+                }`}
             >
               {status}
             </span>
@@ -143,7 +163,6 @@ const JobCard = ({
             <span>{type}</span>
           </div>
           <div className="flex items-center text-muted-foreground text-sm col-span-2">
-            <DollarSign className="w-4 h-4 mr-2 text-primary/70" />
             <span>₹{salary.toLocaleString()} per year</span>
           </div>
         </div>
@@ -152,39 +171,23 @@ const JobCard = ({
           <p className="text-muted-foreground text-sm line-clamp-2">{overview}</p>
         </div>
 
-        <motion.div
-          animate={{ height: isExpanded ? "auto" : 0, opacity: isExpanded ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
-          className="overflow-hidden mb-4"
-        >
-          <div className="space-y-4 pt-2 border-t">
-            <div>
-              <h4 className="font-medium text-sm mb-1">Responsibilities</h4>
-              <p className="text-muted-foreground text-sm">{responsibility}</p>
-            </div>
-            <div>
-              <h4 className="font-medium text-sm mb-1">Requirements</h4>
-              <p className="text-muted-foreground text-sm">{requirement}</p>
-            </div>
-          </div>
-        </motion.div>
-
         <div className="flex flex-col gap-3 mt-auto">
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="text-primary hover:text-primary/80 text-sm font-medium transition-colors"
+          {/* Learn More Button */}
+          <Button
+            onClick={handleLearnMore}
+            className="text-black hover:text-black/80 text-sm font-medium transition-colors bg-transparent p-0 hover:bg-transparent hover:underline"
           >
-            {isExpanded ? "Show Less" : "Learn More"}
-          </button>
+            Learn More
+          </Button>
 
+          {/* Apply Now Button */}
           <motion.button
             whileHover={{ scale: hasApplied ? 1 : 1.02 }}
             whileTap={{ scale: hasApplied ? 1 : 0.98 }}
             onClick={handleApply}
             disabled={hasApplied}
-            className={`w-full py-3 rounded-lg font-medium transition-all ${
-              hasApplied ? "bg-muted text-muted-foreground" : "bg-primary text-primary-foreground hover:bg-primary/90"
-            }`}
+            className={`w-full py-3 rounded-lg font-medium transition-all ${hasApplied ? "bg-muted text-muted-foreground" : "bg-primary text-primary-foreground hover:bg-primary/90"
+              }`}
           >
             <span className="flex items-center justify-center gap-2">
               {hasApplied ? (
@@ -207,4 +210,3 @@ const JobCard = ({
 }
 
 export default JobCard
-
