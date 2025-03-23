@@ -14,6 +14,8 @@ import {
   Award,
   CheckCircle,
 } from "lucide-react"
+import Hero3DScene from "../components/hero-3d-scene"
+import ModernHeroVisual from "@/components/modern-hero-visual"
 
 function HomePage() {
   return (
@@ -77,15 +79,10 @@ function HomePage() {
                 </span>
               </div>
             </div>
-            <div className="relative lg:h-[540px] hidden lg:block">
-              <div className="absolute inset-0 bg-indigo-600/5 rounded-3xl"></div>
-              <img
-                src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-                alt="Job Seeker"
-                className="relative z-10 mx-auto h-full object-cover rounded-2xl shadow-xl"
-              />
-              <div className="absolute -right-6 -bottom-6 h-64 w-64 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-2xl opacity-20 blur-2xl"></div>
-            </div>
+
+            {/* Replace static image with 3D scene */}
+            {/* <Hero3DScene /> */}
+            <ModernHeroVisual/>
           </div>
         </div>
 
@@ -94,6 +91,7 @@ function HomePage() {
         <div className="absolute bottom-0 left-0 -z-10 h-96 w-96 bg-purple-100 rounded-full opacity-30 blur-3xl"></div>
       </section>
 
+      {/* Rest of the page content remains unchanged */}
       {/* Trusted By Section */}
       <section className="py-12 border-y border-gray-100">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -112,11 +110,7 @@ function HomePage() {
                 key={i}
                 className="grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
               >
-                <img
-                  src={logo}
-                  alt={`Company ${i + 1}`}
-                  className="h-10 object-contain"
-                />
+                <img src={logo || "/placeholder.svg"} alt={`Company ${i + 1}`} className="h-10 object-contain" />
               </div>
             ))}
           </div>
@@ -291,75 +285,7 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      {/* <footer className="bg-gray-50 border-t border-gray-100 py-12">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
-            <div className="col-span-2 lg:col-span-2">
-              <div className="flex items-center mb-4">
-                <Briefcase className="h-6 w-6 text-indigo-600 mr-2" />
-                <span className="text-xl font-bold text-gray-900">JobConnect</span>
-              </div>
-              <p className="text-gray-600 mb-4 max-w-xs">
-                Connecting talented professionals with the best companies worldwide.
-              </p>
-              <div className="flex space-x-4">
-                {["twitter", "facebook", "instagram", "linkedin"].map((social) => (
-                  <a key={social} href={`#${social}`} className="text-gray-400 hover:text-indigo-600">
-                    <span className="sr-only">{social}</span>
-                    <div className="h-6 w-6 rounded-full bg-gray-200 flex items-center justify-center">
-                      <span className="text-xs">{social[0].toUpperCase()}</span>
-                    </div>
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {[
-              {
-                title: "For Job Seekers",
-                links: ["Browse Jobs", "Career Advice", "Resume Builder", "Profile Setup"],
-              },
-              {
-                title: "For Employers",
-                links: ["Post a Job", "Browse Candidates", "Pricing Plans", "Enterprise Solutions"],
-              },
-              {
-                title: "Company",
-                links: ["About Us", "Contact", "Careers", "Press"],
-              },
-            ].map((column, index) => (
-              <div key={index}>
-                <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">{column.title}</h3>
-                <ul className="space-y-2">
-                  {column.links.map((link, linkIndex) => (
-                    <li key={linkIndex}>
-                      <a href="#" className="text-gray-600 hover:text-indigo-600 transition-colors">
-                        {link}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-12 pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-gray-500">&copy; {new Date().getFullYear()} JobConnect. All rights reserved.</p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="#" className="text-sm text-gray-500 hover:text-indigo-600">
-                Privacy Policy
-              </a>
-              <a href="#" className="text-sm text-gray-500 hover:text-indigo-600">
-                Terms of Service
-              </a>
-              <a href="#" className="text-sm text-gray-500 hover:text-indigo-600">
-                Cookie Policy
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer> */}
+      {/* Footer section is commented out in the original code */}
     </div>
   )
 }
