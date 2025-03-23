@@ -31,37 +31,48 @@ import { useSelector } from "react-redux";
 import ATS from "./pages/Ats";
 import GoogleLoginComponent from "./components/GoogleLoginComponent";
 import ProfileForm from "./components/ProfilePage/ProfileForm";
+import Unauthorized from "./pages/Unauthorized";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
+      {/* Public Routes */}
       <Route path="/" element={<Layout />}>
         <Route path="" element={<Home2 />} />
         <Route path="signup" element={<SignUp />} />
         <Route path="login" element={<Login />} />
-        <Route path="userhome" element={<JobsPage />} />
-        <Route path="myjobs" element={<MyJobsPage />} />
-        {/* <Route path="profile" element={<ProfilePage />} /> */}
-        <Route path="profile" element={<ProfilePage/>} />
+        <Route path="unauthorized" element={<Unauthorized />} />
         <Route path="technews" element={<TechNews />} />
         <Route path="ats" element={<ATS />} />
         <Route path="payment" element={<Payment />} />
         <Route path="chat" element={<Chat />} />
         <Route path="oauth" element={<GoogleLoginComponent />} />
-        
+        <Route path="profile" element={<ProfilePage />} />
+        <Route path="admin" element={<AdminLayout />}>
+            <Route path="" element={<AdminDashboard />} />
+            <Route path="users" element={<UsersTable />} />
+            <Route path="jobs" element={<JobsTable />} />
+            <Route path="job-applications" element={<JobApplicationTable />} />
+          </Route>
 
-        {/* <Route path='recruiterhome' element={<MyPostedJobs />} /> */}
-        <Route path="recruiterhome" element={<MyPostedJobs />} />
-        <Route path="postjob" element={<PostJobForm />} />
-        {/* <Route path='admin' element={<AdminDashboard />} /> */}
-      </Route>
-      <Route path="admin" element={<AdminLayout />}>
-        <Route path="" element={<AdminDashboard />} />
-        <Route path="users" element={<UsersTable />} />
-        <Route path="jobs" element={<JobsTable />} />
-        <Route path="job-applications" element={<JobApplicationTable />} />
+        {/* Protected Routes for Job Seekers */}
+        <Route element={<ProtectedRoute allowedRoles={["jobseeker"]} />}>
+          <Route path="userhome" element={<JobsPage />} />
+          <Route path="myjobs" element={<MyJobsPage />} />
+          
+        </Route>
+
+        {/* Protected Routes for Recruiters */}
+        <Route element={<ProtectedRoute allowedRoles={["recruiter"]} />}>
+          <Route path="recruiterhome" element={<MyPostedJobs />} />
+          <Route path="postjob" element={<PostJobForm />} />
+        </Route>
+
+       
+  
       </Route>
     </Route>
   )

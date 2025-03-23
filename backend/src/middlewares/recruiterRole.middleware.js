@@ -1,11 +1,14 @@
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
-export const authorizeRoles = (allowedRoles) => {
+export const authorizeRecruiter = () => {
     return asyncHandler(async (req, res, next) => {
-        if (!req.user || !allowedRoles.includes(req.user.role)) {
+        if (req.user.role === "recruiter") {
+            next();
+            
+        }else{
             throw new ApiError(403, "Access Denied: You do not have permission to access this resource.");
         }
-        next();
+        
     });
 };

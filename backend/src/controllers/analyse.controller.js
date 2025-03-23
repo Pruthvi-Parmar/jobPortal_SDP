@@ -1,5 +1,6 @@
 import { extractTextFromPDF } from "../utils/pdfParser.js";
 import { getGeminiOutput } from "../utils/aiConfig.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 
 export const analyzeResume = async (req, res) => {
   try {
@@ -80,9 +81,21 @@ export const analyzeResume = async (req, res) => {
 
     // Get AI response
     const responseText = await getGeminiOutput(prompt);
-    console.log("RESPONSE TEXT OF ANALYSIS",responseText);
+    // console.log("RESPONSE TEXT OF ANALYSIS",responseText);
+    console.log("res : ", responseText);
+
     
-    return res.json({ analysis: responseText });
+
+    // In your analyzeResume function, replace the return statement with:
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        {
+          analysis: responseText,
+        },
+        "Analysis successful"
+      )
+    );
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Error during resume analysis" });

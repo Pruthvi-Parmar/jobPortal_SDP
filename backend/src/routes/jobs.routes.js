@@ -2,7 +2,8 @@ import { Router } from "express";
 import {deleteJob, getJobs, getJobsPostedByRecruiter, postJobs, updateJob, updateJobStatus,} from "../controllers/jobs.controller.js"
 import {upload} from "../middlewares/multer.middleware.js"
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { authorizeRoles } from "../middlewares/role.middleware.js";
+import { authorizeJobSeeker } from "../middlewares/jobSeekerRole.middleware.js";
+import { authorizeRecruiter } from "../middlewares/recruiterRole.middleware.js";
 
 
 const router = Router()

@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -16,6 +18,11 @@ import {
   ChevronRight,
   Download,
   ExternalLink,
+  AlertTriangle,
+  Star,
+  BarChart,
+  Target,
+  XCircle,
 } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
@@ -28,6 +35,7 @@ const ATS = () => {
   const [jobDescription, setJobDescription] = useState("")
   const [analysisOption, setAnalysisOption] = useState("Quick Scan")
   const [result, setResult] = useState(null)
+  const [parsedResult, setParsedResult] = useState(null)
   const [loading, setLoading] = useState(false)
   const [initialLoading, setInitialLoading] = useState(true)
   const [activeTab, setActiveTab] = useState("overview")
@@ -61,6 +69,16 @@ const ATS = () => {
 
     fetchUserData()
   }, [])
+
+  // Parse the result when it changes
+  useEffect(() => {
+    if (result) {
+      const parsed = parseAnalysisResult(result)
+      setParsedResult(parsed)
+    } else {
+      setParsedResult(null)
+    }
+  }, [result])
 
   const handleFileChange = (e) => {
     const file = e.target.files[0]
@@ -100,6 +118,7 @@ const ATS = () => {
 
     setLoading(true)
     setResult(null)
+    setParsedResult(null)
 
     try {
       const requestBody = {
@@ -124,10 +143,11 @@ const ATS = () => {
       })
 
       const data = await response.json()
-      console.log(data)
+      console.log("Response data:", data)
+
       if (response.ok) {
-        // Properly parse the response based on its structure
-        setResult(data.data)
+        // Access the analysis from the response data
+        setResult(data.analysis || data.data?.analysis)
         toast.success("Analysis complete!")
       } else {
         toast.error("Analysis failed", {
@@ -153,6 +173,102 @@ const ATS = () => {
     })
   }
 
+  // Function to parse the analysis result text into structured data
+  const parseAnalysisResult = (text) => {
+    if (!text) return null
+
+    // If it's already an object, return it
+    if (typeof text !== "string") {
+      return text
+    }
+
+    // Initialize the parsed result with default structure
+    const parsed = {
+      profession: "",
+      atsScore: 0,
+      strengths: [],
+      improvements: [],
+      keywordMatches: [],
+      missingKeywords: [],
+      detailedFeedback: "",
+      skillsRatings: {},
+    }
+
+    try {
+      // Extract profession
+      const professionMatch =
+        text.match(/best-matching profession:?\s*([^\n.]+)/i) || text.match(/profession:?\s*([^\n.]+)/i)
+      if (professionMatch) {
+        parsed.profession = professionMatch[1].trim()
+      }
+
+      // Extract ATS score
+      const scoreMatch =
+        text.match(/ATS score:?\s*(\d+)\s*\/\s*100/i) || text.match(/ATS compatibility score:?\s*(\d+)/i)
+      if (scoreMatch) {
+        parsed.atsScore = Number.parseInt(scoreMatch[1])
+      }
+
+      // Extract strengths
+      const strengthsSection = text.match(/strengths:?\s*([\s\S]*?)(?=improvements:|suggestions:|$)/i)
+      if (strengthsSection) {
+        const strengthsList = strengthsSection[1].split(/\n\s*[-•*]\s*/).filter(Boolean)
+        parsed.strengths = strengthsList.map((s) => s.trim()).filter((s) => s.length > 0)
+      }
+
+      // Extract improvements
+      const improvementsSection =
+        text.match(/improvements:?\s*([\s\S]*?)(?=strengths:|optimization points:|$)/i) ||
+        text.match(/suggestions:?\s*([\s\S]*?)(?=strengths:|optimization points:|$)/i) ||
+        text.match(/optimization points:?\s*([\s\S]*?)(?=strengths:|improvements:|$)/i)
+      if (improvementsSection) {
+        const improvementsList = improvementsSection[1].split(/\n\s*[-•*]\s*/).filter(Boolean)
+        parsed.improvements = improvementsList.map((i) => i.trim()).filter((i) => i.length > 0)
+      }
+
+      // Extract missing keywords for ATS Optimization
+      const missingKeywordsSection = text.match(/missing keywords:?\s*([\s\S]*?)(?=improvements:|suggestions:|$)/i)
+      if (missingKeywordsSection) {
+        const keywordsList = missingKeywordsSection[1].split(/\n\s*[-•*]\s*/).filter(Boolean)
+        parsed.missingKeywords = keywordsList.map((k) => k.trim()).filter((k) => k.length > 0)
+      }
+
+      // Extract skills ratings for Detailed Analysis
+      const skillsSection = text.match(/skills:?\s*([\s\S]*?)(?=overall|ats score:|$)/i)
+      if (skillsSection) {
+        const skillsText = skillsSection[1]
+        const skillMatches = skillsText.matchAll(/([A-Za-z\s]+):\s*(\d+)(?:\/10)?/g)
+        for (const match of skillMatches) {
+          const skill = match[1].trim()
+          const rating = Number.parseInt(match[2])
+          if (skill && !isNaN(rating)) {
+            parsed.skillsRatings[skill] = rating
+          }
+        }
+      }
+
+      // If we couldn't parse much, store the whole text as detailed feedback
+      if (
+        Object.values(parsed).every((v) =>
+          Array.isArray(v) ? v.length === 0 : typeof v === "object" ? Object.keys(v).length === 0 : !v,
+        )
+      ) {
+        parsed.detailedFeedback = text
+      } else if (text.length > 0) {
+        // Store the original text as detailed feedback
+        parsed.detailedFeedback = text
+      }
+
+      return parsed
+    } catch (error) {
+      console.error("Error parsing analysis result:", error)
+      // If parsing fails, return the original text as detailed feedback
+      return {
+        detailedFeedback: text,
+      }
+    }
+  }
+
   // Function to get score color based on value
   const getScoreColor = (score) => {
     if (score >= 80) return "text-green-600"
@@ -167,153 +283,190 @@ const ATS = () => {
     return "destructive"
   }
 
+  // Function to get score label based on value
+  const getScoreLabel = (score) => {
+    if (score >= 80) return "Excellent"
+    if (score >= 60) return "Good"
+    return "Needs Improvement"
+  }
+
   // Function to render the appropriate result based on the API response structure
   const renderAnalysisResult = () => {
-    if (!result) return null
-
-    // This is a placeholder for the actual response structure
-    // You'll need to adjust this based on the actual API response format
-    const {
-      atsScore = 0,
-      matchingProfession = "",
-      keyStrengths = [],
-      improvements = [],
-      keywordMatch = [],
-      skillsAnalysis = {},
-      detailedFeedback = "",
-    } = result
+    if (!parsedResult) return null
 
     return (
       <Card className="mt-8 border-t-4 border-t-primary">
         <CardHeader>
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
             <div>
               <CardTitle className="text-2xl">Resume Analysis Results</CardTitle>
               <CardDescription>Analysis type: {analysisOption}</CardDescription>
             </div>
-            <Badge variant={getBadgeVariant(atsScore)} className="text-md px-3 py-1">
-              ATS Score: {atsScore}/100
-            </Badge>
+            {parsedResult.atsScore > 0 && (
+              <div className="flex flex-col items-center">
+                <div className="text-sm text-muted-foreground mb-1">ATS Compatibility</div>
+                <div className="relative h-24 w-24">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className={`text-2xl font-bold ${getScoreColor(parsedResult.atsScore)}`}>
+                      {parsedResult.atsScore}
+                    </span>
+                  </div>
+                  <svg className="h-24 w-24" viewBox="0 0 100 100">
+                    <circle
+                      className="text-muted stroke-current"
+                      strokeWidth="10"
+                      fill="transparent"
+                      r="40"
+                      cx="50"
+                      cy="50"
+                    />
+                    <circle
+                      className={`${parsedResult.atsScore >= 80 ? "text-green-500" : parsedResult.atsScore >= 60 ? "text-amber-500" : "text-red-500"} stroke-current`}
+                      strokeWidth="10"
+                      strokeLinecap="round"
+                      fill="transparent"
+                      r="40"
+                      cx="50"
+                      cy="50"
+                      strokeDasharray={`${parsedResult.atsScore * 2.51} 251`}
+                      strokeDashoffset="0"
+                      transform="rotate(-90 50 50)"
+                    />
+                  </svg>
+                </div>
+                <Badge variant={getBadgeVariant(parsedResult.atsScore)} className="mt-1">
+                  {getScoreLabel(parsedResult.atsScore)}
+                </Badge>
+              </div>
+            )}
           </div>
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid grid-cols-3 mb-6">
               <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="details">Detailed Analysis</TabsTrigger>
-              <TabsTrigger value="keywords">Keywords</TabsTrigger>
+              <TabsTrigger value="details">Details</TabsTrigger>
+              <TabsTrigger value="raw">Raw Analysis</TabsTrigger>
             </TabsList>
 
             <TabsContent value="overview" className="space-y-6">
-              <div>
-                <h3 className="text-lg font-medium flex items-center gap-2 mb-3">
-                  <Award className="h-5 w-5 text-primary" />
-                  Best Matching Profession
-                </h3>
-                <p className="text-muted-foreground bg-muted p-3 rounded-md">{matchingProfession || "Not specified"}</p>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-medium flex items-center gap-2 mb-3">
-                  <TrendingUp className="h-5 w-5 text-primary" />
-                  ATS Compatibility
-                </h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span>Score: {atsScore}/100</span>
-                    <span className={getScoreColor(atsScore)}>
-                      {atsScore >= 80 ? "Excellent" : atsScore >= 60 ? "Good" : "Needs Improvement"}
-                    </span>
+              {parsedResult.profession && (
+                <div>
+                  <h3 className="text-lg font-medium flex items-center gap-2 mb-3">
+                    <Award className="h-5 w-5 text-primary" />
+                    Best Matching Profession
+                  </h3>
+                  <div className="bg-muted p-4 rounded-md">
+                    <p className="font-medium">{parsedResult.profession}</p>
                   </div>
-                  <Progress value={atsScore} className="h-2" />
                 </div>
-              </div>
+              )}
 
-              <div>
-                <h3 className="text-lg font-medium flex items-center gap-2 mb-3">
-                  <CheckCircle className="h-5 w-5 text-primary" />
-                  Key Strengths
-                </h3>
-                <ul className="space-y-2">
-                  {keyStrengths && keyStrengths.length > 0 ? (
-                    keyStrengths.map((strength, index) => (
-                      <li key={index} className="flex items-start gap-2">
-                        <ChevronRight className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+              {parsedResult.strengths && parsedResult.strengths.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-medium flex items-center gap-2 mb-3">
+                    <Star className="h-5 w-5 text-primary" />
+                    Key Strengths
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {parsedResult.strengths.map((strength, index) => (
+                      <div key={index} className="flex items-start gap-2 p-3 border rounded-md">
+                        <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
                         <span>{strength}</span>
-                      </li>
-                    ))
-                  ) : (
-                    <li className="text-muted-foreground">No key strengths identified</li>
-                  )}
-                </ul>
-              </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
-              <div>
-                <h3 className="text-lg font-medium flex items-center gap-2 mb-3">
-                  <Zap className="h-5 w-5 text-primary" />
-                  Quick Improvements
-                </h3>
-                <ul className="space-y-2">
-                  {improvements && improvements.length > 0 ? (
-                    improvements.map((improvement, index) => (
-                      <li key={index} className="flex items-start gap-2">
+              {parsedResult.improvements && parsedResult.improvements.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-medium flex items-center gap-2 mb-3">
+                    <AlertTriangle className="h-5 w-5 text-primary" />
+                    Suggested Improvements
+                  </h3>
+                  <div className="space-y-3">
+                    {parsedResult.improvements.map((improvement, index) => (
+                      <div key={index} className="flex items-start gap-2 p-3 border rounded-md bg-muted/50">
                         <ChevronRight className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                         <span>{improvement}</span>
-                      </li>
-                    ))
-                  ) : (
-                    <li className="text-muted-foreground">No improvements suggested</li>
-                  )}
-                </ul>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="details">
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium">Detailed Feedback</h3>
-                <div className="bg-muted p-4 rounded-md whitespace-pre-line">
-                  {detailedFeedback || "No detailed feedback available for this analysis type."}
-                </div>
-
-                {skillsAnalysis && Object.keys(skillsAnalysis).length > 0 && (
-                  <div className="mt-6">
-                    <h3 className="text-lg font-medium mb-3">Skills Analysis</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {Object.entries(skillsAnalysis).map(([skill, rating]) => (
-                        <div key={skill} className="flex justify-between items-center p-3 border rounded-md">
-                          <span>{skill}</span>
-                          <Badge variant={rating >= 3 ? "success" : "outline"}>{rating}/5</Badge>
-                        </div>
-                      ))}
-                    </div>
+                      </div>
+                    ))}
                   </div>
-                )}
-              </div>
-            </TabsContent>
+                </div>
+              )}
 
-            <TabsContent value="keywords">
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium">Keyword Matching</h3>
-                {keywordMatch && keywordMatch.length > 0 ? (
+              {parsedResult.missingKeywords && parsedResult.missingKeywords.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-medium flex items-center gap-2 mb-3">
+                    <Target className="h-5 w-5 text-primary" />
+                    Missing Keywords
+                  </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                    {keywordMatch.map((keyword, index) => (
+                    {parsedResult.missingKeywords.map((keyword, index) => (
                       <div key={index} className="flex items-center gap-2 p-2 border rounded-md">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <XCircle className="h-4 w-4 text-red-500" />
                         <span>{keyword}</span>
                       </div>
                     ))}
                   </div>
-                ) : (
-                  <p className="text-muted-foreground">
-                    No keyword matching data available. Try providing a job description for better results.
-                  </p>
-                )}
+                </div>
+              )}
+            </TabsContent>
+
+            <TabsContent value="details">
+              {Object.keys(parsedResult.skillsRatings).length > 0 && (
+                <div className="mb-6">
+                  <h3 className="text-lg font-medium flex items-center gap-2 mb-3">
+                    <BarChart className="h-5 w-5 text-primary" />
+                    Skills Analysis
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {Object.entries(parsedResult.skillsRatings).map(([skill, rating]) => (
+                      <div key={skill} className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="font-medium">{skill}</span>
+                          <span
+                            className={rating >= 7 ? "text-green-600" : rating >= 5 ? "text-amber-600" : "text-red-600"}
+                          >
+                            {rating}/10
+                          </span>
+                        </div>
+                        <Progress value={rating * 10} className="h-2" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <h3 className="text-lg font-medium flex items-center gap-2 mb-3">
+                  <FileText className="h-5 w-5 text-primary" />
+                  Detailed Feedback
+                </h3>
+                <div className="bg-muted p-4 rounded-md whitespace-pre-line">
+                  {parsedResult.detailedFeedback || "No detailed feedback available."}
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="raw">
+              <div className="bg-muted p-4 rounded-md overflow-auto max-h-[500px]">
+                <pre className="text-sm whitespace-pre-wrap">
+                  {typeof result === "string" ? result : JSON.stringify(result, null, 2)}
+                </pre>
               </div>
             </TabsContent>
           </Tabs>
         </CardContent>
         <CardFooter className="flex justify-between border-t pt-6">
-          <Button variant="outline" onClick={() => setResult(null)}>
+          <Button
+            variant="outline"
+            onClick={() => {
+              setResult(null)
+              setParsedResult(null)
+            }}
+          >
             New Analysis
           </Button>
           <Button>
