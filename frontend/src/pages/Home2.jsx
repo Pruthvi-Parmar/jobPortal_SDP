@@ -65,7 +65,7 @@ function HomePage() {
                       className="inline-block h-8 w-8 rounded-full ring-2 ring-white overflow-hidden bg-indigo-100"
                     >
                       <img
-                        src={`/placeholder.svg?height=32&width=32&text=${i}`}
+                        src={`https://randomuser.me/api/portraits/thumb/men/${i}.jpg`} // RandomUser.me URL
                         alt={`User ${i}`}
                         className="h-full w-full object-cover"
                       />
@@ -77,11 +77,10 @@ function HomePage() {
                 </span>
               </div>
             </div>
-
             <div className="relative lg:h-[540px] hidden lg:block">
               <div className="absolute inset-0 bg-indigo-600/5 rounded-3xl"></div>
               <img
-                src="/placeholder.svg?height=540&width=540&text=Job+Seeker"
+                src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
                 alt="Job Seeker"
                 className="relative z-10 mx-auto h-full object-cover rounded-2xl shadow-xl"
               />
@@ -102,14 +101,20 @@ function HomePage() {
             <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Trusted by leading companies</p>
           </div>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
-            {[1, 2, 3, 4, 5].map((i) => (
+            {[
+              "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg", // Google
+              "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg", // Amazon
+              "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg", // Apple
+              "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg", // Netflix
+              "https://upload.wikimedia.org/wikipedia/commons/0/01/LinkedIn_Logo.svg", // LinkedIn
+            ].map((logo, i) => (
               <div
                 key={i}
                 className="grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
               >
                 <img
-                  src={`/placeholder.svg?height=40&width=120&text=Company+${i}`}
-                  alt={`Company ${i}`}
+                  src={logo}
+                  alt={`Company ${i + 1}`}
                   className="h-10 object-contain"
                 />
               </div>
@@ -287,7 +292,7 @@ function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-50 border-t border-gray-100 py-12">
+      {/* <footer className="bg-gray-50 border-t border-gray-100 py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
             <div className="col-span-2 lg:col-span-2">
@@ -354,7 +359,7 @@ function HomePage() {
             </div>
           </div>
         </div>
-      </footer>
+      </footer> */}
     </div>
   )
 }

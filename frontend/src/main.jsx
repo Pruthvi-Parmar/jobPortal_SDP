@@ -12,10 +12,10 @@ const GOOGLE_CLIENT_ID = "1017411108298-im20caml3866cc4pfdevoh6h674d4t70.apps.go
 createRoot(document.getElementById('root')).render(
   <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
   <Provider store={store}>
-  <StrictMode>
+  {/* <StrictMode> */}
     <App/>
     <Toaster />
-  </StrictMode>
+  {/* </StrictMode> */}
   </Provider>
   </GoogleOAuthProvider>,
 )
