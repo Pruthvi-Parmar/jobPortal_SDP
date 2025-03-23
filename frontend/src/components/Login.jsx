@@ -10,6 +10,7 @@ import { toast } from "sonner"
 import { useDispatch } from "react-redux"
 import { login } from "@/store/authSlice"
 import { AtSign, Lock, User } from "lucide-react"
+import { GoogleLogin } from "@react-oauth/google"
 
 const Login = () => {
   const [input, setInput] = useState({
@@ -75,6 +76,50 @@ const Login = () => {
     }
   }
 
+  const handleGoogleSuccess = async (response) => {
+    try {
+      const { credential } = response // Google Token
+
+      // Send Google token and all fields to the backend
+      const { data } = await axios.post("http://localhost:8001/auth/google", {
+        token: credential,
+        username: input.username,
+        email: input.email,
+        fullname: input.fullname,
+        password: input.password,
+        coverimage: input.coverimage,
+        resume: input.resume,
+        role: input.role,
+        bio: input.bio,
+        location: input.location,
+        qualifications: input.qualifications,
+        experience: input.experience,
+        company: input.company,
+      })
+
+      console.log("Backend Response:", data)
+      toast.success("Sign-up successful!")
+      console.log("ACCESS TOKEN", data.accessToken)
+      localStorage.setItem("accessToken", data.accessToken)
+      localStorage.setItem("refreshToken", data.refreshToken)
+      dispatch(login(data.user))
+      // Redirect based on role
+      if (data.user?.role === "jobseeker") {
+        navigate("/userhome")
+      } else if (data.user?.role === "recruiter") {
+        navigate("/recruiterhome")
+      }
+    } catch (error) {
+      console.error("Google login failed:", error)
+      toast.error(error.response?.data?.message || "An error occurred")
+    }
+  }
+
+  const handleGoogleFailure = (error) => {
+    console.error("Google Login Failed:", error)
+    toast.error("Google authentication failed.")
+  }
+
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
       {/* Left side - Form */}
@@ -84,6 +129,22 @@ const Login = () => {
             <h1 className="text-3xl font-extrabold text-gray-900">Welcome Back</h1>
             <p className="mt-2 text-sm text-gray-600">Sign in to access your account and find your dream job</p>
           </div>
+
+          <div className="mb-6">
+              <div className="flex justify-center">
+                <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleFailure} />
+                
+              </div>
+
+              <div className="relative mt-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                </div>
+              </div>
+            </div>
 
           <form onSubmit={submitHandler} className="mt-8 space-y-6">
             <div className="space-y-4">
