@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 import Layout from "./Layout";
 import Login from "./components/Login";
-import SignUp from "./components/SignUp";
+import SignUp from "./pages/SignUp";
 import Home from "./pages/Home";
 import JobsPage from "./pages/JobsPage";
 import PostJobForm from "./components/PostJobForm";

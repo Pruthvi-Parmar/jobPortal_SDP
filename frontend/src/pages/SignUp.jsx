@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { GoogleLogin } from "@react-oauth/google"
 import axios from "axios"
@@ -11,6 +9,7 @@ import { Button } from "../components/ui/button"
 import { useDispatch } from "react-redux"
 import { login } from "@/store/authSlice"
 import { AtSign, Briefcase, FileText, Image, MapPin, User, UserPlus, BookOpen, Building2 } from "lucide-react"
+import SignUpHero from "@/components/SignUp/SignUpHero"
 
 const SignUp = () => {
   const [input, setInput] = useState({
@@ -20,7 +19,7 @@ const SignUp = () => {
     password: "",
     coverimage: "",
     resume: "",
-    role: "",
+    role: "jobseeker",
     bio: "",
     location: "",
     qualifications: [{ education: "", certificate: "", skills: "" }],
@@ -165,53 +164,7 @@ const SignUp = () => {
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden">
         <div className="md:flex">
           <div className="md:w-1/3 bg-gradient-to-br from-blue-600 to-indigo-800 p-8 text-white">
-            <div className="h-full flex flex-col justify-between">
-              <div>
-                <h2 className="text-3xl font-bold mb-6">Join Our Professional Network</h2>
-                <p className="mb-8 text-blue-100">
-                  Create your account and connect with employers or find talented professionals.
-                </p>
-
-                <div className="space-y-4 mb-8">
-                  <div className="flex items-center">
-                    <div className="rounded-full bg-white/20 p-2 mr-3">
-                      <UserPlus className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="font-medium">Create your profile</p>
-                      <p className="text-sm text-blue-100">Showcase your skills and experience</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center">
-                    <div className="rounded-full bg-white/20 p-2 mr-3">
-                      <Briefcase className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="font-medium">Find opportunities</p>
-                      <p className="text-sm text-blue-100">Browse thousands of job listings</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center">
-                    <div className="rounded-full bg-white/20 p-2 mr-3">
-                      <Building2 className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="font-medium">Connect with companies</p>
-                      <p className="text-sm text-blue-100">Build your professional network</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-auto">
-                <p className="text-sm text-blue-100">Already have an account?</p>
-                <Link to="/login" className="block mt-2 text-white font-medium hover:underline">
-                  Sign in →
-                </Link>
-              </div>
-            </div>
+            <SignUpHero/>
           </div>
 
           <div className="md:w-2/3 p-8">
