@@ -21,6 +21,10 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import * as XLSX from "xlsx"
+import jsPDF from "jspdf"
+import autoTable from "jspdf-autotable"
+
 
 export default function JobsTable() {
   const [jobs, setJobs] = useState([])
@@ -41,16 +45,58 @@ export default function JobsTable() {
         },
       })
       const data = await res.json()
+      console.log("RESPONSE",data.data)
       if (data.success) {
         setJobs(data.data)
-        const uniqueCreators = [...new Set(data.data.map((job) => job.createdBy._id))]
+        const uniqueCreators = [...new Set(data.data.map((job) => job.createdBy?._id || "N/A"))];
+
         setCreators(uniqueCreators)
+        console.log("CREATORS", creators)
       }
     } catch (error) {
       console.error("Error fetching jobs:", error)
     } finally {
       setIsLoading(false)
     }
+  }
+
+  
+const handleDownload = (format) => {
+    if (jobs.length === 0) {
+      alert("No job data available to download.")
+      return
+    }
+  
+    if (format === "csv" || format === "excel") {
+      const ws = XLSX.utils.json_to_sheet(jobs)
+      const wb = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(wb, ws, "Jobs")
+  
+      if (format === "csv") {
+        XLSX.writeFile(wb, "jobs_data.csv")
+      } else {
+        XLSX.writeFile(wb, "jobs_data.xlsx")
+      }
+    } else if (format === "pdf") {
+        const doc = new jsPDF()
+        doc.text("Job Data", 14, 10)
+      
+        const tableData = jobs.map((job) => [
+          job.title,
+          job.location,
+          job.type,
+          job.salary,
+          job.createdBy?._id || "N/A",
+        ])
+      
+        autoTable(doc, {
+          head: [["Title", "Location", "Type", "Salary", "Created By"]],
+          body: tableData,
+        })
+      
+        doc.save("jobs_data.pdf")
+      }
+      
   }
 
   const handleDelete = async (jobId) => {
@@ -84,15 +130,17 @@ export default function JobsTable() {
     setIsDialogOpen(false)
   }
 
-  const handleFilterChange = (value) => {
-    setSelectedCreator(value)
-  }
+ const handleFilterChange = (value) => {
+  setSelectedCreator(value === "all" ? "" : value);
+};
 
-  const filteredJobs = jobs.filter((job) => {
-    const matchesSearch = job.title?.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesCreator = selectedCreator ? job.createdBy._id === selectedCreator : true
-    return matchesSearch && matchesCreator
-  })
+
+const filteredJobs = jobs.filter((job) => {
+    const matchesSearch = job.title?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCreator = selectedCreator === "" || job.createdBy._id === selectedCreator;
+    return matchesSearch && matchesCreator;
+  });
+  
 
   useEffect(() => {
     fetchJobs()
@@ -126,10 +174,24 @@ export default function JobsTable() {
               ))}
             </SelectContent>
           </Select>
-          <Button variant="outline" size="icon">
+          <DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <Button variant="outline" size="icon">
+      <Download className="h-4 w-4" />
+      <span className="sr-only">Download</span>
+    </Button>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent align="end">
+    <DropdownMenuItem onClick={() => handleDownload("csv")}>Download as CSV</DropdownMenuItem>
+    <DropdownMenuItem onClick={() => handleDownload("excel")}>Download as Excel</DropdownMenuItem>
+    <DropdownMenuItem onClick={() => handleDownload("pdf")}>Download as PDF</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+          {/* <Button variant="outline" size="icon">
             <Download className="h-4 w-4" />
             <span className="sr-only">Download</span>
-          </Button>
+          </Button> */}
         </div>
       </div>
 
@@ -188,10 +250,10 @@ export default function JobsTable() {
                             <Eye className="mr-2 h-4 w-4" />
                             View Details
                           </DropdownMenuItem>
-                          <DropdownMenuItem>
+                          {/* <DropdownMenuItem>
                             <Edit className="mr-2 h-4 w-4" />
                             Edit Job
-                          </DropdownMenuItem>
+                          </DropdownMenuItem> */}
                           <DropdownMenuSeparator />
                           <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(job._id)}>
                             <Trash2 className="mr-2 h-4 w-4" />
