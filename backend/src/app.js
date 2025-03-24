@@ -39,6 +39,7 @@ import chatbotRouter from "./routes/chatbot.routes.js"
 import paymentRouter from "./routes/payment.routes.js"
 import chatRouter from "./routes/chat.routes.js"
 import resumeAnalyseRouter from "./routes/analyse.routes.js"
+import complaintRoute from "./routes/complaint.routes.js"
 
 // oauth route
 
@@ -54,6 +55,7 @@ app.use("/v1/chatbot",chatbotRouter)
 app.use("/v1/payment",paymentRouter)
 app.use("/v1/chat",chatRouter)
 app.use("/v1/resume",resumeAnalyseRouter)
+app.use("/v1/complaint",complaintRoute)
 
 app.use(passport.initialize());
 app.use("/auth", authRoutes);
