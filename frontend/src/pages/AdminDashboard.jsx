@@ -6,6 +6,7 @@ import  UsersTable  from "../components/Admin/UsersTable"
 import  JobsTable  from "../components/Admin/JobsTable"
 import  JobApplicationsTable  from "../components/Admin/JobApplicationsTable"
 import Approval from "@/components/Admin/Approval"
+import Complaint from "@/components/Admin/Complaints"
 
 export default function AdminDashboard() {
   const [currentView, setCurrentView] = useState("overview")
@@ -51,6 +52,7 @@ export default function AdminDashboard() {
           {currentView === "users" && <UsersTable />}
           {currentView === "jobs" && <JobsTable />}
           {currentView === "approval" && <Approval />}
+          {currentView === "complaints" && <Complaint />}
           {currentView === "applications" && <JobApplicationsTable />}
         </main>
       </div>

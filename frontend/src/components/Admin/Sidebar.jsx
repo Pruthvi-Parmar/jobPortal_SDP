@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, Briefcase, FileText, Settings, LogOut } from "lucide-react"
+import { LayoutDashboard, Users, UserCheck, Briefcase, FileText, Inbox, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
@@ -58,7 +58,7 @@ export default function Sidebar({ currentView, setCurrentView }) {
             onClick={() => setCurrentView("users")}
           />
           <SidebarItem
-            icon={<Users className="h-5 w-5" />}
+            icon={<UserCheck className="h-5 w-5" />}
             label="Approve Recruiters"
             active={currentView === "approval"}
             onClick={() => setCurrentView("approval")}
@@ -76,10 +76,10 @@ export default function Sidebar({ currentView, setCurrentView }) {
             onClick={() => setCurrentView("applications")}
           />
           <SidebarItem
-            icon={<Settings className="h-5 w-5" />}
-            label="Settings"
-            active={currentView === "settings"}
-            onClick={() => setCurrentView("settings")}
+            icon={<Inbox className="h-5 w-5" />}
+            label="Complaints"
+            active={currentView === "complaints"}
+            onClick={() => setCurrentView("complaints")}
           />
           <div className="pt-4 mt-4 border-t">
             <SidebarItem icon={<LogOut className="h-5 w-5" />} label="Logout" onClick={handleLogout} />
