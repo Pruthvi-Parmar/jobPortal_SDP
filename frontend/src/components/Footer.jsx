@@ -1,7 +1,7 @@
-import { Linkedin, Twitter, Github, Mail, Phone, MapPin, ChevronRight } from "lucide-react"
+import { Linkedin, Twitter, Github, Mail, Phone, MapPin, ChevronRight, BookOpen, FileText, BarChart, Award } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom"
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
@@ -12,7 +12,7 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
-          <div className="space-y-4">
+          <div className="space-y-4 mx-8">
             <h2 className="text-2xl font-bold text-white">JobConnect</h2>
             <p className="text-slate-400 max-w-xs">
               Empowering careers, connecting talent with opportunity. Find your dream job or the perfect candidate.
@@ -44,7 +44,7 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Quick Links</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/jobs" className="text-slate-400 hover:text-white flex items-center transition-colors">
@@ -56,6 +56,12 @@ const Footer = () => {
                 <Link href="/post-job" className="text-slate-400 hover:text-white flex items-center transition-colors">
                   <ChevronRight className="h-4 w-4 mr-1" />
                   Post a Job
+                </Link>
+              </li>
+              <li>
+                <Link to="/raise-ticket" className="text-slate-400 hover:text-white flex items-center transition-colors">
+                  <ChevronRight className="h-4 w-4 mr-1" />
+                  Raise ticket
                 </Link>
               </li>
               <li>
@@ -86,37 +92,60 @@ const Footer = () => {
           </div>
 
           {/* Contact Info */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Contact Us</h3>
+          <div >
+            <h3 className="text-lg font-semibold text-white mb-4">Contact Us</h3>
             <ul className="space-y-3">
-              <li className="flex items-start">
-                <Mail className="h-5 w-5 mr-3 text-primary mt-0.5" />
+              <li className="flex">
+                <Mail className="h-5 w-5 mr-3 text-secondary flex-shrink-0" />
                 <span className="text-slate-400">support@jobconnect.com</span>
               </li>
-              <li className="flex items-start">
-                <Phone className="h-5 w-5 mr-3 text-primary mt-0.5" />
-                <span className="text-slate-400">+1 (555) 123-4567</span>
+              <li className="flex">
+                <Phone className="h-5 w-5 mr-3 text-secondary flex-shrink-0" />
+                <span className="text-slate-400">+91 6352510273</span>
               </li>
-              <li className="flex items-start">
-                <MapPin className="h-5 w-5 mr-3 text-primary mt-0.5" />
+              <li className="flex">
+                <MapPin className="h-5 w-5 mr-3 text-secondary flex-shrink-0" />
                 <span className="text-slate-400">123 Employment Ave, Career City, JC 54321</span>
               </li>
             </ul>
           </div>
 
-          {/* Newsletter */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Newsletter</h3>
-            <p className="text-slate-400">
-              Subscribe to our newsletter for the latest job opportunities and career advice.
-            </p>
-            <div className="flex space-x-2">
-              <Input
-                type="email"
-                placeholder="Your email"
-                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
-              />
-              <Button className="shrink-0">Subscribe</Button>
+          {/* Career Resources - Added instead of Newsletter */}
+          <div>
+            <h3 className="text-lg font-semibold text-white mb-4">Career Resources</h3>
+            <ul className="space-y-3">
+              <li className="flex">
+                <BookOpen className="h-5 w-5 mr-3 text-secondary flex-shrink-0" />
+                <Link href="/blog" className="text-slate-400 hover:text-white transition-colors">
+                  Career Blog
+                </Link>
+              </li>
+              <li className="flex">
+                <FileText className="h-5 w-5 mr-3 text-secondary flex-shrink-0" />
+                <Link href="/resume-tips" className="text-slate-400 hover:text-white transition-colors">
+                  Resume Writing Tips
+                </Link>
+              </li>
+              <li className="flex">
+                <BarChart className="h-5 w-5 mr-3 text-secondary flex-shrink-0" />
+                <Link href="/salary-guide" className="text-slate-400 hover:text-white transition-colors">
+                  Salary Guides
+                </Link>
+              </li>
+              <li className="flex">
+                <Award className="h-5 w-5 mr-3 text-secondary flex-shrink-0" />
+                <Link href="/certifications" className="text-slate-400 hover:text-white transition-colors">
+                  Recommended Certifications
+                </Link>
+              </li>
+            </ul>
+            <div className="mt-4">
+              <Link 
+                href="/resources" 
+                className="text-primary hover:text-primary/90 text-sm font-medium transition-colors"
+              >
+                View all resources →
+              </Link>
             </div>
           </div>
         </div>
@@ -144,4 +173,3 @@ const Footer = () => {
 }
 
 export default Footer
-

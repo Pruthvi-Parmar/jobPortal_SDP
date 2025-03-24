@@ -34,6 +34,7 @@ import ProfileForm from "./components/ProfilePage/ProfileForm";
 import Unauthorized from "./pages/Unauthorized";
 import ProtectedRoute from "./components/ProtectedRoute";
 import JobPage from "./pages/JobPage";
+import RaiseTicket from "./pages/RaiseTicket";
 
 
 
@@ -52,6 +53,7 @@ const router = createBrowserRouter(
         <Route path="chat" element={<Chat />} />
         <Route path="oauth" element={<GoogleLoginComponent />} />
         <Route path="profile" element={<ProfilePage />} />
+        <Route path="raise-ticket" element={<RaiseTicket />} />
         
 
         {/* Protected Routes for Job Seekers */}
