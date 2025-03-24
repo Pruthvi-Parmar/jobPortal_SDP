@@ -7,7 +7,7 @@ import AdminHeader from './components/Admin/AdminHeader'
 function AdminLayout() {
   return (
     <>
-    <AdminHeader/>
+    {/* <AdminHeader/> */}
     <Outlet /> 
     <Footer/>
     </>

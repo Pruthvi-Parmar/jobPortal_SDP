@@ -1,198 +1,333 @@
-import React, { useEffect, useState } from "react";
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react"
+import { Eye, Trash2, Search, MoreHorizontal, Download, Filter } from "lucide-react"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Trash2, Eye } from "lucide-react";
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
 
-const UsersTable = () => {
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+export default function UsersTable() {
+  const [users, setUsers] = useState([])
+  const [selectedUser, setSelectedUser] = useState(null)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [isLoading, setIsLoading] = useState(true)
 
   const fetchUsers = async () => {
+    setIsLoading(true)
     try {
       const res = await fetch("http://localhost:8001/v1/admin/getalluser", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
-      });
-      const data = await res.json();
-      if (data.success) setUsers(data.data);
+      })
+      const data = await res.json()
+      if (data.success) {
+        setUsers(data.data)
+      }
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error("Error fetching users:", error)
+    } finally {
+      setIsLoading(false)
     }
-  };
+  }
 
   const deleteUser = async (userId) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       try {
-        await fetch("http://localhost:8001/v1/admin/deleteuser", {
+        const res = await fetch("http://localhost:8001/v1/admin/deleteuser", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
           body: JSON.stringify({ userId }),
-        });
-        setUsers(users.filter((user) => user._id !== userId));
+        })
+        const data = await res.json()
+        if (data.success) {
+          setUsers(users.filter((user) => user._id !== userId))
+        }
       } catch (error) {
-        console.error("Error deleting user:", error);
+        console.error("Error deleting user:", error)
       }
     }
-  };
+  }
 
   const handleViewUser = (user) => {
-    setSelectedUser(user);
-    setIsDialogOpen(true);
-  };
+    setSelectedUser(user)
+    setIsDialogOpen(true)
+  }
 
   const handleCloseDialog = () => {
-    setSelectedUser(null);
-    setIsDialogOpen(false);
-  };
+    setSelectedUser(null)
+    setIsDialogOpen(false)
+  }
+
+  const filteredUsers = users.filter(
+    (user) =>
+      user.username?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email?.toLowerCase().includes(searchQuery.toLowerCase()),
+  )
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    fetchUsers()
+  }, [])
 
   return (
-    <div className="p-6 bg-white rounded-md shadow-md mx-auto max-w-4xl">
-      <h2 className="text-3xl font-bold mb-4 text-gray-800 text-center border-b-2 border-gray-300 pb-2">
-        User Management
-      </h2>
-      <Table className="w-full border-collapse">
-        <TableHeader>
-          <TableRow className="bg-gray-100">
-            <TableHead className="py-2 text-left">Username</TableHead>
-            <TableHead className="py-2 text-left">Email</TableHead>
-            <TableHead className="py-2 text-center">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {users.map((user) => (
-            <TableRow
-              key={user._id}
-              className="hover:bg-gray-50 border-b transition duration-300"
-            >
-              <TableCell className="py-3 px-4">{user.username}</TableCell>
-              <TableCell className="py-3 px-4">{user.email}</TableCell>
-              <TableCell className="py-3 px-4 text-center flex justify-center gap-3">
-                <Button
-                  variant="ghost"
-                  className="text-blue-500 hover:bg-blue-100 p-2 rounded-full"
-                  onClick={() => handleViewUser(user)}
-                >
-                  <Eye size={18} />
-                </Button>
-
-                <Button
-                  variant="ghost"
-                  className="text-red-500 hover:bg-red-100 p-2 rounded-full"
-                  onClick={() => deleteUser(user._id)}
-                >
-                  <Trash2 size={18} />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-
-      {/* Modal for User Details */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto break-words">
-          <DialogHeader>
-            <DialogTitle>User Details</DialogTitle>
-          </DialogHeader>
-          <DialogDescription>
-            Detailed information of the selected user.
-          </DialogDescription>
-          <div className="space-y-2 mt-4">
-            {selectedUser?.username && (
-              <p>
-                <span className="font-semibold">Username:</span>{" "}
-                {selectedUser.username}
-              </p>
-            )}
-            {selectedUser?.email && (
-              <p>
-                <span className="font-semibold">Email:</span> {selectedUser.email}
-              </p>
-            )}
-            {selectedUser?.bio && (
-              <p>
-                <span className="font-semibold">Bio:</span> {selectedUser.bio}
-              </p>
-            )}
-            {selectedUser?.location && (
-              <p>
-                <span className="font-semibold">Location:</span>{" "}
-                {selectedUser.location}
-              </p>
-            )}
-            {selectedUser?.resume && (
-              <p>
-                <span className="font-semibold">Resume:</span>{" "}
-                <a
-                  href={selectedUser.resume}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 underline"
-                >
-                  View Resume
-                </a>
-              </p>
-            )}
-            {selectedUser?.coverimage && (
-              <p>
-                <span className="font-semibold">Cover Image:</span>{" "}
-                <img
-                  src={selectedUser.coverimage}
-                  alt="Cover"
-                  className="mt-2 rounded-md w-full max-h-52 object-cover"
-                />
-              </p>
-            )}
-            {selectedUser?.qualifications?.length > 0 && (
-              <div>
-                <span className="font-semibold">Qualifications:</span>
-                {selectedUser.qualifications.map((qual, index) => (
-                  <div key={index} className="ml-4">
-                    <p>Education: {qual.education}</p>
-                    <p>Skills: {qual.skills}</p>
-                  </div>
-                ))}
-              </div>
-            )}
-            {selectedUser?.experience?.length > 0 && (
-              <div>
-                <span className="font-semibold">Experience:</span>
-                {selectedUser.experience.map((exp, index) => (
-                  <div key={index} className="ml-4">
-                    <p>Title: {exp.title}</p>
-                    <p>Company: {exp.company}</p>
-                    <p>Description: {exp.desc}</p>
-                  </div>
-                ))}
-              </div>
-            )}
+    <div className="space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h2 className="text-2xl font-bold tracking-tight">User Management</h2>
+        <div className="flex items-center gap-2">
+          <div className="relative w-full sm:w-64">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Search users..."
+              className="pl-8 w-full"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
-          <DialogFooter className="mt-4">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon">
+                <Filter className="h-4 w-4" />
+                <span className="sr-only">Filter</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Filter by</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>All Users</DropdownMenuItem>
+              <DropdownMenuItem>Job Seekers</DropdownMenuItem>
+              <DropdownMenuItem>Employers</DropdownMenuItem>
+              <DropdownMenuItem>Recently Active</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Button variant="outline" size="icon">
+            <Download className="h-4 w-4" />
+            <span className="sr-only">Download</span>
+          </Button>
+        </div>
+      </div>
+
+      <Card>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>User</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead className="hidden md:table-cell">Location</TableHead>
+                <TableHead className="hidden md:table-cell">Status</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {isLoading ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center py-8">
+                    Loading users...
+                  </TableCell>
+                </TableRow>
+              ) : filteredUsers.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center py-8">
+                    No users found
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredUsers.map((user) => (
+                  <TableRow key={user._id}>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <Avatar>
+                          <AvatarImage src={user.coverimage} alt={user.username} />
+                          <AvatarFallback>{user.username?.charAt(0)?.toUpperCase()}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <div className="font-medium">{user.username}</div>
+                          <div className="text-sm text-muted-foreground hidden md:block">
+                            {user.qualifications?.[0]?.education || "No education listed"}
+                          </div>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell className="hidden md:table-cell">{user.location || "Not specified"}</TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                        Active
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <MoreHorizontal className="h-4 w-4" />
+                            <span className="sr-only">Actions</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => handleViewUser(user)}>
+                            <Eye className="mr-2 h-4 w-4" />
+                            View Details
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Download className="mr-2 h-4 w-4" />
+                            Download Resume
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem className="text-red-600" onClick={() => deleteUser(user._id)}>
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete User
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </CardContent>
+        <CardFooter className="flex items-center justify-between py-4">
+          <div className="text-sm text-muted-foreground">
+            Showing <strong>{filteredUsers.length}</strong> of <strong>{users.length}</strong> users
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" disabled>
+              Previous
+            </Button>
+            <Button variant="outline" size="sm">
+              Next
+            </Button>
+          </div>
+        </CardFooter>
+      </Card>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>User Profile</DialogTitle>
+            <DialogDescription>Detailed information about {selectedUser?.username}</DialogDescription>
+          </DialogHeader>
+
+          {selectedUser && (
+            <div className="grid gap-6 py-4">
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="flex flex-col items-center gap-4">
+                  <Avatar className="h-24 w-24">
+                    <AvatarImage src={selectedUser.coverimage} alt={selectedUser.username} />
+                    <AvatarFallback>{selectedUser.username?.charAt(0)?.toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                  {selectedUser.resume && (
+                    <Button variant="outline" size="sm" asChild>
+                      <a href={selectedUser.resume} target="_blank" rel="noopener noreferrer">
+                        <Download className="mr-2 h-4 w-4" />
+                        Download Resume
+                      </a>
+                    </Button>
+                  )}
+                </div>
+
+                <div className="flex-1 space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <h3 className="text-sm font-medium text-muted-foreground">Username</h3>
+                      <p className="text-base">{selectedUser.username}</p>
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium text-muted-foreground">Email</h3>
+                      <p className="text-base">{selectedUser.email}</p>
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium text-muted-foreground">Location</h3>
+                      <p className="text-base">{selectedUser.location || "Not specified"}</p>
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium text-muted-foreground">Status</h3>
+                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                        Active
+                      </Badge>
+                    </div>
+                  </div>
+
+                  {selectedUser.bio && (
+                    <div>
+                      <h3 className="text-sm font-medium text-muted-foreground">Bio</h3>
+                      <p className="text-base">{selectedUser.bio}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {selectedUser.qualifications?.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Qualifications</h3>
+                  <div className="space-y-4">
+                    {selectedUser.qualifications.map((qual, index) => (
+                      <Card key={index}>
+                        <CardContent className="p-4">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <h4 className="text-sm font-medium text-muted-foreground">Education</h4>
+                              <p className="text-base">{qual.education}</p>
+                            </div>
+                            <div>
+                              <h4 className="text-sm font-medium text-muted-foreground">Skills</h4>
+                              <p className="text-base">{qual.skills}</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {selectedUser.experience?.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Experience</h3>
+                  <div className="space-y-4">
+                    {selectedUser.experience.map((exp, index) => (
+                      <Card key={index}>
+                        <CardContent className="p-4">
+                          <div className="grid gap-2">
+                            <div className="flex justify-between">
+                              <h4 className="font-medium">{exp.title}</h4>
+                              <p className="text-sm text-muted-foreground">{exp.company}</p>
+                            </div>
+                            <p className="text-sm">{exp.desc}</p>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          <DialogFooter>
             <Button variant="outline" onClick={handleCloseDialog}>
               Close
             </Button>
@@ -200,7 +335,5 @@ const UsersTable = () => {
         </DialogContent>
       </Dialog>
     </div>
-  );
-};
-
-export default UsersTable;
+  )
+}

@@ -52,12 +52,7 @@ const router = createBrowserRouter(
         <Route path="chat" element={<Chat />} />
         <Route path="oauth" element={<GoogleLoginComponent />} />
         <Route path="profile" element={<ProfilePage />} />
-        <Route path="admin" element={<AdminLayout />}>
-            <Route path="" element={<AdminDashboard />} />
-            <Route path="users" element={<UsersTable />} />
-            <Route path="jobs" element={<JobsTable />} />
-            <Route path="job-applications" element={<JobApplicationTable />} />
-          </Route>
+        
 
         {/* Protected Routes for Job Seekers */}
         <Route element={<ProtectedRoute allowedRoles={["jobseeker"]} />}>
@@ -75,6 +70,12 @@ const router = createBrowserRouter(
        
   
       </Route>
+      <Route path="admin" element={<AdminLayout />}>
+            <Route path="" element={<AdminDashboard />} />
+            <Route path="users" element={<UsersTable />} />
+            <Route path="jobs" element={<JobsTable />} />
+            <Route path="job-applications" element={<JobApplicationTable />} />
+          </Route>
     </Route>
   )
 );
