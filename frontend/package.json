@@ -34,6 +34,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
+    "file-saver": "^2.0.5",
     "framer-motion": "^12.5.0",
     "jspdf": "^3.0.1",
     "jspdf-autotable": "^5.0.2",

@@ -22,12 +22,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import * as XLSX from "xlsx";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import { saveAs } from "file-saver";
 
 export default function UsersTable() {
   const [users, setUsers] = useState([])
   const [selectedUser, setSelectedUser] = useState(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedRole, setSelectedRole] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true)
 
   const fetchUsers = async () => {
@@ -49,6 +54,47 @@ export default function UsersTable() {
       setIsLoading(false)
     }
   }
+
+  const handleDownload = (type) => {
+    if (filteredUsers.length === 0) {
+      alert("No data to download!");
+      return;
+    }
+
+    const data = filteredUsers.map((user) => ({
+      Username: user.username,
+      Email: user.email,
+      Location: user.location || "Not specified",
+      Role: user.role,
+      Status: "Active",
+    }));
+
+    if (type === "csv") {
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Users");
+      const csv = XLSX.write(wb, { bookType: "csv", type: "string" });
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      saveAs(blob, "users.csv");
+    }
+
+    if (type === "excel") {
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Users");
+      XLSX.writeFile(wb, "users.xlsx");
+    }
+
+    if (type === "pdf") {
+      const doc = new jsPDF();
+      doc.text("User List", 14, 10);
+      autoTable(doc, {
+        head: [["Username", "Email", "Location", "Role", "Status"]],
+        body: data.map((user) => Object.values(user)),
+      });
+      doc.save("users.pdf");
+    }
+  };
 
   const deleteUser = async (userId) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
@@ -80,12 +126,22 @@ export default function UsersTable() {
     setSelectedUser(null)
     setIsDialogOpen(false)
   }
+  
 
-  const filteredUsers = users.filter(
-    (user) =>
-      user.username?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email?.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
+  
+  const filteredUsers = users.filter((user) => {
+    // Role-based filtering
+    const roleMatch = selectedRole === "all" || user.role === selectedRole;
+  
+    // Search-based filtering (checks username, email, and location)
+    const searchMatch =
+      user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (user.location && user.location.toLowerCase().includes(searchQuery.toLowerCase()));
+  
+    return roleMatch && searchMatch;
+  });
+  
 
   useEffect(() => {
     fetchUsers()
@@ -96,36 +152,63 @@ export default function UsersTable() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h2 className="text-2xl font-bold tracking-tight">User Management</h2>
         <div className="flex items-center gap-2">
-          <div className="relative w-full sm:w-64">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search users..."
-              className="pl-8 w-full"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon">
-                <Filter className="h-4 w-4" />
-                <span className="sr-only">Filter</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>All Users</DropdownMenuItem>
-              <DropdownMenuItem>Job Seekers</DropdownMenuItem>
-              <DropdownMenuItem>Employers</DropdownMenuItem>
-              <DropdownMenuItem>Recently Active</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Button variant="outline" size="icon">
-            <Download className="h-4 w-4" />
-            <span className="sr-only">Download</span>
-          </Button>
+        <div className="relative w-full sm:w-64">
+  {/* Search Input with Icon */}
+  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+  <Input
+    type="search"
+    placeholder="Search users..."
+    className="pl-8 w-full"
+    value={searchQuery}
+    onChange={(e) => setSearchQuery(e.target.value)}
+  />
+</div>
+
+{/* Role Filter Dropdown */}
+<DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <Button variant="outline" size="icon">
+      <Filter className="h-4 w-4" />
+      <span className="sr-only">Filter</span>
+    </Button>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent align="end">
+    <DropdownMenuLabel>Filter by Role</DropdownMenuLabel>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem onClick={() => setSelectedRole("all")}>
+      All Users
+    </DropdownMenuItem>
+    <DropdownMenuItem onClick={() => setSelectedRole("jobseeker")}>
+      Job Seekers
+    </DropdownMenuItem>
+    <DropdownMenuItem onClick={() => setSelectedRole("recruiter")}>
+      Employers
+    </DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+<DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <Button variant="outline" size="icon">
+      <Download className="h-4 w-4" />
+      <span className="sr-only">Download</span>
+    </Button>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent align="end">
+    <DropdownMenuLabel>Download As</DropdownMenuLabel>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem onClick={() => handleDownload("csv", filteredUsers)}>
+      CSV
+    </DropdownMenuItem>
+    <DropdownMenuItem onClick={() => handleDownload("excel", filteredUsers)}>
+      Excel
+    </DropdownMenuItem>
+    <DropdownMenuItem onClick={() => handleDownload("pdf", filteredUsers)}>
+      PDF
+    </DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+
         </div>
       </div>
 
@@ -191,10 +274,10 @@ export default function UsersTable() {
                             <Eye className="mr-2 h-4 w-4" />
                             View Details
                           </DropdownMenuItem>
-                          <DropdownMenuItem>
+                          {/* <DropdownMenuItem>
                             <Download className="mr-2 h-4 w-4" />
                             Download Resume
-                          </DropdownMenuItem>
+                          </DropdownMenuItem> */}
                           <DropdownMenuSeparator />
                           <DropdownMenuItem className="text-red-600" onClick={() => deleteUser(user._id)}>
                             <Trash2 className="mr-2 h-4 w-4" />

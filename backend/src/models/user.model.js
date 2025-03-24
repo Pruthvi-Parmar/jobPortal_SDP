@@ -86,7 +86,7 @@ const userSchema = new Schema(
         },
         isAllowedToPostJob: {
             type: Boolean,
-            dafault:false,
+            default:false,
         },
     },
     {
