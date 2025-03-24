@@ -13,10 +13,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Briefcase, MapPin, DollarSign, FileText, Upload, Clock, CheckCircle2, AlertCircle } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { useSelector } from "react-redux"
 
 const JOB_TYPES = ["Full-time", "Part-time", "Contract", "Freelance", "Internship", "Remote"]
 
 const PostJobForm = () => {
+  const user = useSelector((state) => state.auth.userData)
   const {
     register,
     handleSubmit,
@@ -70,6 +72,8 @@ const PostJobForm = () => {
         console.log(pair[0], pair[1])
       }
 
+      if(user.isAllowedToPostJob){
+
       const response = await fetch("http://localhost:8001/v1/jobs/post-job", {
         method: "POST",
         body: formData,
@@ -91,6 +95,12 @@ const PostJobForm = () => {
         description: "Job posted successfully!",
       })
       console.log("Job posted:", result)
+    }else{
+      toast({
+        title: "Failed",
+        description: "You are not allowed to post jobs wait for verification!",
+      })
+    }
     } catch (error) {
       toast({
         title: "Error",

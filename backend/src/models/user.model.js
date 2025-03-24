@@ -72,14 +72,9 @@ const userSchema = new Schema(
                 type: String,
             }
         }],
-        company:[{
-            name:{
-                type: String,
-            },
-            desc:{
-                type: String,
-            }
-        }],
+        company:{
+            type: String,
+        },
         isPremium: { 
             type: Boolean, 
             default: false 
@@ -88,6 +83,10 @@ const userSchema = new Schema(
             type: String,
             unique: true,
             sparse: true 
+        },
+        isAllowedToPostJob: {
+            type: Boolean,
+            dafault:false,
         },
     },
     {

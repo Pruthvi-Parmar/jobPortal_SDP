@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { deleteApplication, deleteJob, deleteUser, getAdminDashboard, getAllApplications, getAllJobs, getAllUsers, loginAdmin, logoutAdmin, registerAdmin } from "../controllers/admin.controller.js";
+import { changePostJobStatus, deleteApplication, deleteJob, deleteUser, getAdminDashboard, getAllApplications, getAllJobs, getAllUsers, loginAdmin, logoutAdmin, registerAdmin } from "../controllers/admin.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { verifyJWTAdmin } from "../middlewares/admin.auth.middleware.js";
 import { verifyAdmin } from "../middlewares/verifyAdmin.js";
@@ -16,6 +16,7 @@ router.route("/deletejob").post(deleteJob)
 router.route("/getalljobs").post(getAllJobs)
 router.route("/getAllApplications").post(verifyJWTAdmin,getAllApplications)
 router.route("/deleteApplication").post(deleteApplication)
+router.route("/changePostJobStatus").post(changePostJobStatus)
 
 
 

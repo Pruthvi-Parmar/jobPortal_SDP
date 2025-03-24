@@ -231,6 +231,28 @@ const deleteApplication = asyncHandler(async (req, res) => {
         .status(200)
         .json(new ApiResponse(200, null, "Application deleted successfully"));
 });
+const changePostJobStatus = asyncHandler(async(req, res)=>{
+
+    const {userId} = req.body
+
+    if(!userId){
+        throw new ApiError(404,"userId is undefined")
+    }
+
+    const user = await User.findById(userId)
+
+    user.isAllowedToPostJob = true
+
+    user.save({validateBeforeSave:false})
+
+    return res
+            .status(200)
+            .json(new ApiResponse(
+                200,
+                {user},
+                "Recruiter Allowed to post jobs now!"
+            ))
+})
 
 export {
     registerAdmin,
@@ -242,5 +264,6 @@ export {
     deleteJob,
     getAllJobs,
     getAllApplications,
-    deleteApplication
+    deleteApplication,
+    changePostJobStatus
 }
