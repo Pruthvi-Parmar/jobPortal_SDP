@@ -126,22 +126,22 @@ export default function UsersTable() {
     setSelectedUser(null)
     setIsDialogOpen(false)
   }
-  
 
-  
+
+
   const filteredUsers = users.filter((user) => {
     // Role-based filtering
     const roleMatch = selectedRole === "all" || user.role === selectedRole;
-  
+
     // Search-based filtering (checks username, email, and location)
     const searchMatch =
       user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (user.location && user.location.toLowerCase().includes(searchQuery.toLowerCase()));
-  
+
     return roleMatch && searchMatch;
   });
-  
+
 
   useEffect(() => {
     fetchUsers()
@@ -152,62 +152,62 @@ export default function UsersTable() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h2 className="text-2xl font-bold tracking-tight">User Management</h2>
         <div className="flex items-center gap-2">
-        <div className="relative w-full sm:w-64">
-  {/* Search Input with Icon */}
-  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-  <Input
-    type="search"
-    placeholder="Search users..."
-    className="pl-8 w-full"
-    value={searchQuery}
-    onChange={(e) => setSearchQuery(e.target.value)}
-  />
-</div>
+          <div className="relative w-full sm:w-64">
+            {/* Search Input with Icon */}
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Search users..."
+              className="pl-8 w-full"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
 
-{/* Role Filter Dropdown */}
-<DropdownMenu>
-  <DropdownMenuTrigger asChild>
-    <Button variant="outline" size="icon">
-      <Filter className="h-4 w-4" />
-      <span className="sr-only">Filter</span>
-    </Button>
-  </DropdownMenuTrigger>
-  <DropdownMenuContent align="end">
-    <DropdownMenuLabel>Filter by Role</DropdownMenuLabel>
-    <DropdownMenuSeparator />
-    <DropdownMenuItem onClick={() => setSelectedRole("all")}>
-      All Users
-    </DropdownMenuItem>
-    <DropdownMenuItem onClick={() => setSelectedRole("jobseeker")}>
-      Job Seekers
-    </DropdownMenuItem>
-    <DropdownMenuItem onClick={() => setSelectedRole("recruiter")}>
-      Employers
-    </DropdownMenuItem>
-  </DropdownMenuContent>
-</DropdownMenu>
+          {/* Role Filter Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon">
+                <Filter className="h-4 w-4" />
+                <span className="sr-only">Filter</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Filter by Role</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => setSelectedRole("all")}>
+                All Users
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setSelectedRole("jobseeker")}>
+                Job Seekers
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setSelectedRole("recruiter")}>
+                Employers
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-<DropdownMenu>
-  <DropdownMenuTrigger asChild>
-    <Button variant="outline" size="icon">
-      <Download className="h-4 w-4" />
-      <span className="sr-only">Download</span>
-    </Button>
-  </DropdownMenuTrigger>
-  <DropdownMenuContent align="end">
-    <DropdownMenuLabel>Download As</DropdownMenuLabel>
-    <DropdownMenuSeparator />
-    <DropdownMenuItem onClick={() => handleDownload("csv", filteredUsers)}>
-      CSV
-    </DropdownMenuItem>
-    <DropdownMenuItem onClick={() => handleDownload("excel", filteredUsers)}>
-      Excel
-    </DropdownMenuItem>
-    <DropdownMenuItem onClick={() => handleDownload("pdf", filteredUsers)}>
-      PDF
-    </DropdownMenuItem>
-  </DropdownMenuContent>
-</DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon">
+                <Download className="h-4 w-4" />
+                <span className="sr-only">Download</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Download As</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => handleDownload("csv", filteredUsers)}>
+                CSV
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleDownload("excel", filteredUsers)}>
+                Excel
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleDownload("pdf", filteredUsers)}>
+                PDF
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
         </div>
       </div>

@@ -58,6 +58,12 @@ export default function Sidebar({ currentView, setCurrentView }) {
             onClick={() => setCurrentView("users")}
           />
           <SidebarItem
+            icon={<Users className="h-5 w-5" />}
+            label="Approve Recruiters"
+            active={currentView === "approval"}
+            onClick={() => setCurrentView("approval")}
+          />
+          <SidebarItem
             icon={<Briefcase className="h-5 w-5" />}
             label="Jobs"
             active={currentView === "jobs"}
