@@ -254,6 +254,149 @@ const changePostJobStatus = asyncHandler(async(req, res)=>{
             ))
 })
 
+const getMonthlyJobStats = asyncHandler(async (req, res) => {
+    const monthlyStats = await Jobs.aggregate([
+        {
+            $group: {
+                _id: { $month: "$createdAt" },
+                totalJobs: { $sum: 1 }
+            }
+        },
+        { $sort: { _id: 1 } }
+    ]);
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, monthlyStats, "Monthly job stats retrieved successfully"));
+});
+
+const getMonthlyApplicationsStats = asyncHandler(async (req, res) => {
+    const monthlyStats = await Applications.aggregate([
+        {
+            $group: {
+                _id: { $month: "$createdAt" },
+                totalApplications: { $sum: 1 }
+            }
+        },
+        { $sort: { _id: 1 } }
+    ]);
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, monthlyStats, "Monthly application stats retrieved successfully"));
+});
+
+const getMonthlyJobApplications = asyncHandler(async (req, res) => {
+    const monthlyApplications = await Applications.aggregate([
+        {
+            $group: {
+                _id: { $month: "$createdAt" },
+                totalApplications: { $sum: 1 }
+            }
+        },
+        { $sort: { _id: 1 } }
+    ]);
+
+    return res.status(200).json(
+        new ApiResponse(200, monthlyApplications, "Monthly job applications count retrieved successfully")
+    );
+});
+
+const getMonthlyUserRegistrations = asyncHandler(async (req, res) => {
+    const monthlyUsers = await User.aggregate([
+        {
+            $group: {
+                _id: { $month: "$createdAt" },
+                totalUsers: { $sum: 1 }
+            }
+        },
+        { $sort: { _id: 1 } }
+    ]);
+
+    return res.status(200).json(
+        new ApiResponse(200, monthlyUsers, "Monthly user registrations retrieved successfully")
+    );
+});
+
+const getMonthlyJobPostings = asyncHandler(async (req, res) => {
+    const monthlyJobs = await Jobs.aggregate([
+        {
+            $group: {
+                _id: { $month: "$createdAt" },
+                totalJobs: { $sum: 1 }
+            }
+        },
+        { $sort: { _id: 1 } }
+    ]);
+
+    return res.status(200).json(
+        new ApiResponse(200, monthlyJobs, "Monthly job postings retrieved successfully")
+    );
+});
+
+const getTopJobCategories = asyncHandler(async (req, res) => {
+    const categoryStats = await Applications.aggregate([
+        {
+            $lookup: {
+                from: "jobs",
+                localField: "job",
+                foreignField: "_id",
+                as: "jobDetails"
+            }
+        },
+        { $unwind: "$jobDetails" },
+        {
+            $group: {
+                _id: "$jobDetails.category",
+                totalApplications: { $sum: 1 }
+            }
+        },
+        { $sort: { totalApplications: -1 } },
+        { $limit: 5 } 
+    ]);
+
+    return res.status(200).json(
+        new ApiResponse(200, categoryStats, "Top job categories retrieved successfully")
+    );
+});
+
+const getApplicationStatusDistribution = asyncHandler(async (req, res) => {
+    const statusDistribution = await Applications.aggregate([
+        {
+            $group: {
+                _id: "$status",
+                count: { $sum: 1 }
+            }
+        }
+    ]);
+
+    return res.status(200).json(
+        new ApiResponse(200, statusDistribution, "Application status distribution retrieved successfully")
+    );
+});
+
+const getAverageSalaryByCategory = asyncHandler(async (req, res) => {
+    const avgSalary = await Jobs.aggregate([
+        {
+            $group: {
+                _id: "$category",
+                averageSalary: { $avg: "$salary" }
+            }
+        },
+        { $sort: { averageSalary: -1 } }
+    ]);
+
+    return res.status(200).json(
+        new ApiResponse(200, avgSalary, "Average salary by category retrieved successfully")
+    );
+});
+
+
+
+
+
+
+
 export {
     registerAdmin,
     loginAdmin,
@@ -265,5 +408,14 @@ export {
     getAllJobs,
     getAllApplications,
     deleteApplication,
-    changePostJobStatus
+    changePostJobStatus,
+    getMonthlyJobApplications,
+    getMonthlyUserRegistrations,
+    getMonthlyJobPostings,
+    getTopJobCategories,
+    getApplicationStatusDistribution,
+    getAverageSalaryByCategory,
+
+    getMonthlyJobStats,
+    getMonthlyApplicationsStats,
 }
