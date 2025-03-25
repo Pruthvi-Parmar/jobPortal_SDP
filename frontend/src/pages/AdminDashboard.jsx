@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from "react"
-import  Sidebar  from "../components/Admin/Sidebar"
+"use client"
+
+import { useState, useEffect } from "react"
+import Sidebar from "../components/Admin/Sidebar"
 import AdminHeader from "../components/Admin/AdminHeader"
-import  Overview  from "../components/Admin/Overview"
-import  UsersTable  from "../components/Admin/UsersTable"
-import  JobsTable  from "../components/Admin/JobsTable"
-import  JobApplicationsTable  from "../components/Admin/JobApplicationsTable"
+import Overview from "../components/Admin/Overview"
+import UsersTable from "../components/Admin/UsersTable"
+import JobsTable from "../components/Admin/JobsTable"
+import JobApplicationsTable from "../components/Admin/JobApplicationsTable"
 import Approval from "@/components/Admin/Approval"
 import Complaint from "@/components/Admin/Complaints"
+import Analytics from "@/components/Admin/Analytics"
 
 export default function AdminDashboard() {
   const [currentView, setCurrentView] = useState("overview")
   const [dashboardData, setDashboardData] = useState({
     totalUsers: 0,
     totalJobs: 0,
-    totalApplications: 0
+    totalApplications: 0,
   })
   const [isLoading, setIsLoading] = useState(true)
 
@@ -49,6 +52,7 @@ export default function AdminDashboard() {
         <AdminHeader />
         <main className="flex-1 overflow-y-auto p-4 md:p-6">
           {currentView === "overview" && <Overview dashboardData={dashboardData} isLoading={isLoading} />}
+          {currentView === "analytics" && <Analytics />}
           {currentView === "users" && <UsersTable />}
           {currentView === "jobs" && <JobsTable />}
           {currentView === "approval" && <Approval />}
@@ -59,3 +63,4 @@ export default function AdminDashboard() {
     </div>
   )
 }
+

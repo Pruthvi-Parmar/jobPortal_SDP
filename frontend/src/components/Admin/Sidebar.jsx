@@ -1,4 +1,6 @@
-import { LayoutDashboard, Users, UserCheck, Briefcase, FileText, Inbox, LogOut } from "lucide-react"
+"use client"
+
+import { LayoutDashboard, Users, UserCheck, Briefcase, FileText, Inbox, LogOut, BarChart } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
@@ -50,6 +52,12 @@ export default function Sidebar({ currentView, setCurrentView }) {
             label="Dashboard"
             active={currentView === "overview"}
             onClick={() => setCurrentView("overview")}
+          />
+          <SidebarItem
+            icon={<BarChart className="h-5 w-5" />}
+            label="Analytics"
+            active={currentView === "analytics"}
+            onClick={() => setCurrentView("analytics")}
           />
           <SidebarItem
             icon={<Users className="h-5 w-5" />}
@@ -104,3 +112,4 @@ function SidebarItem({ icon, label, active, onClick }) {
     </button>
   )
 }
+
