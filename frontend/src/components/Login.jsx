@@ -82,7 +82,7 @@ const Login = () => {
       const { credential } = response // Google Token
 
       // Send Google token and all fields to the backend
-      const { data } = await axios.post("http://localhost:8001/auth/google", {
+      const { data } = await axios.post("https://jobportal-sdp.onrender.com/auth/google", {
         token: credential,
         username: input.username,
         email: input.email,

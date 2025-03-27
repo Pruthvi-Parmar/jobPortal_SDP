@@ -16,7 +16,7 @@ const Login = () => {
       //console.log("Google Token:", credential);
 
       // Send token to backend
-      const { data } = await axios.post("http://localhost:8001/auth/google", {
+      const { data } = await axios.post("https://jobportal-sdp.onrender.com/auth/google", {
         token: credential,
       });
 
