@@ -13,13 +13,13 @@ const MyPostedJobsTestt = () => {
   const [loadingApplicants, setLoadingApplicants] = useState(false);
   const [error, setError] = useState(null);
   const user = useSelector((state) => state.auth.userData);
-
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
   // Fetch user's posted jobs
   const fetchJobs = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("http://localhost:8001/v1/jobs/get-posted-job", {
+      const response = await fetch(`${API_URL}/jobs/get-posted-job`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -51,7 +51,7 @@ const MyPostedJobsTestt = () => {
     setAppliedUsers([]);
 
     try {
-      const response = await fetch("http://localhost:8001/v1/application/get-job-application", {
+      const response = await fetch(`${API_URL}/application/get-job-application`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -9,7 +9,7 @@ const JobPage = () => {
   const location = useLocation()
   const { job } = location.state || {}
   const [hasApplied, setHasApplied] = useState(false)
-
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
   const handleApply = async () => {
     try {
       const accessToken = localStorage.getItem("accessToken")
@@ -18,7 +18,7 @@ const JobPage = () => {
         return
       }
 
-      const response = await fetch("http://localhost:8001/v1/application/apply-to-job", {
+      const response = await fetch(`${API_URL}/application/apply-to-job`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

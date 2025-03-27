@@ -12,6 +12,7 @@ import { AtSign, Briefcase, FileText, Image, MapPin, User, UserPlus, BookOpen, B
 import SignUpHero from "@/components/SignUp/SignUpHero"
 
 const SignUp = () => {
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
   const [input, setInput] = useState({
     username: "",
     email: "",
@@ -144,7 +145,7 @@ const SignUp = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:8001/v1/users/register", formData, {
+      const res = await axios.post(`${API_URL}/users/register`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: false,
       })

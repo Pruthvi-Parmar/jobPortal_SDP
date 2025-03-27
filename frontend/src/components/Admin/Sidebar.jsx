@@ -11,11 +11,11 @@ import { toast } from "sonner"
 export default function Sidebar({ currentView, setCurrentView }) {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
   const handleLogout = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:8001/v1/admin/logout",
+        `${API_URL}/admin/logout`,
         {},
         {
           headers: {

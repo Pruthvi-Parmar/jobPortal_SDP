@@ -13,11 +13,12 @@ const Approval = () => {
     const [search, setSearch] = useState("")
     const [filterStatus, setFilterStatus] = useState("all")
     const { toast } = useToast()
+    const API_URL = import.meta.env.VITE_REACT_APP_API_URL
 
     const fetchRecruiters = async () => {
         setIsLoading(true)
         try {
-            const res = await fetch("http://localhost:8001/v1/admin/getalluser", {
+            const res = await fetch(`${API_URL}/admin/getalluser`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -39,7 +40,7 @@ const Approval = () => {
 
     const handleApprove = async (userId) => {
         try {
-            const res = await fetch("http://localhost:8001/v1/admin/changePostJobStatus", {
+            const res = await fetch(`${API_URL}/admin/changePostJobStatus`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

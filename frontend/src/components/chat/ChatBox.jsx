@@ -14,13 +14,13 @@ const ChatBox = ({ selectedUser, socket, onlineUsers }) => {
   const messageInputRef = useRef(null)
 
   const isOnline = onlineUsers.includes(selectedUser._id)
-
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
   useEffect(() => {
     const fetchChatHistory = async () => {
       try {
         setIsLoading(true)
         const token = localStorage.getItem("accessToken")
-        const { data } = await axios.get(`http://localhost:8001/v1/chat/${selectedUser._id}`, {
+        const { data } = await axios.get(`${API_URL}/chat/${selectedUser._id}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         // Ensure we have unique messages by ID
@@ -80,7 +80,7 @@ const ChatBox = ({ selectedUser, socket, onlineUsers }) => {
     try {
       const token = localStorage.getItem("accessToken")
       const { data } = await axios.post(
-        `http://localhost:8001/v1/chat`,
+        `${API_URL}/chat`,
         { receiverId: selectedUser._id, message: message.trim(), userId: user._id },
         { headers: { Authorization: `Bearer ${token}` } },
       )

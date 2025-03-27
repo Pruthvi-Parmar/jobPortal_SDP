@@ -34,11 +34,11 @@ export default function UsersTable() {
   const [selectedRole, setSelectedRole] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true)
-
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
   const fetchUsers = async () => {
     setIsLoading(true)
     try {
-      const res = await fetch("http://localhost:8001/v1/admin/getalluser", {
+      const res = await fetch(`${API_URL}/admin/getalluser`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -99,7 +99,7 @@ export default function UsersTable() {
   const deleteUser = async (userId) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       try {
-        const res = await fetch("http://localhost:8001/v1/admin/deleteuser", {
+        const res = await fetch(`${API_URL}/admin/deleteuser`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

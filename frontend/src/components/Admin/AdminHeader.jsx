@@ -22,11 +22,12 @@ export default function AdminHeader() {
   const user = useSelector((state) => state.auth.userData)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
 
   const handleLogout = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:8001/v1/admin/logout",
+        `${API_URL}/admin/logout`,
         {},
         {
           headers: {

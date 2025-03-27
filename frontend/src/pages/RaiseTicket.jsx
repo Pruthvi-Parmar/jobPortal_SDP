@@ -17,7 +17,7 @@ const RaiseTicket = () => {
         }
 
         try {
-            const res = await fetch("http://localhost:8001/v1/complaint/register-complaint", {
+            const res = await fetch(`{API_URL}/complaint/register-complaint`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

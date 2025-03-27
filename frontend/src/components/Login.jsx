@@ -21,6 +21,7 @@ const Login = () => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value })
@@ -30,7 +31,7 @@ const Login = () => {
     e.preventDefault()
 
     if (input.username == "admin") {
-      const res = await axios.post("http://localhost:8001/v1/admin/login", input, {
+      const res = await axios.post(`${API_URL}/admin/login`, input, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       })
@@ -50,7 +51,7 @@ const Login = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:8001/v1/users/login", input, {
+      const res = await axios.post(`${API_URL}/users/login`, input, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       })

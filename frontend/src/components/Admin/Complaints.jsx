@@ -14,11 +14,11 @@ const Complaint = () => {
     const [filterRole, setFilterRole] = useState("all");
     const { toast } = useToast();
     const [expandedMessages, setExpandedMessages] = useState({});
-
+    const API_URL = import.meta.env.VITE_REACT_APP_API_URL
     const fetchComplaints = async () => {
         setIsLoading(true);
         try {
-            const res = await fetch("http://localhost:8001/v1/complaint/retrieve-complaint", {
+            const res = await fetch(`${API_URL}/complaint/retrieve-complaint`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("accessToken")}`,

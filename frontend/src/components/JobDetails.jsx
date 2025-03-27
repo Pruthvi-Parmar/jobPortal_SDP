@@ -46,6 +46,7 @@ const JobDetails = ({ job, className }) => {
   const [refreshKey, setRefreshKey] = useState(0)
   const [selectedApplicant, setSelectedApplicant] = useState(null)
   const [activeTab, setActiveTab] = useState("details")
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
 
   useEffect(() => {
     setEditedJob(job)
@@ -61,7 +62,7 @@ const JobDetails = ({ job, className }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:8001/v1/jobs/update-job", {
+      const response = await fetch(`${API_URL}/jobs/update-job`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -91,7 +92,7 @@ const JobDetails = ({ job, className }) => {
     if (!job) return
     setLoadingApplicants(true)
     try {
-      const response = await fetch("http://localhost:8001/v1/application/get-job-application", {
+      const response = await fetch(`${API_URL}/application/get-job-application`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -115,7 +116,7 @@ const JobDetails = ({ job, className }) => {
     console.log("Accept application:", applicationId)
     const userId = applicationId
     try {
-      const response = await fetch("http://localhost:8001/v1/application/changeState", {
+      const response = await fetch(`${API_URL}/application/changeState`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -139,7 +140,7 @@ const JobDetails = ({ job, className }) => {
     console.log("Reject application:", applicationId)
     const userId = applicationId
     try {
-      const response = await fetch("http://localhost:8001/v1/application/changeState", {
+      const response = await fetch(`${API_URL}/application/changeState`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -167,7 +168,7 @@ const JobDetails = ({ job, className }) => {
 
   const handleViewProfile = async (applicant) => {
     try {
-      const response = await fetch("http://localhost:8001/v1/users/viewProfile", {
+      const response = await fetch(`${API_URL}/users/viewProfile`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

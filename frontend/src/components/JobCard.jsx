@@ -20,6 +20,7 @@ const JobCard = ({
   const [hasApplied, setHasApplied] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
   const navigate = useNavigate()
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
 
   useEffect(() => {
     const checkApplicationStatus = async () => {
@@ -30,7 +31,7 @@ const JobCard = ({
           return
         }
 
-        const response = await fetch("http://localhost:8001/v1/application/get-applicants-job", {
+        const response = await fetch(`${API_URL}/application/get-applicants-job`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -62,7 +63,7 @@ const JobCard = ({
         return
       }
 
-      const response = await fetch("http://localhost:8001/v1/application/apply-to-job", {
+      const response = await fetch(`${API_URL}/application/apply-to-job`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

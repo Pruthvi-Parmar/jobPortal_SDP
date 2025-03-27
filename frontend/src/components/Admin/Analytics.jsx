@@ -13,6 +13,7 @@ import DownloadAllMenu from "../ui/DownloadMenu"
 import { downloadAllData } from "./utils/downloadUtils"
 
 export default function Analytics() {
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
   const [isLoading, setIsLoading] = useState(true)
   const [analyticsData, setAnalyticsData] = useState({
     monthlyJobs: [],
@@ -40,7 +41,7 @@ export default function Analytics() {
       ]
 
       const requests = endpoints.map((endpoint) =>
-        axios.get(`http://localhost:8001/v1/admin${endpoint}`, {
+        axios.get(`${API_URL}/admin${endpoint}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },

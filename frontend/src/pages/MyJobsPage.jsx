@@ -31,7 +31,7 @@ const MyJobsPage = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [refreshing, setRefreshing] = useState(false);
   const user = useSelector(state => state.auth.userData);
-
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
   const fetchJobs = async () => {
     setLoading(true);
     setError(null);
@@ -40,7 +40,7 @@ const MyJobsPage = () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       document.cookie = `accessToken=${localStorage.getItem('accessToken')}; path=/;`;
-      const response = await fetch("http://localhost:8001/v1/application/get-applicants-job", {
+      const response = await fetch(`${API_URL}/application/get-applicants-job`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,

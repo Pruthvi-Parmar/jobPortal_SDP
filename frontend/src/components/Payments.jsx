@@ -13,6 +13,7 @@ const Payment = () => {
   const user = useSelector((state) => state.auth.userData)
   const dispatch = useDispatch()
   const [isPremiumUser, setIsPremiumUser] = useState(false)
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
 
   useEffect(() => {
     if (user) {
@@ -52,7 +53,7 @@ const Payment = () => {
       }
 
       const res = await axios.post(
-        "http://localhost:8001/v1/payment/create-order",
+        `${API_URL}/payment/create-order`,
         { amount: 499 },
         {
           headers: {
@@ -76,7 +77,7 @@ const Payment = () => {
         handler: async (response) => {
           try {
             const verifyResponse = await axios.post(
-              "http://localhost:8001/v1/payment/verify-payment",
+              `${API_URL}/payment/verify-payment`,
               { ...response, userId },
               {
                 headers: {

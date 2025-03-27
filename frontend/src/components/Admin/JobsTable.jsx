@@ -34,11 +34,11 @@ export default function JobsTable() {
   const [isLoading, setIsLoading] = useState(true)
   const [creators, setCreators] = useState([])
   const [selectedCreator, setSelectedCreator] = useState("")
-
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
   const fetchJobs = async () => {
     setIsLoading(true)
     try {
-      const res = await fetch("http://localhost:8001/v1/admin/getalljobs", {
+      const res = await fetch(`${API_URL}/admin/getalljobs`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -102,7 +102,7 @@ const handleDownload = (format) => {
   const handleDelete = async (jobId) => {
     if (window.confirm("Are you sure you want to delete this job?")) {
       try {
-        const res = await fetch("http://localhost:8001/v1/admin/deletejob", {
+        const res = await fetch(`${API_URL}/admin/deletejob`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

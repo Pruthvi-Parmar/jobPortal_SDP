@@ -19,6 +19,7 @@ const JOB_TYPES = ["Full-time", "Part-time", "Contract", "Freelance", "Internshi
 
 const PostJobForm = () => {
   const user = useSelector((state) => state.auth.userData)
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
   const {
     register,
     handleSubmit,
@@ -74,7 +75,7 @@ const PostJobForm = () => {
 
       if(user.isAllowedToPostJob){
 
-      const response = await fetch("http://localhost:8001/v1/jobs/post-job", {
+      const response = await fetch(`${API_URL}/jobs/post-job`, {
         method: "POST",
         body: formData,
         headers: {

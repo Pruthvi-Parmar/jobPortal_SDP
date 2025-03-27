@@ -39,11 +39,11 @@ const ATS = () => {
   const [loading, setLoading] = useState(false)
   const [initialLoading, setInitialLoading] = useState(true)
   const [activeTab, setActiveTab] = useState("overview")
-
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("http://localhost:8001/v1/users/getCurrentUser", {
+        const response = await fetch(`${API_URL}/users/getCurrentUser`, {
           method: "POST",
           credentials: "include",
           headers: {
@@ -134,7 +134,7 @@ const ATS = () => {
         requestBody.resumeUrl = resumeUrl
       }
 
-      const response = await fetch("http://localhost:8001/v1/resume/analyze", {
+      const response = await fetch(`${API_URL}/resume/analyze`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

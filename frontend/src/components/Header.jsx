@@ -21,6 +21,7 @@ import axios from "axios"
 import { toast } from "sonner";
 
 const Header = () => {
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const user = useSelector((state) => state.auth.userData)
@@ -40,7 +41,7 @@ const Header = () => {
     console.log(localStorage.getItem("accessToken"))
 
     const res = await axios.post(
-      "http://localhost:8001/v1/users/logout",
+      `${API_URL}/users/logout`,
       {},
       {
         method: "POST",

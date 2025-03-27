@@ -35,14 +35,14 @@ const ProfilePage = () => {
     resume: "",
     coverimage: "",
   });
-
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
   const fetchUserData = async () => {
     setLoading(true);
     try {
         console.log("TOKEN CHECK")
         console.log(localStorage.getItem("token")); // Check token in storage
       const response = await axios.post(
-        "http://localhost:8001/v1/users/getCurrentUser",
+        `${API_URL}/users/getCurrentUser`,
         {},
         { withCredentials: true }
       );
@@ -109,7 +109,7 @@ const ProfilePage = () => {
     formData.append("experience", data.experience)
     formData.append("resume", data.resume)
     
-    const response = await fetch("http://localhost:8001/v1/users/updateAccountDetails", {
+    const response = await fetch(`${API_URL}/users/updateAccountDetails`, {
       method: "POST",
       headers: {
         "Content-Type": "multipart/form-data",

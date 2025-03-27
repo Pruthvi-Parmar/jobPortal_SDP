@@ -10,7 +10,7 @@ const ChatOngoingList = ({ selectUser, socket, onlineUsers, selectedUser }) => {
   const [searchTerm, setSearchTerm] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const user = useSelector((state) => state.auth.userData)
-
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
   useEffect(() => {
     if (!user) return
 
@@ -18,7 +18,7 @@ const ChatOngoingList = ({ selectUser, socket, onlineUsers, selectedUser }) => {
       try {
         setIsLoading(true)
         const res = await axios.post(
-          "http://localhost:8001/v1/chat/ongoing-chats",
+          `${API_URL}/chat/ongoing-chats`,
           { userId: user._id },
           {
             headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` },

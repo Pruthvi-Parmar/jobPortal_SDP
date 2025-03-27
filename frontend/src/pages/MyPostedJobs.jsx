@@ -23,13 +23,13 @@ const MyPostedJobs = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const user = useSelector((state) => state.auth.userData);
-
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
   useEffect(() => {
     const fetchJobs = async () => {
       setLoading(true);
       try {
         const response = await fetch(
-          "http://localhost:8001/v1/jobs/get-posted-job",
+          `${API_URL}/jobs/get-posted-job`,
           {
             method: "POST",
             headers: {

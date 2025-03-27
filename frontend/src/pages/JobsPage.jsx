@@ -16,6 +16,7 @@ import {
 import JobCard from "../components/JobCard"
 
 const JobsPage = () => {
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
   // State for jobs and loading
   const [jobs, setJobs] = useState([])
   const [loading, setLoading] = useState(false)
@@ -60,7 +61,7 @@ const JobsPage = () => {
     setError(null)
 
     try {
-      const response = await fetch("http://localhost:8001/v1/jobs/get-job", {
+      const response = await fetch(`${API_URL}/jobs/get-job`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -124,7 +125,7 @@ const JobsPage = () => {
     setIsSendingMessage(true)
 
     try {
-      const response = await fetch("http://localhost:8001/v1/chatbot/chat", {
+      const response = await fetch(`${API_URL}/chatbot/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

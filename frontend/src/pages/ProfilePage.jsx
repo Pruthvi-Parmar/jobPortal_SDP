@@ -19,13 +19,13 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const { toast } = useToast();
-
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
   // Fetch user data from the backend
   const fetchUserData = async () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:8001/v1/users/getCurrentUser",
+        `${API_URL}/users/getCurrentUser`,
         {}, // Empty body for POST request
         {
           withCredentials: true, // Include cookies
@@ -97,7 +97,7 @@ const ProfilePage = () => {
     setLoading(true);
     
     try {
-      const response = await fetch("http://localhost:8001/v1/users/updateAccountDetails", {
+      const response = await fetch(`${API_URL}/users/updateAccountDetails`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

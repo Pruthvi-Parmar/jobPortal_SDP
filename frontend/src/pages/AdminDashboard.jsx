@@ -19,7 +19,7 @@ export default function AdminDashboard() {
     totalApplications: 0,
   })
   const [isLoading, setIsLoading] = useState(true)
-
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
   // Fetch Dashboard Data from API
   useEffect(() => {
     fetchDashboardData()
@@ -28,7 +28,7 @@ export default function AdminDashboard() {
   const fetchDashboardData = async () => {
     setIsLoading(true)
     try {
-      const res = await fetch("http://localhost:8001/v1/admin/dashboard", {
+      const res = await fetch(`${API_URL}/admin/dashboard`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,

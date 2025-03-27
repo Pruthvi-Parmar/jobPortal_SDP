@@ -17,7 +17,7 @@ const ChatUserList = ({ selectUser, onlineUsers, selectedUser }) => {
         setIsLoading(true)
         const token = localStorage.getItem("accessToken")
         const { data } = await axios.post(
-          `http://localhost:8001/v1/chat/users`,
+          `${API_URL}/chat/users`,
           { userId: user._id },
           { headers: { Authorization: `Bearer ${token}` } },
         )
