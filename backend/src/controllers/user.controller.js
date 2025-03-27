@@ -26,9 +26,9 @@ export const generateAccessAndRefreshTokens = async (userId) => {
 
 const registerUser = asyncHandler( async (req, res) => {
     const {username, email, password, role, bio } = req.body
-    console.log("request body ",req.body)
-    console.log(email);
-    console.log(role);
+    // console.log("request body ",req.body)
+    // console.log(email);
+    // console.log(role);
     
 
     if(
@@ -66,8 +66,8 @@ const registerUser = asyncHandler( async (req, res) => {
         throw new ApiError(400, "resume file is required")
     }
 
-    console.log(coverimage.url);
-    console.log(resume.url);
+    // console.log(coverimage.url);
+    // console.log(resume.url);
 
     if(role=="jobseeker"){
         const {qualifications, experience, location} = req.body
@@ -185,7 +185,7 @@ const registerUser = asyncHandler( async (req, res) => {
 const loginUser = asyncHandler( async(req, res) => {
     const {email, username, password} = req.body
 
-    console.log(req.body);
+    // console.log(req.body);
     
 
     if(!(email || username)){
@@ -341,7 +341,7 @@ const getCurrentUser = asyncHandler(async(req, res) => {
 const updateAccountDetails = asyncHandler(async (req, res) => {
     const { username, email } = req.body
   
-    console.log("Request body:", req.body)
+    // console.log("Request body:", req.body)
   
     // if (!username || !email) {
     //   throw new ApiError(400, "Username and email are required")
@@ -410,7 +410,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
         const users = await User.find().select("-password -refreshToken");
         return res.status(200).json(new ApiResponse(200, users, "Users retrieved successfully"));
     } catch (error) {
-        console.error("❌ Error fetching users:", error);
+        // console.error("❌ Error fetching users:", error);
         res.status(500).json({ error: "Error retrieving users" });
     }
 });

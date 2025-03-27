@@ -4,7 +4,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 const chatbot = asyncHandler(async (req, res) => {
     const { userQuery } = req.body;
-    console.log(req.body);
+    //console.log(req.body);
 
     const api_key = "SG_b2eef1726812b277";  // Ensure this is valid
     const url = "https://api.segmind.com/v1/llama-v3-8b-instruct";
@@ -57,7 +57,7 @@ const chatbot = asyncHandler(async (req, res) => {
         //console.log("Chatbot Reply:", chatbotReply);
         return res.status(200).json(new ApiResponse(200, chatbotReply, "Query successful"));
     } catch (error) {
-        console.error("API Call Error:", error);
+        //console.error("API Call Error:", error);
         return res.status(500).json(new ApiError(500, "Something went wrong: " + error.message));
     }
 });

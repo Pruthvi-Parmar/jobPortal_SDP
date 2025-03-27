@@ -101,7 +101,7 @@ export const getOngoingChats = async (req, res) => {
 
     res.json(ongoingChats)
   } catch (error) {
-    console.error("❌ Error fetching ongoing chats:", error)
+    //console.error("❌ Error fetching ongoing chats:", error)
     res.status(500).json({ error: "Error fetching ongoing chats" })
   }
 }
@@ -130,7 +130,7 @@ export const initiateChat = async (req, res) => {
 
     res.status(201).json({ message: "Chat initiated", chat: newChat })
   } catch (error) {
-    console.error("❌ Error initiating chat:", error)
+    //console.error("❌ Error initiating chat:", error)
     res.status(500).json({ error: "Error initiating chat" })
   }
 }

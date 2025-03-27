@@ -80,7 +80,7 @@ const registerAdmin = asyncHandler( async (req, res) => {
 const loginAdmin = asyncHandler( async(req, res) => {
     const {email, username, password} = req.body
 
-    console.log(req.body);
+    //console.log(req.body);
     
 
     if(!(email || username)){
@@ -110,7 +110,7 @@ const loginAdmin = asyncHandler( async(req, res) => {
         secure: true
     }
 
-    console.log(admin);
+    //console.log(admin);
     
 
     return res

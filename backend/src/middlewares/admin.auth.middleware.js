@@ -14,7 +14,7 @@ export const verifyJWTAdmin = asyncHandler(async (req, _, next) => { // "_" if r
         }
        // console.log(req.headers.authorization?.split(" ")[1]);
         
-        console.log(token);
+        // console.log(token);
         
     
         if(!token){

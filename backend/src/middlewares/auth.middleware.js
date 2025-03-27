@@ -10,7 +10,7 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
     try {
         // Get the token from cookies or Authorization header
         const token = req.cookies?.accessToken || req.headers.authorization?.split(" ")[1];
-        console.log("TOKEN : ", token)
+        // console.log("TOKEN : ", token)
         if (!token) {
             throw new ApiError(401, "Unauthorized request: No token provided");
         }
@@ -21,7 +21,7 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
         // Step 1: Try verifying as a backend JWT
         try {
             decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-            console.log("✅ Backend JWT Verified:", decodedToken);
+            // console.log("✅ Backend JWT Verified:", decodedToken);
 
             // Find the user by ID
             user = await User.findById(decodedToken._id);
@@ -29,7 +29,7 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
                 throw new ApiError(404, "User not found");
             }
         } catch (jwtError) {
-            console.log("❌ Backend JWT Verification Failed. Trying Google Token...");
+            // console.log("❌ Backend JWT Verification Failed. Trying Google Token...");
 
             // Step 2: Try verifying as a Google ID token
             try {
@@ -38,7 +38,7 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
                     audience: process.env.GOOGLE_CLIENT_ID,
                 });
                 decodedToken = ticket.getPayload();
-                console.log("✅ Google Token Verified:", decodedToken);
+                // console.log("✅ Google Token Verified:", decodedToken);
 
                 // Find or create the user by email
                 user = await User.findOne({ email: decodedToken.email });
@@ -51,7 +51,7 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
                     });
                 }
             } catch (googleError) {
-                console.error("❌ Google Token Verification Failed:", googleError.message);
+                // console.error("❌ Google Token Verification Failed:", googleError.message);
                 throw new ApiError(401, "Invalid Token: Neither JWT nor Google Token is valid");
             }
         }
