@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import JobList from "@/components/jobList";
-import JobDetails from "@/components/jobDetails";
+import JobList from "@/components/JobList";
+import JobDetails from "@/components/JobDetails";
 import { useSelector } from "react-redux";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
