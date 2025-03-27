@@ -39,8 +39,8 @@ const ProfilePage = () => {
   const fetchUserData = async () => {
     setLoading(true);
     try {
-        console.log("TOKEN CHECK")
-        console.log(localStorage.getItem("token")); // Check token in storage
+        //console.log("TOKEN CHECK")
+        //console.log(localStorage.getItem("token")); // Check token in storage
       const response = await axios.post(
         `${API_URL}/users/getCurrentUser`,
         {},

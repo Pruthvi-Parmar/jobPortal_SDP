@@ -37,10 +37,10 @@ const Login = () => {
       })
       localStorage.setItem("accessToken", res.data.data.accessToken)
       localStorage.setItem("refreshToken", res.data.data.refreshToken)
-      console.log(res.data.data.accessToken)
+      //console.log(res.data.data.accessToken)
 
       if (res.data.success) {
-        console.log(res.data.data.user)
+        //console.log(res.data.data.user)
 
         dispatch(login(res.data.data.user))
 
@@ -55,13 +55,13 @@ const Login = () => {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       })
-      console.log(res)
+      //console.log(res)
       localStorage.setItem("accessToken", res.data.data.accessToken)
       localStorage.setItem("refreshToken", res.data.data.refreshToken)
-      //console.log();
+      ////console.log();
 
       if (res.data.success) {
-        console.log(res.data.data.user)
+        //console.log(res.data.data.user)
 
         dispatch(login(res.data.data.user))
         if (res.data.data.user.role == "jobseeker") {
@@ -73,7 +73,7 @@ const Login = () => {
         toast.success(res.data.message)
       }
     } catch (error) {
-      console.log(error)
+      //console.log(error)
     }
   }
 
@@ -98,9 +98,9 @@ const Login = () => {
         company: input.company,
       })
 
-      console.log("Backend Response:", data)
+      //console.log("Backend Response:", data)
       toast.success("Sign-up successful!")
-      console.log("ACCESS TOKEN", data.accessToken)
+      //console.log("ACCESS TOKEN", data.accessToken)
       localStorage.setItem("accessToken", data.accessToken)
       localStorage.setItem("refreshToken", data.refreshToken)
       dispatch(login(data.user))

@@ -45,13 +45,13 @@ export default function JobsTable() {
         },
       })
       const data = await res.json()
-      console.log("RESPONSE",data.data)
+      //console.log("RESPONSE",data.data)
       if (data.success) {
         setJobs(data.data)
         const uniqueCreators = [...new Set(data.data.map((job) => job.createdBy?._id || "N/A"))];
 
         setCreators(uniqueCreators)
-        console.log("CREATORS", creators)
+        //console.log("CREATORS", creators)
       }
     } catch (error) {
       console.error("Error fetching jobs:", error)

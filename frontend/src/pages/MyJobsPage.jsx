@@ -55,7 +55,7 @@ const MyJobsPage = () => {
       const result = await response.json();
 
       if (result.success) {
-        console.log(result.data);
+        //console.log(result.data);
         setJobs(result.data);
         setFilteredJobs(result.data);
       } else {

@@ -4,7 +4,7 @@ import { Navigate, Outlet } from "react-router-dom";
 const ProtectedRoute = ({ allowedRoles }) => {
   const userData = JSON.parse(localStorage.getItem("userData")); // Get role from localStorage
   const userRole = userData.role;
-  console.log(userData.role);
+  //console.log(userData.role);
   
   
 

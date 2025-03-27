@@ -7,7 +7,7 @@ export const getChatUsers = async (req, res) => {
   try {
     const userId = req.user._id;
     const user = await User.findById(userId);
-    console.log(user);
+    //console.log(user);
     
 
     if (!user) {
@@ -64,7 +64,7 @@ export const sendMessage = async (req, res) => {
 export const getAvailableUsers = async (req, res) => {
   try {
     const userId = req.body
-    console.log(userId.userId);
+    //console.log(userId.userId);
     const loggedInUserId = userId.userId
     
 

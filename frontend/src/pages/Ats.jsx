@@ -143,7 +143,7 @@ const ATS = () => {
       })
 
       const data = await response.json()
-      console.log("Response data:", data)
+      //console.log("Response data:", data)
 
       if (response.ok) {
         // Access the analysis from the response data

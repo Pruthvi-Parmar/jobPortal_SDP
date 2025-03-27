@@ -14,8 +14,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { User, Mail, MapPin, Briefcase, GraduationCap, Building, FileText, ImageIcon, Edit, Save, X } from 'lucide-react';
 const ProfessionalInfo = ({ register, watch, isEditing, role }) => {
-  console.log("Role:", role); // Log role
-  console.log("Company Data:", watch("company")); // Log company data
+  //console.log("Role:", role); // Log role
+  //console.log("Company Data:", watch("company")); // Log company data
 
   return (
     <div className="space-y-8">

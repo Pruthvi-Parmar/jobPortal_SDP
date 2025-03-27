@@ -27,9 +27,9 @@ const Header = () => {
   const user = useSelector((state) => state.auth.userData)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  console.log(user)
+  //console.log(user)
   if (user) {
-    console.log(user.coverimage)
+    //console.log(user.coverimage)
   }
 
   const handleViewProfile = () => {
@@ -37,8 +37,8 @@ const Header = () => {
   }
 
   const handleClick = async () => {
-    console.log("inside logout")
-    console.log(localStorage.getItem("accessToken"))
+    //console.log("inside logout")
+    //console.log(localStorage.getItem("accessToken"))
 
     const res = await axios.post(
       `${API_URL}/users/logout`,
@@ -58,7 +58,7 @@ const Header = () => {
       navigate("/")
       toast.success(res.data.message)
     }
-    console.log(res)
+    //console.log(res)
   }
 
   const toggleMobileMenu = () => {

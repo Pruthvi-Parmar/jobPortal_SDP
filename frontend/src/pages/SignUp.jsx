@@ -52,9 +52,9 @@ const SignUp = () => {
         company: input.company,
       })
 
-      console.log("Backend Response:", data)
+      //console.log("Backend Response:", data)
       toast.success("Sign-up successful!")
-      console.log("ACCESS TOKEN", data.accessToken)
+      //console.log("ACCESS TOKEN", data.accessToken)
       localStorage.setItem("accessToken", data.accessToken)
       localStorage.setItem("refreshToken", data.refreshToken)
       dispatch(login(data.user))
@@ -155,7 +155,7 @@ const SignUp = () => {
         toast.success(res.data.message)
       }
     } catch (error) {
-      console.log(error)
+      //console.log(error)
       toast.error(error.response?.data?.message || "An error occurred")
     }
   }

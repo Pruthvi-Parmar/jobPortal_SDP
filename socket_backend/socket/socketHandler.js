@@ -8,11 +8,11 @@ export const initSocket = (server) => {
   const io = new Server(server, { cors: { origin: "http://localhost:5173" } });
 
   io.on("connection", (socket) => {
-    console.log(`🔗 User connected: ${socket.id}`);
+    //console.log(`🔗 User connected: ${socket.id}`);
 
     socket.on("registerUser", async ({ userId }) => {
       users[userId] = socket.id;
-      console.log(`✅ User Registered: ${userId}`);
+      //console.log(`✅ User Registered: ${userId}`);
 
       // Broadcast updated online user list
       const onlineUsers = Object.keys(users);
@@ -36,7 +36,7 @@ export const initSocket = (server) => {
       const userId = Object.keys(users).find((key) => users[key] === socket.id);
       if (userId) {
         delete users[userId];
-        console.log(`❌ User disconnected: ${userId}`);
+        //console.log(`❌ User disconnected: ${userId}`);
 
         // Notify clients about user disconnection
         io.emit("updateOnlineUsers", Object.keys(users));

@@ -13,15 +13,15 @@ const Login = () => {
   const handleSuccess = async (response) => {
     try {
       const { credential } = response; // Google Token
-      console.log("Google Token:", credential);
+      //console.log("Google Token:", credential);
 
       // Send token to backend
       const { data } = await axios.post("http://localhost:8001/auth/google", {
         token: credential,
       });
 
-      console.log("Backend Response:", data);
-      console.log("User:", data.user);
+      //console.log("Backend Response:", data);
+      //console.log("User:", data.user);
 
       // Dispatch user data to Redux store
       dispatch(login(data.user));

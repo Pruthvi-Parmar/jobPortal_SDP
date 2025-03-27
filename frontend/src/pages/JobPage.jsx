@@ -58,7 +58,6 @@ const JobPage = () => {
     <Card className="max-w-3xl mx-auto my-8">
       <CardHeader>
         <CardTitle>{job.title}</CardTitle>
-        {console.log("job",job)}
         <CardDescription>{job.location}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

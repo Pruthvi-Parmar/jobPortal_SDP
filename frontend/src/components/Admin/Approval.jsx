@@ -29,7 +29,7 @@ const Approval = () => {
                 const filtered = data.data.filter(user => user.role === "recruiter")
                 setRecruiters(filtered)
                 setFilteredRecruiters(filtered)
-                console.log("RECRUITERS", recruiters)
+                //console.log("RECRUITERS", recruiters)
             }
         } catch (error) {
             console.error("Error fetching recruiters:", error)
@@ -134,7 +134,6 @@ const Approval = () => {
                             {filteredRecruiters.map(recruiter => (
                                 <TableRow key={recruiter._id}>
                                     <TableCell>
-                                        {console.log("username", recruiter.username, "FUllname", recruiter.fullname)}
                                         <div className="font-medium">
                                             {recruiter.username}
                                             <div className="text-sm text-muted-foreground">

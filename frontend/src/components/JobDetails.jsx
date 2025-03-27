@@ -81,7 +81,7 @@ const JobDetails = ({ job, className }) => {
       })
 
       const result = await response.json()
-      console.log(result)
+      //console.log(result)
     } catch (error) {
       console.error("Error updating job:", error)
     }
@@ -103,7 +103,7 @@ const JobDetails = ({ job, className }) => {
       const result = await response.json()
       if (result.success) {
         setAppliedUsers(result.data)
-        console.log(result.data)
+        //console.log(result.data)
       }
     } catch (error) {
       console.error("Failed to fetch applicants", error)
@@ -113,7 +113,7 @@ const JobDetails = ({ job, className }) => {
   }
 
   const handleAccept = async (applicationId) => {
-    console.log("Accept application:", applicationId)
+    //console.log("Accept application:", applicationId)
     const userId = applicationId
     try {
       const response = await fetch(`${API_URL}/application/changeState`, {
@@ -129,7 +129,7 @@ const JobDetails = ({ job, className }) => {
       })
 
       const result = await response.json()
-      console.log("Application status updated:", result)
+      //console.log("Application status updated:", result)
       setRefreshKey((prev) => prev + 1)
     } catch (error) {
       console.error("Error updating application status", error)
@@ -137,7 +137,7 @@ const JobDetails = ({ job, className }) => {
   }
 
   const handleReject = async (applicationId) => {
-    console.log("Reject application:", applicationId)
+    //console.log("Reject application:", applicationId)
     const userId = applicationId
     try {
       const response = await fetch(`${API_URL}/application/changeState`, {
@@ -153,7 +153,7 @@ const JobDetails = ({ job, className }) => {
       })
 
       const result = await response.json()
-      console.log("Application status updated:", result)
+      //console.log("Application status updated:", result)
       setRefreshKey((prev) => prev + 1)
     } catch (error) {
       console.error("Error updating application status", error)
@@ -181,7 +181,7 @@ const JobDetails = ({ job, className }) => {
       })
 
       const result = await response.json()
-      console.log(result.data)
+      //console.log(result.data)
 
       if (!response.ok) {
         throw new Error(result.message || "Failed to fetch profile")

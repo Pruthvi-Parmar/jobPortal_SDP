@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 
 const MyJobsCard = ({ jobDetails,status}) => {
   const { title, location, overview } = jobDetails;
-  console.log(status);
+  //console.log(status);
   
 
   return (

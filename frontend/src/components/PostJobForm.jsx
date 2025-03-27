@@ -46,7 +46,7 @@ const PostJobForm = () => {
   const onSubmit = async (data) => {
     setLoading(true)
     try {
-      console.log("Form data being submitted:", data)
+      //console.log("Form data being submitted:", data)
 
       const formData = new FormData()
 
@@ -70,7 +70,7 @@ const PostJobForm = () => {
 
       // Log FormData entries to verify
       for (const pair of formData.entries()) {
-        console.log(pair[0], pair[1])
+        //console.log(pair[0], pair[1])
       }
 
       if(user.isAllowedToPostJob){
@@ -95,7 +95,7 @@ const PostJobForm = () => {
         title: "Success",
         description: "Job posted successfully!",
       })
-      console.log("Job posted:", result)
+      //console.log("Job posted:", result)
     }else{
       toast({
         title: "Failed",

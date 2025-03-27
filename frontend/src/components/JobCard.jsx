@@ -27,7 +27,7 @@ const JobCard = ({
       try {
         const accessToken = localStorage.getItem("accessToken")
         if (!accessToken) {
-          console.log("No access token found")
+          //console.log("No access token found")
           return
         }
 
@@ -120,8 +120,6 @@ const JobCard = ({
       onHoverStart={() => setIsHovering(true)}
       onHoverEnd={() => setIsHovering(false)}
     >
-      {console.log("REQUIREMENT", requirment)}
-      {console.log("RESPONSIBILITY", responsiblity)}
       {coverImage && (
         <div className="relative h-48 overflow-hidden">
           <motion.img

@@ -19,5 +19,5 @@ app.use("/api/chat", chatRoutes);
 initSocket(server);
 
 server.listen(process.env.PORT, () => {
-  console.log(`🚀 Chat server running on port ${process.env.PORT}`);
+  //console.log(`🚀 Chat server running on port ${process.env.PORT}`);
 });

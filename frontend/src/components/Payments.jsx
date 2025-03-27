@@ -21,7 +21,7 @@ const Payment = () => {
     }
   }, [user])
 
-  console.log(user)
+  //console.log(user)
 
   if (!user) {
     toast.error("User not found! Please log in.")
@@ -95,7 +95,7 @@ const Payment = () => {
               // TODO: here after dispaching we are updating state of user which
               //        is stored in redux check if above line creating any problem
               //        in previous redux related logic!!!!!
-              console.log(user)
+              //console.log(user)
 
               toast.success("Payment Successful! 🎉")
               //setTimeout(() => window.location.reload(), 3000);
@@ -126,7 +126,7 @@ const Payment = () => {
   }
 
   const newUser = useSelector((state) => state.auth.userData)
-  console.log(newUser)
+  //console.log(newUser)
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">

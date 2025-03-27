@@ -351,7 +351,6 @@ const JobsPage = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  {console.log(job)}
                   <JobCard {...job} jobId={job._id} />
                 </motion.div>
               ))}
