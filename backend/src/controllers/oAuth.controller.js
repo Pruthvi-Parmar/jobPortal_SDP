@@ -10,11 +10,11 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
  * @param {Object} res - The response object.
  */
 export const handleGoogleAuth = async (req, res) => {
-    console.log("Inside Google controller");
+    // console.log("Inside Google controller");
 
     const { token, role, bio, location, qualifications, experience } = req.body;
-    console.log("Received token:", token);
-    console.log("Received role:", role);
+    // console.log("Received token:", token);
+    // console.log("Received role:", role);
 
     try {
         // Verify Google ID Token

@@ -58,8 +58,8 @@ const getJobs = asyncHandler(async (req, res) => {
     //      title, location, type, keyword  = req.body
     // }
 
-    console.log(req.query);
-    console.log(req.body);
+    // console.log(req.query);
+    // console.log(req.body);
     
 
    
@@ -85,7 +85,7 @@ const getJobs = asyncHandler(async (req, res) => {
         ];
     }
 
-    console.log(query)
+    // console.log(query)
     
 
     
@@ -129,7 +129,7 @@ const updateJob = asyncHandler(async (req, res) => {
        
     // }, {new: true})
 
-    console.log(job);
+    // console.log(job);
     
 
     if (!job) {
@@ -147,7 +147,7 @@ const updateJob = asyncHandler(async (req, res) => {
     if (status) job.status = status;
 
 
-    console.log(job);
+    // console.log(job);
     
 
     
@@ -199,7 +199,7 @@ const getJobsPostedByRecruiter = asyncHandler(async (req, res) => {
 
     
 
-    console.log(query)
+    // console.log(query)
     
 
     

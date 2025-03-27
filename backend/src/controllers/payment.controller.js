@@ -21,12 +21,12 @@ const razorpay = new Razorpay({
 
 const createOrder = asyncHandler(async(req, res) => {
 
-    console.log("inside controller");
+    // console.log("inside controller");
     
     
     const { amount } = req.body;
     const userId = req.user._id
-    console.log("req body : ",req.body);
+    // console.log("req body : ",req.body);
     
     
     const options = {
@@ -103,7 +103,7 @@ const verifyPayment = asyncHandler(async(req, res) => {
     );
     user.save()
 
-    console.log(user);
+    // console.log(user);
     
 
     if(!user){
@@ -135,7 +135,7 @@ const verifyPayment = asyncHandler(async(req, res) => {
 
     await sendEmail(user.email, emailSubject, emailText);
 
-    console.log("email sent!");
+    // console.log("email sent!");
     
     
 

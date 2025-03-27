@@ -5,11 +5,11 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 export const analyzeResume = async (req, res) => {
   try {
     // Validate uploaded file or resume URL
-    console.log(req.body.resumeUrl);
+   // console.log(req.body.resumeUrl);
     if (!req.files?.resume && !req.body.resumeUrl) {
       return res.status(400).json({ error: "No resume file or URL provided" });
     }
-    console.log("first point");
+  //  console.log("first point");
     let pdfText = "";
 
     if (req.files?.resume) {
@@ -21,10 +21,10 @@ export const analyzeResume = async (req, res) => {
       pdfText = await extractTextFromPDF(uint8Array);
     } else {
       // If a URL is provided, fetch the PDF
-      console.log("running til now in analyse controller");
+      //console.log("running til now in analyse controller");
       const response = await fetch(req.body.resumeUrl);
       if (!response.ok) {
-        console.log("issue with cloudinary");
+        //console.log("issue with cloudinary");
         return res.status(400).json({ error: "Invalid resume URL" });
       }
       const pdfBuffer = await response.arrayBuffer();
@@ -82,7 +82,7 @@ export const analyzeResume = async (req, res) => {
     // Get AI response
     const responseText = await getGeminiOutput(prompt);
     // console.log("RESPONSE TEXT OF ANALYSIS",responseText);
-    console.log("res : ", responseText);
+    //console.log("res : ", responseText);
 
     
 
@@ -97,7 +97,7 @@ export const analyzeResume = async (req, res) => {
       )
     );
   } catch (error) {
-    console.error(error);
+   // console.error(error);
     return res.status(500).json({ error: "Error during resume analysis" });
   }
 };

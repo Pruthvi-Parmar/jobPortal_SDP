@@ -12,8 +12,8 @@ import { User } from "../models/user.model.js"
 const applyToJob = asyncHandler(async (req, res) => {
 
     const { jobId } = req.body
-    console.log(jobId);
-    console.log(req.body);
+    // console.log(jobId);
+    // console.log(req.body);
     
     
     
@@ -58,7 +58,7 @@ const applyToJob = asyncHandler(async (req, res) => {
 
     await sendEmail(user.email, emailSubject, emailText);
 
-    console.log("email sent!");
+    //console.log("email sent!");
 
     res
     .status(200)
@@ -69,7 +69,7 @@ const applyToJob = asyncHandler(async (req, res) => {
 const getApplicant = asyncHandler(async (req, res) => {
 
     const { jobId } = req.body
-    console.log(req.body);
+   // console.log(req.body);
     const JobId = jobId
     
     const applicantForJobs = await Applications.aggregate([
@@ -99,7 +99,7 @@ const getApplicant = asyncHandler(async (req, res) => {
         },
     ])
     //console.log(applicantForJobs);
-    console.log("status ++"+applicantForJobs.status);
+   // console.log("status ++"+applicantForJobs.status);
     
 
     return res
@@ -138,7 +138,7 @@ const getJob = asyncHandler(async (req, res) => {
             },
         },
     ])
-    console.log(jobsOfApplicant);
+   // console.log(jobsOfApplicant);
 
     return res
     .status(200)
@@ -183,7 +183,7 @@ const getJob = asyncHandler(async (req, res) => {
 
 const changeApplicationState = asyncHandler(async(req, res) => {
     const { jobId, userId, status } = req.body;
-    console.log(jobId, userId, status);
+   // console.log(jobId, userId, status);
     
 
     // Update the status in the database
@@ -206,7 +206,7 @@ const changeApplicationState = asyncHandler(async(req, res) => {
 
     await sendEmail(user.email, emailSubject, emailText);
 
-    console.log("email sent!");
+   // console.log("email sent!");
     
 
     if (!updatedApplication) {
