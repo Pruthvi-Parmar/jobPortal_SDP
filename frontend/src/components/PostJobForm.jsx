@@ -14,6 +14,7 @@ import { Briefcase, MapPin, DollarSign, FileText, Upload, Clock, CheckCircle2, A
 import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useSelector } from "react-redux"
+import axios from "axios"
 
 const JOB_TYPES = ["Full-time", "Part-time", "Contract", "Freelance", "Internship", "Remote"]
 
