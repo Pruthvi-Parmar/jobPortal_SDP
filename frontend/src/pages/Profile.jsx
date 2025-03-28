@@ -118,6 +118,9 @@ const ProfilePage = () => {
       method: "POST",
       headers: {
         "Content-Type": "multipart/form-data",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`, 
+        },
       },
       credentials: "include", // Include cookies for authentication
       body: formData,
