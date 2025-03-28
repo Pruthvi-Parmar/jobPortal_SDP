@@ -44,7 +44,12 @@ const ProfilePage = () => {
       const response = await axios.post(
         `${API_URL}/users/getCurrentUser`,
         {},
-        { withCredentials: true }
+        { 
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`, 
+          },
+        }
       );
 
       const result = response.data;
