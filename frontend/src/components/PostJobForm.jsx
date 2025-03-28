@@ -73,7 +73,22 @@ const PostJobForm = () => {
         //console.log(pair[0], pair[1])
       }
 
-      if(user.isAllowedToPostJob){
+      //TODO:
+      const res = await axios.post(
+        `${API_URL}/users/getCurrentUser`,
+        {},
+        { 
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`, 
+          },
+        }
+      );
+
+      const user1 = res.data.data
+
+
+      if(user1.isAllowedToPostJob){
 
       const response = await fetch(`${API_URL}/jobs/post-job`, {
         method: "POST",
