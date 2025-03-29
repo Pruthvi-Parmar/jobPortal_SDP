@@ -65,7 +65,7 @@ app.use("/auth", authRoutes);
 
 initSocket(server);
 server.listen(process.env.PORT, () => {
-    console.log(`🚀 Chat server running on port ${process.env.PORT}`);
+    console.log(`🚀 Chat server running on port ${process.env.PORT} and auto deploy on render configure!`);
   });
 
 export { app }
