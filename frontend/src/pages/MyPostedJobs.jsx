@@ -24,6 +24,37 @@ const MyPostedJobs = () => {
 
   const user = useSelector((state) => state.auth.userData);
   const API_URL = import.meta.env.VITE_REACT_APP_API_URL
+  useEffect( () => {
+    const refreshToken = async () => {
+      console.log(localStorage.getItem('refreshToken'));
+      
+
+      if(localStorage.getItem('refreshToken')){
+
+        const res = await fetch(`${API_URL}/users/refresh-token`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('refreshToken')}`,
+          },
+          withCredentials: true,
+        });
+        
+        const response = await res.json();
+        console.log(response);
+        
+
+        if(response.data.success){
+
+          localStorage.setItem("accessToken", response.data.data.accessToken)
+          localStorage.setItem("refreshToken", response.data.data.newRefreshToken)
+        }
+      }
+    
+    }
+    refreshToken()
+    
+  }, [])
+
   useEffect(() => {
     const fetchJobs = async () => {
       setLoading(true);

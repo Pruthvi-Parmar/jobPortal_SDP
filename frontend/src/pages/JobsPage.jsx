@@ -41,6 +41,37 @@ const JobsPage = () => {
   // Refs
   const chatContainerRef = useRef(null)
   const searchInputRef = useRef(null)
+  useEffect( () => {
+    const refreshToken = async () => {
+      console.log(localStorage.getItem('refreshToken'));
+      
+
+      if(localStorage.getItem('refreshToken')){
+
+        const res = await fetch(`${API_URL}/users/refresh-token`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('refreshToken')}`,
+          },
+          withCredentials: true,
+        });
+        
+        const response = await res.json();
+        console.log(response);
+        
+
+        if(response.data.success){
+
+          localStorage.setItem("accessToken", response.data.data.accessToken)
+          localStorage.setItem("refreshToken", response.data.data.newRefreshToken)
+        }
+      }
+    
+    }
+    refreshToken()
+    
+  }, [])
+
 
   // Scroll to bottom of chat when new messages arrive
   useEffect(() => {
