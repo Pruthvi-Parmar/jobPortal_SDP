@@ -4,7 +4,7 @@ import { Chat } from "../models/chat.model.js"
 const users = {} // Store connected users
 
 export const initSocket = (server) => {
-  const io = new Server(server, { cors: { origin: "http://localhost:5173" } })
+  const io = new Server(server, { cors: { origin: "https://jobportal-sdp.onrender.com/v1" } })
 
   io.on("connection", (socket) => {
     console.log(`🔗 User connected: ${socket.id}`)
