@@ -10,6 +10,7 @@ const ChatUserList = ({ selectUser, onlineUsers, selectedUser }) => {
   const [users, setUsers] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
   const [isLoading, setIsLoading] = useState(true)
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
 
   useEffect(() => {
     const fetchUsers = async () => {
