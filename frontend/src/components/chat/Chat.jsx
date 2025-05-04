@@ -12,9 +12,10 @@ const Chat = () => {
   const [socket, setSocket] = useState(null)
   const [activeTab, setActiveTab] = useState("ongoing") // "ongoing" or "available"
   const [onlineUsers, setOnlineUsers] = useState([])
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL
 
   useEffect(() => {
-    const newSocket = io("http://localhost:8001")
+    const newSocket = io(`${API_URL}`)
     setSocket(newSocket)
 
     newSocket.on("updateOnlineUsers", (users) => {
