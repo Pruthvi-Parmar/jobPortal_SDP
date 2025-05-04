@@ -14,7 +14,7 @@ const TechNews = () => {
     const fetchNews = async () => {
       try {
         const response = await fetch(
-          `https://newsapi.org/v2/top-headlines?category=technology&language=en&apiKey=bc45b34a2cf345ed942834467e4c687e`
+          `https://newsapi.org/v2/top-headlines?category=technology&language=en&apiKey=a87ba73e50e94637b8a5ada4b230a198`
         )
         const data = await response.json()
         setNews(data.articles)
