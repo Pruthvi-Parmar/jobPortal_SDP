@@ -15,7 +15,8 @@ const Chat = () => {
   const API_URL = import.meta.env.VITE_REACT_APP_API_URL
 
   useEffect(() => {
-    const newSocket = io(`${API_URL}`)
+    const newSocket = io("http://localhost:8001")
+    // const newSocket = io(`${API_URL}`)
     setSocket(newSocket)
 
     newSocket.on("updateOnlineUsers", (users) => {
