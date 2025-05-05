@@ -27,6 +27,7 @@ const Complaint = () => {
             const data = await res.json();
             if (data.success) {
                 setComplaints(data.data.complaints);
+                console.log(data.data.complaints);
                 setFilteredComplaints(data.data.complaints);
             }
         } catch (error) {
@@ -45,18 +46,20 @@ const Complaint = () => {
 
         if (search) {
             filtered = filtered.filter(complaint => {
-                const fullname = complaint.senderId.fullname || "";
+                const fullname = complaint.senderId?.fullname || "";
+                const username = complaint.senderId?.username || "";
+                const email = complaint.senderId?.email || "";
                 return (
-                    complaint.senderId.username.toLowerCase().includes(search.toLowerCase()) ||
+                    username.toLowerCase().includes(search.toLowerCase()) ||
                     fullname.toLowerCase().includes(search.toLowerCase()) ||
-                    complaint.senderId.email.toLowerCase().includes(search.toLowerCase()) ||
+                    email.toLowerCase().includes(search.toLowerCase()) ||
                     complaint.message.toLowerCase().includes(search.toLowerCase())
                 );
             });
         }
 
         if (filterRole !== "all") {
-            filtered = filtered.filter(complaint => complaint.senderId.role === filterRole);
+            filtered = filtered.filter(complaint => complaint.senderId?.role === filterRole);
         }
 
         setFilteredComplaints(filtered);
@@ -112,18 +115,18 @@ const Complaint = () => {
                                         {/* Username & Fullname */}
                                         <TableCell>
                                             <div className="font-medium">
-                                                {complaint.senderId.username}
+                                                {complaint.senderId?.username || "User Deleted"}
                                                 <div className="text-sm text-muted-foreground">
-                                                    {complaint.senderId.fullname || "N/A"}
+                                                    {complaint.senderId?.fullname || "N/A"}
                                                 </div>
                                             </div>
                                         </TableCell>
                                         
                                         {/* Email */}
-                                        <TableCell>{complaint.senderId.email}</TableCell>
+                                        <TableCell>{complaint.senderId?.email || "N/A"}</TableCell>
                                         
                                         {/* Role */}
-                                        <TableCell>{complaint.senderId.role}</TableCell>
+                                        <TableCell>{complaint.senderId?.role || "Unknown"}</TableCell>
                                         
                                         {/* Read More functionality for Message */}
                                         <TableCell>

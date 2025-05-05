@@ -21,7 +21,7 @@ function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50">
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-16 md:pt-20 lg:pt-28">
+      <section className="relative overflow-hidden pt-16 md:pt-20 lg:pt-4">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
             <div className="flex flex-col space-y-8 max-w-2xl">
@@ -49,14 +49,14 @@ function HomePage() {
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
-                <Link to="/jobs">
+                {/* <Link to="/jobs">
                   <Button
                     variant="outline"
                     className="h-12 px-6 border-indigo-200 text-indigo-700 hover:bg-indigo-50 rounded-lg text-base font-medium"
                   >
                     Browse Jobs
                   </Button>
-                </Link>
+                </Link> */}
               </div>
 
               <div className="flex items-center space-x-4 text-sm text-gray-500">
@@ -238,9 +238,9 @@ function HomePage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
-              { value: "10K+", label: "Active Jobs", icon: <Briefcase className="h-6 w-6" /> },
-              { value: "2,500+", label: "Companies", icon: <Building className="h-6 w-6" /> },
-              { value: "150K+", label: "Job Seekers", icon: <Users className="h-6 w-6" /> },
+              { value: "10+", label: "Active Jobs", icon: <Briefcase className="h-6 w-6" /> },
+              { value: "250+", label: "Companies", icon: <Building className="h-6 w-6" /> },
+              { value: "15+", label: "Job Seekers", icon: <Users className="h-6 w-6" /> },
               { value: "95%", label: "Success Rate", icon: <Award className="h-6 w-6" /> },
             ].map((stat, index) => (
               <div key={index} className="flex flex-col items-center">
@@ -272,14 +272,14 @@ function HomePage() {
                   Get Started Now
                 </Button>
               </Link>
-              <Link to="/employers">
+              {/* <Link to="/employers">
                 <Button
                   variant="outline"
                   className="h-12 px-8 border-indigo-200 text-indigo-700 hover:bg-indigo-50 rounded-lg text-base font-medium"
                 >
                   For Employers
                 </Button>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>

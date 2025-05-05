@@ -137,7 +137,7 @@ const handleDownload = (format) => {
 
 const filteredJobs = jobs.filter((job) => {
     const matchesSearch = job.title?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCreator = selectedCreator === "" || job.createdBy._id === selectedCreator;
+    const matchesCreator = selectedCreator === "" || job.createdBy?._id === selectedCreator;
     return matchesSearch && matchesCreator;
   });
   
@@ -235,7 +235,9 @@ const filteredJobs = jobs.filter((job) => {
                     </TableCell>
                     <TableCell className="hidden md:table-cell">{job.salary}</TableCell>
                     <TableCell className="hidden lg:table-cell">
-                      <span className="text-sm text-muted-foreground">{job.createdBy._id.substring(0, 8)}...</span>
+                      <span className="text-sm text-muted-foreground">
+                        {job.createdBy?._id.substring(0, 8) || 'Unknown'}...
+                      </span>
                     </TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
@@ -306,7 +308,7 @@ const filteredJobs = jobs.filter((job) => {
                   <div className="text-right">
                     <div className="text-lg font-semibold">{selectedJob.salary}</div>
                     <div className="text-sm text-muted-foreground">
-                      Created by: {selectedJob.createdBy._id.substring(0, 8)}...
+                      Created by: {selectedJob.createdBy?._id.substring(0, 8) || 'Unknown'}...
                     </div>
                   </div>
                 </div>

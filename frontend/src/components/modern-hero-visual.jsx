@@ -156,14 +156,14 @@ export default function ModernHeroVisual() {
         <div className="bg-white/80 backdrop-blur-sm rounded-lg px-4 py-2 shadow-sm border border-indigo-50">
           <div className="flex items-center space-x-2">
             <div className="h-3 w-3 rounded-full bg-green-500"></div>
-            <span className="text-sm font-medium text-gray-700">10,00+ Active Jobs</span>
+            <span className="text-sm font-medium text-gray-700">10+ Active Jobs</span>
           </div>
         </div>
         
         <div className="bg-white/80 backdrop-blur-sm rounded-lg px-4 py-2 shadow-sm border border-indigo-50">
           <div className="flex items-center space-x-2">
             <div className="h-3 w-3 rounded-full bg-indigo-500"></div>
-            <span className="text-sm font-medium text-gray-700">2,50+ Companies</span>
+            <span className="text-sm font-medium text-gray-700">250+ Companies</span>
           </div>
         </div>
         
