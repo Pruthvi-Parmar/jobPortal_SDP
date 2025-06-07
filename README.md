@@ -219,12 +219,6 @@ VITE_SOCKET_URL=http://localhost:3001
 
 ---
 
-## 🖼 Screenshots
-
-> *(Add relevant UI screenshots here)*
-
----
-
 ## 📝 License
 
 MIT License. Feel free to fork, improve, and use in your projects!
